@@ -27,6 +27,9 @@ if ('IntersectionObserver' in window) {
     });
   }, { threshold: .12 });
   reveals.forEach(item => observer.observe(item));
+  window.setTimeout(() => {
+    document.querySelectorAll('.hero .reveal').forEach(item => item.classList.add('is-visible'));
+  }, 250);
 } else {
   reveals.forEach(item => item.classList.add('is-visible'));
 }

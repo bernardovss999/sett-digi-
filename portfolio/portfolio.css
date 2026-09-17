@@ -1,0 +1,147 @@
+/* PORTFÓLIO — só o que a home não tem.
+   Cores, fontes, grade, cabeçalho, botões, lista de serviços, processo,
+   dúvidas e rodapé vêm de /styles.css; aqui entram a abertura e as prévias. */
+
+.mobile-nav a[aria-current="page"] { color: var(--cyan); }
+
+/* ---------------------------------------------------------------- abertura
+   Mesma estrutura do hero da home (frase na margem, rodapé com o índice),
+   mas sem ocupar a tela inteira: quem chega pelo link do WhatsApp já vê a
+   primeira prévia começando logo abaixo. */
+.port-hero { position: relative; padding: clamp(64px, 8vw, 120px) var(--margem) 0; }
+.port-foot { position: static; margin-top: clamp(72px, 8vw, 120px); padding-bottom: 34px; }
+.port-title {
+  font: 600 clamp(3.2rem, 7.6vw, 7.4rem) var(--display);
+  line-height: .9; letter-spacing: -.09em;
+  margin: 30px 0 34px;
+}
+.port-title em { font-style: normal; color: var(--cyan); }
+.port-title .junto { white-space: nowrap; }
+
+/* ----------------------------------------------------------------- prévias
+   Cada prévia ocupa a largura inteira da grade e repete a divisão da página:
+   na coluna do índice ficam o número e o rótulo; na do conteúdo, o nome e o
+   que o site faz. As duas telas vão de borda a borda, lado a lado, com o
+   topo E a base na mesma linha. */
+.previas { background: var(--paper); color: var(--ink); }
+.previas .section-index { color: #4e5b57; }
+.previas .section-title span:not(.linha) { color: #188f86; }
+.previas .section-text { color: #3d4845; }
+.previas .text-link { color: var(--ink); border-color: var(--ink); }
+/* Aqui cada prévia tem o próprio número preso junto das telas: o índice da seção não acompanha. */
+.previas > .section-index { position: static; }
+
+.caso {
+  grid-column: 1 / -1; margin-top: clamp(72px, 8vw, 120px);
+  /* O caso segue a grade da página: número e rótulo na linha do índice;
+     nome, telas e "o que o site faz" na linha do conteúdo, terminando na
+     mesma borda direita. --caso-w é um teto pela altura da janela (conta
+     abaixo), para as telas nunca passarem da tela em monitor largo e baixo. */
+  --vao: clamp(14px, 1.8vw, 32px);
+  --telas-h: min(60svh, 44rem);
+  --caso-w: calc((var(--telas-h) - 36px) * 1.6 + var(--vao) + (var(--telas-h) - 14px) * .4621 + 14px);
+}
+.caso-grade {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); column-gap: var(--coluna-gap);
+  padding-top: 26px; border-top: 1px solid rgba(11, 13, 14, .2);
+}
+.caso-num { grid-column: 1; font: 500 .72rem var(--display); letter-spacing: .08em; color: #188f86; padding-top: .9em; }
+.caso-cab { grid-column: 2; max-width: var(--caso-w); display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 12px 26px; }
+.caso-nome h3 { font: 600 clamp(1.9rem, 3.4vw, 3.1rem)/1 var(--display); letter-spacing: -.07em; margin: 0; }
+.caso-nome p { margin: 8px 0 0; color: #56625e; font-size: .95rem; }
+.caso-selo {
+  font: 500 .66rem var(--display); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+  color: #3d4845; border: 1px solid rgba(11, 13, 14, .28); border-radius: 999px; padding: 7px 12px;
+}
+.caso-link { white-space: nowrap; }
+
+/* As duas telas lado a lado, topo E base na mesma linha.
+   Altura das telas = --telas-h (no máximo ~60% da altura da janela), e a
+   largura sai dela: computador = (altura − barra de 36px) × 1440/900;
+   celular = (altura − moldura de 14px) × 780/1688 + 14px. Assim elas nunca
+   passam da tela, sobra margem em volta e ficam centralizadas no ultrawide.
+   Largura do celular dentro da grade (com L = 100cqw − vão):
+   (L × 0,2888 + 22px × 0,4621 + 14px) ÷ 1,2888. */
+.caso-telas {
+  grid-column: 2; width: 100%; max-width: var(--caso-w); margin-top: 34px;
+  container-type: inline-size;
+  display: flex; align-items: stretch; gap: var(--vao);
+}
+.caso-telas figure { margin: 0; }
+.tela-desktop {
+  flex: 1 1 0; min-width: 0; align-self: start;
+  border-radius: 14px; overflow: hidden; background: #fff;
+  border: 1px solid rgba(11, 13, 14, .14);
+  box-shadow: 0 34px 60px -34px rgba(11, 13, 14, .45);
+}
+.tela-janela { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #fff; }
+.tela-barra {
+  height: 34px; display: flex; align-items: center; padding: 0 16px;
+  background: #e3e6e0; border-bottom: 1px solid rgba(11, 13, 14, .1);
+  font: 500 .72rem var(--display); letter-spacing: .02em; color: #6b7672;
+}
+.tela-celular {
+  flex: 0 0 calc(((100cqw - var(--vao)) * .2888 + 22px * .4621 + 14px) / 1.2888);
+  position: relative; overflow: hidden;
+  border: 7px solid var(--ink); border-radius: 30px; background: var(--ink);
+  box-shadow: 0 34px 60px -26px rgba(11, 13, 14, .55);
+}
+
+.caso-rodape {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); column-gap: var(--coluna-gap);
+  margin-top: 40px; border-top: 1px solid rgba(11, 13, 14, .2);
+}
+.caso-rotulo { margin: 0; padding-top: 24px; font: 500 .72rem var(--display); letter-spacing: .08em; color: #4e5b57; }
+.caso-feitos { max-width: var(--caso-w); list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.caso-feitos li { display: grid; align-content: start; gap: 8px; padding: 22px 24px 0 0; }
+.caso-feitos li + li { padding-left: 24px; border-left: 1px solid rgba(11, 13, 14, .2); }
+.caso-feitos b { font: 500 1.2rem var(--display); letter-spacing: -.04em; }
+.caso-feitos span { color: #56625e; font-size: .93rem; line-height: 1.45; max-width: 20rem; }
+
+/* ------------------------------------------------------ as telas rolando
+   Cada imagem tem 3 telas de altura (topo do site e as seções seguintes).
+   Quando a prévia chega, o palco (nome do cliente + as duas telas) fica
+   preso no meio da janela e só os sites rolam, do topo ao fim (−66,67% da
+   própria altura); depois a página segue. O trilho = palco + distância da
+   rolagem, e "contain" é exatamente o trecho em que o palco está preso.
+   Nada usa margem negativa: nada passa por cima de nada. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .caso { margin-top: 24px; }
+    .caso-trilho { height: calc(100svh - var(--topo) + 120svh); view-timeline: --trilho block; }
+    .caso-palco { position: sticky; top: var(--topo); height: calc(100svh - var(--topo)); display: flex; flex-direction: column; justify-content: center; }
+    .caso-rodape { margin-top: 0; }
+    .caso-telas .tela-rola { animation: rola-tela linear both; animation-timeline: --trilho; animation-range: contain 8% contain 92%; }
+  }
+}
+
+/* ----------------------------------------------------------------- celular
+   Tela estreita demais para as duas lado a lado: o celular passa por cima
+   do canto do computador, com um deslocamento claro (não "quase alinhado"). */
+@media (max-width: 800px) {
+  .port-hero { padding-top: 64px; }
+  .port-foot { margin-top: 64px; padding-bottom: 24px; }
+  /* "Nota 5 no Google." mede 7em: a fonte é a largura útil ÷ 7,3, então a
+     primeira linha sempre cabe inteira e o título fica maior que os h2. */
+  .port-title { font-size: min(4.6rem, calc((100vw - 40px) / 7.3)); margin: 22px 0 26px; }
+
+  .caso { margin-top: 56px; }
+  .caso-grade { grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; padding-top: 22px; }
+  .caso-num { padding-top: .75em; }
+  .caso-cab { grid-template-columns: auto minmax(0, 1fr); gap: 16px 14px; }
+  .caso-nome { grid-column: 1 / -1; }
+  .caso-link { justify-self: end; }
+
+  .caso-telas { display: grid; grid-template-columns: repeat(100, minmax(0, 1fr)); gap: 0; margin-top: 28px; }
+  .caso-telas { grid-column: 1 / -1; }
+  .caso-cab, .caso-telas, .caso-feitos { max-width: none; }
+  .tela-desktop { grid-column: 1 / 87; grid-row: 1; border-radius: 10px; }
+  .tela-barra { height: 24px; padding: 0 10px; font-size: .58rem; }
+  .caso-telas .tela-celular { grid-column: 63 / 101; grid-row: 1; align-self: start; margin-top: 18cqw; border-width: 5px; border-radius: 20px; box-sizing: content-box; aspect-ratio: 780 / 1688; }
+
+  .caso-rodape { grid-template-columns: minmax(0, 1fr); margin-top: 28px; }
+  .caso-rotulo { padding-top: 20px; }
+  .caso-feitos { grid-template-columns: minmax(0, 1fr); }
+  .caso-feitos li, .caso-feitos li + li { padding: 18px 0; border-left: 0; border-bottom: 1px solid rgba(11, 13, 14, .2); }
+  .caso-feitos li:last-child { border-bottom: 0; padding-bottom: 0; }
+}

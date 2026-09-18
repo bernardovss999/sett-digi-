@@ -157,14 +157,54 @@ p { text-wrap: pretty; }
 }
 .trust-principios li + li { padding-left: 24px; border-left: 1px solid rgba(11, 13, 14, .22); }
 
-/* --------------------------------------------------------------- direção */
+/* -------------------------------------------------- o perfil no Google
 
-.solution {
-  display: grid; gap: 10px; max-width: 30rem;
-  margin: clamp(56px, 7vw, 96px) 0 0 auto; padding-top: 26px; border-top: 1px solid var(--line);
+   É a oferta principal e entra em papel, o fundo mais claro da página. Três
+   peças de formas diferentes, para não virar tabela: o texto com os dois
+   números ao lado, a régua da rotina (uma linha) e a chamada. Todo número
+   carrega de onde veio — número sem fonte é chute. */
+
+.google { background: var(--paper); color: var(--ink); }
+.google .section-index { color: #188f86; }
+.google .section-title span:not(.linha) { color: #188f86; }
+.google .section-text { color: #45514d; margin-top: 0; line-height: 1.6; }
+
+.google-abre {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .58fr);
+  gap: clamp(28px, 5vw, 80px); align-items: start;
+  margin-top: clamp(44px, 5vw, 76px);
 }
-.solution h3 { font: 500 1.4rem var(--display); letter-spacing: -.03em; margin: 0; }
-.solution p { color: #abb8b3; margin: 0; }
+.google-local { max-width: 31rem; margin: 20px 0 0; font-size: 1.02rem; line-height: 1.6; color: #45514d; }
+.google-local b { font-weight: 500; color: var(--ink); }
+
+.google-numeros { margin: 6px 0 0; display: grid; gap: 22px; }
+.google-numeros > div { display: grid; gap: 4px; padding-top: 20px; border-top: 1px solid rgba(11, 13, 14, .16); }
+.google-numeros dt { font: 600 clamp(3rem, 5.4vw, 5rem)/.9 var(--display); letter-spacing: -.08em; font-variant-numeric: tabular-nums; }
+.google-numeros dd { margin: 0; font-size: .98rem; color: #45514d; }
+.google-numeros p { margin: 0; font: 500 .68rem var(--display); letter-spacing: .04em; color: #7b8884; }
+
+/* a rotina é uma régua de uma linha só: o que entra todo mês, sem parágrafo */
+.google-rotina {
+  position: relative;
+  list-style: none; margin: clamp(52px, 6vw, 84px) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid rgba(11, 13, 14, .16);
+}
+/* o traço verde risca a régua ao entrar, como na seção do processo */
+.google-rotina::after { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: #188f86; transform: scaleX(0); transform-origin: 0 50%; }
+.google-rotina li { display: grid; gap: 6px; padding: 22px 22px 0 0; }
+.google-rotina li + li { padding-left: 22px; border-left: 1px solid rgba(11, 13, 14, .16); }
+.google-rotina b { font: 500 clamp(1.1rem, 1.55vw, 1.4rem) var(--display); letter-spacing: -.04em; font-weight: 500; }
+.google-rotina span { font-size: .88rem; color: #6b7873; text-wrap: pretty; }
+
+/* o pé fecha a seção numa linha só: a chamada à esquerda, o que vem depois
+   à direita, apoiados no mesmo fio das outras réguas */
+.google-pe {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px;
+  margin-top: clamp(44px, 5vw, 68px); padding-top: clamp(26px, 3vw, 38px);
+  border-top: 1px solid rgba(11, 13, 14, .16);
+}
+.google-pe p { margin: 0; font: 500 .76rem var(--display); letter-spacing: .02em; color: #8a9793; }
 
 /* ------------------------------------------------------- o que fazemos */
 
@@ -180,14 +220,14 @@ p { text-wrap: pretty; }
 
 /* ------------------------------------------------------- como fazemos */
 
-.process-track { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(56px, 6vw, 90px); border-top: 1px solid var(--line); }
+.process-track { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(48px, 5vw, 72px); border-top: 1px solid var(--line); }
 .process-track::after { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--cyan); transform: scaleX(0); transform-origin: 0 50%; }
 .process-step { padding: 25px 25px 0 0; border-right: 1px solid var(--line); }
 .process-step:not(:first-child) { padding-left: 25px; }
 .process-step:last-child { border: 0; }
 .process-step span { color: var(--cyan); font: 500 .8rem var(--display); }
-.process-step h3 { font: 500 2rem var(--display); letter-spacing: -.06em; margin: 35px 0 10px; }
-.process-step p { color: #aebbb7; max-width: 16rem; font-size: .92rem; margin: 0; }
+.process-step h3 { font: 500 2rem var(--display); letter-spacing: -.06em; margin: 30px 0 10px; }
+.process-step p { color: #aebbb7; max-width: 19rem; font-size: .92rem; line-height: 1.55; margin: 0; }
 
 /* ------------------------------------------------------------ prova real */
 
@@ -298,6 +338,9 @@ p { text-wrap: pretty; }
   .js .em-linhas.reveal { opacity: 1; transform: none; transition: none; }
   .js .reveal .linha { opacity: 0; translate: 0 .5em; transition: opacity .7s ease, translate 1s var(--curva-entrada); transition-delay: calc(var(--i, 0) * 90ms); }
   .js .reveal.is-visible .linha { opacity: 1; translate: 0 0; }
+  .js .google-numeros.reveal, .js .google-rotina.reveal { opacity: 1; transform: none; transition: none; }
+  .js .google-numeros.reveal > div, .js .google-rotina.reveal li { opacity: 0; translate: 0 18px; transition: opacity .7s ease, translate .9s var(--curva-entrada); transition-delay: calc(var(--i, 0) * 90ms + 100ms); }
+  .js .google-numeros.reveal.is-visible > div, .js .google-rotina.reveal.is-visible li { opacity: 1; translate: 0 0; }
   .js .trust-principios.reveal { opacity: 1; transform: none; transition: none; }
   .js .trust-principios.reveal li { opacity: 0; translate: 0 18px; transition: opacity .7s ease, translate .9s var(--curva-entrada); transition-delay: calc(var(--i, 0) * 110ms + 120ms); }
   .js .trust-principios.reveal.is-visible li { opacity: 1; translate: 0 0; }
@@ -324,6 +367,7 @@ p { text-wrap: pretty; }
 
     /* processo: a linha ciano risca da primeira à última etapa */
     .process-track::after { animation: enche linear both; animation-timeline: view(); animation-range: cover 12% cover 48%; }
+    .google-rotina::after { animation: enche linear both; animation-timeline: view(); animation-range: cover 10% cover 42%; }
 
     /* prova real: quando as prévias chegam, o palco fica preso no meio da
        tela e só os sites rolam, do topo ao fim. O trilho é o palco + a
@@ -348,10 +392,51 @@ html.lenis, html.lenis body { height: auto; }
 /* --------------------------------------------------------------- ultrawide
    Acima de 1800px a coluna abre e tudo que é medido em rem cresce junto,
    mantendo as proporções (e as mesmas linhas de alinhamento). */
-@media (min-width: 1800px) { :root { --largura: 1560px; } html { font-size: 18px; } }
-@media (min-width: 2400px) { :root { --largura: 1800px; } html { font-size: 20px; } }
+/* Ultrawide: a página cresce, mas a coluna do índice não — em 1fr/3fr ela
+   virava 450px de vazio e jogava todo o conteúdo para a direita. */
+@media (min-width: 1800px) {
+  :root { --largura: 1560px; }
+  html { font-size: 18px; }
+  /* Uma borda esquerda só. Em 1fr/3fr a coluna do índice virava um vão de
+     centenas de pixels e o conteúdo nascia deslocado para a direita; aqui o
+     rótulo sobe para cima do título e tudo — marca, rótulo, título, texto,
+     régua e botão — começa e termina na mesma linha. */
+  .section-grid { grid-template-columns: minmax(0, 1fr); }
+  /* top: auto é obrigatório aqui — a chamada final força position:relative no
+     rótulo por outra regra, e o top:112px do índice grudento jogava o "09"
+     para cima do título. */
+  .section-grid > .section-index { position: static; top: auto; padding-top: 0; margin-bottom: 30px; }
+  .section-text, .hero-lead { max-width: 38rem; }
+  /* a descrição do serviço encosta na borda direita: sem vão no meio da linha */
+  .service p { justify-self: end; max-width: 24rem; }
+  /* o bloco de abertura divide a largura em duas metades iguais e os dois
+     números ficam lado a lado — em coluna estreita sobrava um vão no meio. */
+  .google-abre { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(60px, 5vw, 100px); }
+  .google-numeros { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+  .google-numeros > div { padding: 22px 26px 0 0; }
+  .google-numeros > div + div { padding-left: 26px; border-left: 1px solid rgba(11, 13, 14, .16); }
+  .google-numeros dt { font-size: clamp(4rem, 4.6vw, 6.5rem); }
+  .google-numeros p { grid-column: 1 / -1; margin-top: 18px; }
+}
+@media (min-width: 2400px) {
+  :root { --largura: 1800px; }
+  html { font-size: 20px; }
+}
 
 /* ---------------------------------------------------------------- celular */
+/* Entre 800 e 1100 as duas colunas do bloco apertam as duas: o texto empilha
+   e a régua vira 2x2, mesma lógica do celular, sem virar uma terceira versão. */
+@media (max-width: 1100px) {
+  .google-abre { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .google-numeros { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+  .google-numeros > div { padding: 18px 18px 0 0; }
+  .google-numeros > div + div { padding-left: 18px; border-left: 1px solid rgba(11, 13, 14, .16); }
+  .google-numeros p { grid-column: 1 / -1; margin-top: 16px; }
+  .google-rotina { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .google-rotina li:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .google-rotina li:nth-child(n+3) { margin-top: 20px; border-top: 1px solid rgba(11, 13, 14, .16); }
+}
+
 @media (max-width: 800px) {
   :root { --secao-y: 80px; --topo: 68px; }
   .desktop-nav, .site-header > .button { display: none; }
@@ -416,12 +501,24 @@ html.lenis, html.lenis body { height: auto; }
   .trust-principios li, .trust-principios li + li { padding: 20px 0; border-left: 0; border-bottom: 1px solid rgba(11, 13, 14, .22); }
   .trust-principios li:last-child { border-bottom: 0; padding-bottom: 0; }
 
-  .solution { margin-top: 48px; }
-  .solution p { font-size: .95rem; }
-
   .service { grid-template-columns: 35px minmax(0, 1fr); gap: 6px 10px; padding: 22px 0; }
   .service h3 { font-size: 1.7rem; }
   .service p { grid-column: 2; font-size: .9rem; }
+
+  .google-abre { grid-template-columns: minmax(0, 1fr); gap: 34px; margin-top: 36px; }
+  .google-numeros { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+  .google-numeros > div { padding: 16px 16px 0 0; }
+  .google-numeros > div + div { padding-left: 16px; border-left: 1px solid rgba(11, 13, 14, .16); }
+  .google-numeros p { grid-column: 1 / -1; margin-top: 14px; }
+  .google-rotina { grid-template-columns: minmax(0, 1fr); margin-top: 40px; }
+  .google-rotina li, .google-rotina li + li { padding: 16px 0; border-left: 0; border-bottom: 1px solid rgba(11, 13, 14, .16); }
+  /* empilhado, cada item já tem o fio de baixo: o fio de cima do 2x2 sobraria
+     e apareciam dois traços no mesmo vão */
+  .google-rotina li:nth-child(n+3) { margin-top: 0; border-top: 0; }
+  .google-rotina li:last-child { border-bottom: 0; }
+  /* empilhado, o fio do pé é o fio que fecha a régua: ele encosta no último
+     item como todos os outros, e o respiro fica embaixo, antes do botão */
+  .google-pe { gap: 14px; margin-top: 0; padding-top: 28px; }
 
   .process-track { grid-template-columns: minmax(0, 1fr); }
   .process-step, .process-step:not(:first-child) { border-right: 0; border-bottom: 1px solid var(--line); padding: 22px 0; }

@@ -149,12 +149,12 @@
      ela atravessa a tela */
   @media (prefers-reduced-motion: no-preference) and (max-width: 800px) {
     /* A moldura mostra o TOPO do site até chegar no meio da tela (é ali que se
-       olha) e só então o site rola junto com o dedo, até a moldura encostar no
-       topo. O inset desconta o cabeçalho grudado: "meio" é o meio da área
+       olha) e só então o site rola junto com o dedo, devagar, até a moldura ir
+       saindo pelo topo. O inset desconta o cabeçalho grudado: "meio" é o meio da área
        visível. (Antes a rolagem começava com a moldura entrando por baixo e,
        no meio da tela, a primeira dobra do site já tinha passado.) */
     .caso-telas { view-timeline: --telas block; view-timeline-inset: var(--topo) 0px; }
-    .caso-telas .tela-rola { animation: rola-leve linear both; animation-timeline: --telas; animation-range: contain 50% contain 100%; }
+    .caso-telas .tela-rola { animation: rola-leve linear both; animation-timeline: --telas; animation-range: contain 50% exit 40%; }   /* termina com a moldura saindo pelo topo: o mesmo percurso em ~40% mais rolagem, mais devagar */
   }
 }
 @keyframes recua { to { scale: .94; opacity: .3; } }

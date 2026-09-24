@@ -4,6 +4,7 @@
    3. karaokê: o parágrafo vira uma palavra por span
    4. aparições ao rolar (.reveal), em cascata por posição no bloco
    5. números que contam uma vez, quando aparecem
+   6. o campo (só no computador): o body assume a cor da seção no meio da tela
    7. seção ativa no menu
    8. rolagem suave no computador (Lenis)
    Se este arquivo não carregar, o CSS mostra tudo parado e completo. */
@@ -94,6 +95,30 @@ if ('IntersectionObserver' in window) {
 } else {
   reveals.forEach(item => { item.classList.add('is-visible'); contaNumeros(item); });
 }
+
+// 6. O campo, só no computador (≥1024px): a seção que cruza o meio da tela
+//    decide a cor do body — e, pelos tokens, de todo o texto na tela. Liga e
+//    desliga com a largura (girar o tablet, redimensionar a janela). No
+//    celular fica cada seção com o próprio fundo, e o body nunca é marcado.
+const telaGrande = window.matchMedia('(min-width: 1024px)');
+const campos = [...document.querySelectorAll('main [data-campo]')];
+let olhoCampo = null;
+const ligaCampos = () => {
+  const liga = telaGrande.matches && campos.length > 0 && 'IntersectionObserver' in window;
+  document.documentElement.classList.toggle('campos', liga);
+  if (liga && !olhoCampo) {
+    olhoCampo = new IntersectionObserver(entradas => {
+      entradas.forEach(e => { if (e.isIntersecting) document.body.dataset.campo = e.target.dataset.campo; });
+    }, { rootMargin: '-50% 0px -49% 0px', threshold: 0 });
+    campos.forEach(s => olhoCampo.observe(s));
+  } else if (!liga && olhoCampo) {
+    olhoCampo.disconnect();
+    olhoCampo = null;
+    delete document.body.dataset.campo;
+  }
+};
+ligaCampos();
+telaGrande.addEventListener('change', ligaCampos);
 
 // 7. Seção ativa no menu do computador.
 const linksMenu = [...document.querySelectorAll('.desktop-nav a[href^="#"]')];

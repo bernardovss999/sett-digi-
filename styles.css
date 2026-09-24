@@ -51,6 +51,7 @@
   --t-ui: .32s;        /* menu, pergunta abrindo, topo, estados */
   --t-entrada: .7s;    /* aparições ao rolar */
   --t-cena: 1.1s;      /* a abertura e o número que conta */
+  --t-campo: .8s;      /* no computador, o body atravessando de um campo para o outro */
   --passo: 80ms;       /* o passo de toda cascata (frase, linhas, irmãos) */
   --curva: cubic-bezier(.2, .8, .2, 1);
   --curva-entrada: cubic-bezier(.16, 1, .3, 1);
@@ -184,7 +185,7 @@ p { text-wrap: pretty; }
   display: flex; align-items: center; gap: 1rem;
   font: 500 .7rem var(--display); color: var(--campo-texto-2);
 }
-.hero-foot .line { width: 80px; height: 1px; background: var(--cyan); margin-left: 1rem; transform-origin: 0 50%; }
+.hero-foot .line { width: 80px; height: 1px; background: var(--campo-realce); margin-left: 1rem; transform-origin: 0 50%; }
 .hero-foot span:last-child { margin-left: auto; }
 
 /* ------------------------------------------------------------- confiança */
@@ -590,7 +591,7 @@ html.lenis, html.lenis body { height: auto; }
      barra embaixo. A moldura continua 16:10 (uma tela de desktop inteira). */
   .proof-fita-env {
     margin-inline: calc(-1 * var(--margem)); padding-inline: var(--margem);
-    overflow-x: auto; overflow-y: hidden; touch-action: pan-x pinch-zoom; overscroll-behavior-x: contain;
+    overflow-x: auto; overflow-y: hidden; touch-action: pan-x pan-y pinch-zoom; overscroll-behavior-x: contain;   /* pan-y: o dedo que começa na fita e sobe rola a PÁGINA (só pan-x travava) */
     scroll-snap-type: x mandatory; scroll-padding-inline: var(--margem); scrollbar-width: none;
   }
   .proof-fita-env::-webkit-scrollbar { display: none; }
@@ -619,15 +620,43 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* ================================================================ CAMPOS
-   Cada seção declara o próprio campo (fundo sólido + tokens de texto) e a cor
-   muda exatamente onde a seção começa: a borda anda com o dedo, a seção nova
-   sobe cobrindo a anterior. (Houve uma versão em que o body inteiro trocava
-   de cor por tempo ao cruzar o meio da tela: no celular a tela virava papel
-   com o hero ainda nela, e os vãos entre seções, sem borda de cor, viravam
-   buraco. Reprovada em 2026-09-24.) Seções pretas herdam o preto do body. */
+   Cada seção declara o próprio campo (fundo sólido + tokens de texto). No
+   CELULAR e no tablet em pé a cor muda exatamente onde a seção começa: a borda
+   anda com o dedo. No COMPUTADOR (≥1024px, classe .campos posta pelo JS) a
+   página inteira troca de campo quando a seção cruza o meio da tela, com
+   transição — o hero ali ocupa a tela toda, então a virada acontece com ele
+   já saindo. No celular essa virada foi reprovada (2026-09-24): o hero é
+   curto, a tela virava papel com ele ainda nela e os vãos entre seções, sem
+   borda de cor, viravam buraco. Seções pretas herdam o preto do body. */
+
+/* os tokens registrados como cor, para poderem TRANSICIONAR no body */
+@property --campo-fundo { syntax: "<color>"; inherits: true; initial-value: #0b0d0e; }
+@property --campo-texto { syntax: "<color>"; inherits: true; initial-value: #f0f2ed; }
+@property --campo-texto-2 { syntax: "<color>"; inherits: true; initial-value: #aebbb7; }
+@property --campo-fio { syntax: "<color>"; inherits: true; initial-value: rgba(240, 242, 237, .17); }
+@property --campo-realce { syntax: "<color>"; inherits: true; initial-value: #6ef4e7; }
+@property --campo-indice { syntax: "<color>"; inherits: true; initial-value: #6ef4e7; }
+
+/* o body só recebe data-campo com .campos ligada (o JS não marca fora do
+   desktop), então estes seletores nunca pintam o body no celular */
 .google, .previas, [data-campo="paper"] { --campo-fundo: var(--paper); --campo-texto: var(--ink); --campo-texto-2: #45514d; --campo-fio: rgba(11, 13, 14, .16); --campo-realce: #188f86; --campo-indice: #166f68; }
 .services, .final-cta, [data-campo="deep"] { --campo-fundo: var(--deep); --campo-texto: var(--paper); --campo-texto-2: #b0beb9; --campo-fio: rgba(240, 242, 237, .28); --campo-realce: var(--cyan); --campo-indice: var(--cyan); }
 .proof, [data-campo="cyan"] { --campo-fundo: var(--cyan); --campo-texto: var(--ink); --campo-texto-2: #1e3d39; --campo-fio: rgba(11, 13, 14, .22); --campo-realce: var(--ink); --campo-indice: var(--ink); }
+html.campos body[data-campo="ink"] { --campo-fundo: var(--ink); --campo-texto: var(--paper); --campo-texto-2: #aebbb7; --campo-fio: var(--line); --campo-realce: var(--cyan); --campo-indice: var(--cyan); }
+html.campos body {
+  transition: background-color var(--t-campo) var(--curva), color var(--t-campo) var(--curva),
+    --campo-fundo var(--t-campo) var(--curva), --campo-texto var(--t-campo) var(--curva), --campo-texto-2 var(--t-campo) var(--curva),
+    --campo-fio var(--t-campo) var(--curva), --campo-realce var(--t-campo) var(--curva), --campo-indice var(--t-campo) var(--curva);
+}
+/* as seções ficam transparentes e herdam os tokens do body; (0,2,2) vence
+   as cores próprias de .google/.previas/.services (0,1,0) */
+html.campos main [data-campo] { background: transparent; --campo-fundo: inherit; --campo-texto: inherit; --campo-texto-2: inherit; --campo-fio: inherit; --campo-realce: inherit; --campo-indice: inherit; }
+/* o anel é do campo preto: sai junto quando o body deixa de ser preto */
+.hero-aneis { transition: opacity var(--t-campo) var(--curva); }
+html.campos body:not([data-campo="ink"]) .hero-aneis { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  html.campos body, .hero-aneis { transition: none; }
+}
 
 /* O que a rolagem conduz nasce PRONTO onde ela não conduz nada: a linha do
    processo inteira, e a barra da fita some (uma barra parada em 20% mentiria). */
@@ -657,7 +686,8 @@ html.lenis, html.lenis body { height: auto; }
 @supports (animation-timeline: view()) and ((background-clip: text) or (-webkit-background-clip: text)) {
   @media (prefers-reduced-motion: no-preference) {
     .karaoke .k {
-      background-image: linear-gradient(90deg, var(--paper) 50%, #8d9a96 50%);
+      /* lê do campo: no computador o body pode virar ciano com o fim da frase ainda na tela */
+      background-image: linear-gradient(90deg, var(--campo-texto) 50%, color-mix(in srgb, var(--campo-texto-2) 75%, var(--campo-fundo)) 50%);
       background-size: 200% 100%;
       background-position: 100% 0;
       -webkit-background-clip: text; background-clip: text;

@@ -34,7 +34,7 @@
 /* a paleta de cada cliente, tirada do próprio site dele */
 .c-fatima  { --c-fundo: #f3e4df; --c-tinta: #3f101c; --c-tinta2: #7a4a54; --c-fio: rgba(63, 16, 28, .22);    --c-realce: #8a1e33; }
 .c-leal    { --c-fundo: #0b1024; --c-tinta: #eef0f5; --c-tinta2: #aab2c6; --c-fio: rgba(238, 240, 245, .18); --c-realce: #6e83ff; }
-.c-cemevi  { --c-fundo: #dcefe9; --c-tinta: #103f39; --c-tinta2: #3f625d; --c-fio: rgba(16, 63, 57, .22);    --c-realce: #d95f4d; }
+.c-cemevi  { --c-fundo: #dcefe9; --c-tinta: #103f39; --c-tinta2: #3f625d; --c-fio: rgba(16, 63, 57, .22);    --c-realce: #a8412f; }   /* o coral da marca escurecido: #d95f4d dava 3,08:1 no número */
 .c-tannuri { --c-fundo: #f0e7db; --c-tinta: #33241d; --c-tinta2: #5f4d44; --c-fio: rgba(51, 36, 29, .22);    --c-realce: #8b3a2f; }
 .c-rcold   { --c-fundo: #0e0f10; --c-tinta: #f1f2f0; --c-tinta2: #a9aeab; --c-fio: rgba(241, 242, 240, .16); --c-realce: #3a86ff; }
 

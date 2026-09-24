@@ -6,7 +6,27 @@
    o índice ("02 / confiança") e o conteúdo. Assim as bordas esquerda e
    direita batem de cima a baixo, do celular ao ultrawide.
 
-   Movimento: só aparições que terminam e param. Nada em laço infinito. */
+   Movimento: só aparições que terminam e param. Nada em laço infinito.
+   Uma voz só: três durações (micro / interface / entrada, e a cena da
+   abertura) e duas curvas. Tudo que anima lê daqui. */
+
+/* fontes hospedadas (arquivos variáveis, latin): sem trocar de fonte no meio
+   da carga — o HTML pré-carrega as duas */
+@font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 300 700; font-display: swap; src: url('/fonts/space-grotesk.woff2') format('woff2'); }
+@font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 100 1000; font-display: swap; src: url('/fonts/dm-sans.woff2') format('woff2'); }
+
+/* os tokens do campo são registrados como cor para poderem TRANSICIONAR no
+   body quando a página troca de campo ao rolar (ver CAMPOS) */
+@property --campo-fundo { syntax: "<color>"; inherits: true; initial-value: #0b0d0e; }
+@property --campo-texto { syntax: "<color>"; inherits: true; initial-value: #f0f2ed; }
+@property --campo-texto-2 { syntax: "<color>"; inherits: true; initial-value: #aebbb7; }
+@property --campo-fio { syntax: "<color>"; inherits: true; initial-value: rgba(240, 242, 237, .17); }
+@property --campo-realce { syntax: "<color>"; inherits: true; initial-value: #6ef4e7; }
+@property --campo-indice { syntax: "<color>"; inherits: true; initial-value: #6ef4e7; }
+
+/* de uma página para a outra (home ↔ portfólio) o conteúdo cruza e o
+   cabeçalho fica no lugar; onde não há suporte, é a navegação comum */
+@view-transition { navigation: auto; }
 
 :root {
   --ink: #0b0d0e;
@@ -18,11 +38,29 @@
   --display: 'Space Grotesk', sans-serif;
   --body: 'DM Sans', sans-serif;
 
+  /* O CAMPO ATUAL (valores do preto). Cada seção redeclara os seus e, com JS,
+     o body assume os do campo que cruza o meio da tela. Todo texto que senta
+     direto no campo lê daqui — nunca de uma cor fixa. */
+  --campo-fundo: var(--ink);
+  --campo-texto: var(--paper);
+  --campo-texto-2: #aebbb7;
+  --campo-fio: var(--line);
+  --campo-realce: var(--cyan);
+  --campo-indice: var(--cyan);
+
   --largura: 1320px;
   --gutter: clamp(20px, 5vw, 72px);
   --margem: max(var(--gutter), calc((100% - var(--largura)) / 2));
   --coluna-gap: clamp(24px, 4vw, 64px);
   --secao-y: clamp(88px, 10vw, 160px);
+
+  /* uma voz só */
+  --t-micro: .18s;     /* hover, foco, seta, cor de link */
+  --t-ui: .32s;        /* menu, pergunta abrindo, topo, estados */
+  --t-entrada: .7s;    /* aparições ao rolar */
+  --t-cena: 1.1s;      /* a abertura e o número que conta */
+  --t-campo: .8s;      /* o body atravessando de um campo para o outro */
+  --passo: 80ms;       /* o passo de toda cascata (frase, linhas, irmãos) */
   --curva: cubic-bezier(.2, .8, .2, 1);
   --curva-entrada: cubic-bezier(.16, 1, .3, 1);
   --topo: 80px;
@@ -30,7 +68,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-body { margin: 0; background: var(--ink); color: var(--paper); font-family: var(--body); font-size: 1rem; line-height: 1.5; }
+body { margin: 0; background: var(--campo-fundo); color: var(--campo-texto); font-family: var(--body); font-size: 1rem; line-height: 1.5; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 a, button, summary { -webkit-tap-highlight-color: transparent; }
@@ -45,7 +83,9 @@ p { text-wrap: pretty; }
   border-bottom: 1px solid transparent;
   position: sticky; top: 0; z-index: 5;
   background: rgba(11, 13, 14, .62); backdrop-filter: blur(12px);
-  transition: background .35s, border-color .35s, box-shadow .35s;
+  color: var(--paper); --campo-texto: var(--paper);   /* o topo é sempre escuro, em qualquer campo */
+  view-transition-name: cabecalho;   /* fica parado enquanto a página troca */
+  transition: background var(--t-ui), border-color var(--t-ui), box-shadow var(--t-ui);
 }
 .site-header.is-scrolled { background: rgba(11, 13, 14, .9); border-color: var(--line); box-shadow: 0 12px 35px rgba(0, 0, 0, .22); }
 .brand { display: flex; align-items: center; gap: 10px; font: 600 1.35rem var(--display); letter-spacing: -.06em; }
@@ -56,20 +96,25 @@ p { text-wrap: pretty; }
   padding: 10px 22px; border: 1px solid rgba(240, 242, 237, .12); border-radius: 999px;
   background: rgba(240, 242, 237, .06); color: #c7cfcb; font-size: .9rem;
   box-shadow: inset 0 1px rgba(255, 255, 255, .06);
-  transition: background .35s, border-color .35s;
+  transition: background var(--t-ui), border-color var(--t-ui);
 }
-.desktop-nav:hover { background: rgba(240, 242, 237, .1); border-color: rgba(110, 244, 231, .32); }
+/* a seção que está na tela acende no menu */
+.desktop-nav a.is-active { color: var(--cyan); }
+
 /* Efeitos de passar o mouse só onde existe mouse: no toque eles ficavam
    "grudados" depois do toque (pergunta ciano, botão levantado). */
 @media (hover: hover) and (pointer: fine) {
   .button:hover { transform: translateY(-2px); background: #b4fff5; }
-  .button-ink:hover { background: #262c2e; }
+  .button:hover::after { translate: 4px 0; }
+  .button-ink:hover { background: var(--campo-texto-2); }
   .button-light:hover { background: #ffffff; }
   .text-link:hover { border-color: var(--paper); }
   .faq-list summary:hover { color: var(--cyan); }
+  .desktop-nav:hover { background: rgba(240, 242, 237, .1); border-color: rgba(110, 244, 231, .32); }
+  .desktop-nav a:hover, .site-footer a:hover { color: var(--cyan); }
 }
-.desktop-nav a, .site-footer a { transition: color .25s; }
-.desktop-nav a:hover, .site-footer a:hover, .desktop-nav a[aria-current="page"] { color: var(--cyan); }
+.desktop-nav a, .site-footer a { transition: color var(--t-micro); }
+.desktop-nav a[aria-current="page"] { color: var(--cyan); }
 
 /* ---------------------------------------------------------------- botões */
 
@@ -77,17 +122,21 @@ p { text-wrap: pretty; }
   display: inline-flex; align-items: center; gap: 1rem;
   background: var(--cyan); color: var(--ink);
   padding: 15px 22px; border-radius: 999px; font-weight: 600; font-size: .9rem;
-  transition: transform .25s var(--curva), background-color .25s, translate .5s var(--curva);
+  transition: transform var(--t-micro) var(--curva), background-color var(--t-micro);
 }
+/* a seta é parte do botão principal (o menu do celular já usa a mesma) e
+   desliza um pouco no mouse — o mesmo gesto dos links do portfólio */
+.button:not(.button-small)::after { content: "→"; display: inline-block; margin-left: -.35rem; transition: translate var(--t-micro) var(--curva); }
 .button-small { padding: 11px 16px; }
 .button-light { background: var(--paper); }
-.button-ink { background: var(--ink); color: var(--paper); }
+.button-ink { background: var(--campo-texto); color: var(--campo-fundo); }
+.proof .button-ink { color: var(--paper); }
 .menu-toggle, .mobile-nav { display: none; }
 
 .text-link {
-  display: inline-flex; gap: 1rem; padding-bottom: 5px;
-  color: var(--paper); border-bottom: 1px solid var(--cyan); font-size: .9rem;
-  transition: border-color .25s;
+  display: inline-flex; align-items: center; gap: 1rem; min-height: 44px; padding-bottom: 5px;
+  color: var(--campo-texto); border-bottom: 1px solid var(--campo-realce); font-size: .9rem;
+  transition: border-color var(--t-micro);
 }
 
 /* ---------------------------------------------------------------- seções */
@@ -97,12 +146,12 @@ p { text-wrap: pretty; }
   padding: var(--secao-y) var(--margem);
   position: relative;
 }
-.eyebrow, .section-index { font: 500 .72rem var(--display); letter-spacing: .08em; color: var(--cyan); }
+.eyebrow, .section-index { font: 500 .72rem var(--display); letter-spacing: .08em; color: var(--campo-indice); }
 .section-index { padding-top: .35em; }
 .section-title { font: 600 clamp(2.8rem, 6.5vw, 6.5rem) var(--display); line-height: .94; letter-spacing: -.09em; margin: 0; text-wrap: balance; }
-.section-title span:not(.linha) { color: var(--cyan); }
+.section-title span:not(.linha) { color: var(--campo-realce); }
 .section-text { max-width: 31rem; font-size: 1.1rem; line-height: 1.5; margin: 36px 0 0; }
-.hero-title em, .section-title em, .proof-panel em, .cta-title em { font-style: normal; color: var(--cyan); }
+.hero-title em, .section-title em, .proof-panel em, .cta-title em { font-style: normal; color: var(--campo-realce); }
 
 /* ----------------------------------------------------------------- hero
    A frase é a peça central. O único grafismo são os anéis da marca
@@ -119,43 +168,40 @@ p { text-wrap: pretty; }
 .hero-title { font: 600 clamp(4.4rem, 11vw, 10rem) var(--display); line-height: .84; letter-spacing: -.1em; margin: 34px 0 38px; }
 .hero-title em { white-space: nowrap; }
 .hero-title .linha, .port-title .linha { display: block; }
-.hero-lead { font-size: clamp(1.1rem, 1.6vw, 1.35rem); max-width: 30rem; color: #c4ceca; line-height: 1.45; margin: 0; }
+.hero-lead { font-size: clamp(1.1rem, 1.6vw, 1.35rem); max-width: 30rem; color: var(--campo-texto-2); line-height: 1.45; margin: 0; }
 .hero-actions { display: flex; align-items: center; gap: 2rem; margin-top: 38px; }
 
 .aneis {
   position: absolute; pointer-events: none; border-radius: 50%;
-  border: 1px solid rgba(110, 244, 231, .22);
-  box-shadow: 0 0 0 50px rgba(110, 244, 231, .025), 0 0 0 100px rgba(110, 244, 231, .025), 0 0 0 150px rgba(110, 244, 231, .025);
+  border: 1px solid rgba(110, 244, 231, .3);
 }
-.hero-aneis { position: absolute; pointer-events: none; width: min(56vw, 900px); aspect-ratio: 1; right: -22vw; top: 50%; transform: translateY(-46%); }
+.hero-aneis { position: absolute; pointer-events: none; width: min(56vw, 900px); aspect-ratio: 1; right: -22vw; top: 50%; transform: translateY(-46%); transition: opacity var(--t-campo) var(--curva); }
+/* o anel pertence ao campo preto: quando o body vira papel, ele sai junto (senão
+   vazava em menta sobre o papel enquanto o hero ainda está na tela) */
+html.js body:not([data-campo="ink"]) .hero-aneis { opacity: 0; }
 .hero-aneis .aneis { inset: 0; }
+/* A ASSINATURA: um arco de luz na borda do anel, entre 10 e 11 horas — a
+   aresta do monograma pegando luz. É a única coisa que a abertura deixa
+   quando para: a luz passa, a marca fica. Na carga o arco gira 40° e assenta;
+   o mesmo arco fecha a página, parado, nos anéis da chamada final. */
+.hero-aneis .aneis::before, .final-cta .aneis::before {
+  content: ""; position: absolute; inset: -1px; border-radius: 50%; pointer-events: none;
+  background: conic-gradient(from 0deg, #0000 0 250deg, rgba(110, 244, 231, .38) 283deg, #dffffb 299deg, rgba(110, 244, 231, .3) 326deg, #0000 344deg);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 calc(100% - 2.5px) calc(100% - .5px), #0000);
+          mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 calc(100% - 2.5px) calc(100% - .5px), #0000);
+}
 
 .hero-foot {
   position: absolute; bottom: 34px; left: var(--margem); right: var(--margem);
   display: flex; align-items: center; gap: 1rem;
-  font: 500 .7rem var(--display); color: var(--muted);
+  font: 500 .7rem var(--display); color: var(--campo-texto-2);
 }
-.hero-foot .line { width: 80px; height: 1px; background: var(--cyan); margin-left: 1rem; }
+.hero-foot .line { width: 80px; height: 1px; background: var(--cyan); margin-left: 1rem; transform-origin: 0 50%; }
 .hero-foot span:last-child { margin-left: auto; }
 
 /* ------------------------------------------------------------- confiança */
 
-.trust { background: var(--paper); color: var(--ink); }
-.trust .section-index, .trust .section-text { color: #4e5b57; }
-.trust .section-title span:not(.linha) { color: #188f86; }
 /* Os três princípios fecham a seção como uma régua da grade (mesma linguagem
-   do processo): linha em cima, divisórias finas, sem caixa solta. */
-.trust-principios {
-  list-style: none; margin: clamp(56px, 6vw, 88px) 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid rgba(11, 13, 14, .22);
-}
-.trust-principios li {
-  padding: 24px 24px 0 0;
-  font: 500 clamp(1.2rem, 1.75vw, 1.7rem)/1.08 var(--display); letter-spacing: -.05em; color: var(--ink);
-  text-wrap: balance;
-}
-.trust-principios li + li { padding-left: 24px; border-left: 1px solid rgba(11, 13, 14, .22); }
 
 /* -------------------------------------------------- o perfil no Google
 
@@ -164,109 +210,107 @@ p { text-wrap: pretty; }
    números ao lado, a régua da rotina (uma linha) e a chamada. Todo número
    carrega de onde veio — número sem fonte é chute. */
 
-.google { background: var(--paper); color: var(--ink); }
-.google .section-index { color: #188f86; }
-.google .section-title span:not(.linha) { color: #188f86; }
-.google .section-text { color: #45514d; margin-top: 0; line-height: 1.6; }
+.google { background: var(--campo-fundo); color: var(--campo-texto); }
+.google .section-text { color: var(--campo-texto-2); margin-top: 0; line-height: 1.6; }
 
 .google-abre {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .58fr);
   gap: clamp(28px, 5vw, 80px); align-items: start;
   margin-top: clamp(44px, 5vw, 76px);
 }
-.google-local { max-width: 31rem; margin: 20px 0 0; font-size: 1.02rem; line-height: 1.6; color: #45514d; }
-.google-local b { font-weight: 500; color: var(--ink); }
+.google-local { max-width: 31rem; margin: 20px 0 0; font-size: 1.02rem; line-height: 1.6; color: var(--campo-texto-2); }
+.google-local b { font-weight: 500; color: var(--campo-texto); }
 
 .google-numeros { margin: 6px 0 0; display: grid; gap: 22px; }
-.google-numeros > div { display: grid; gap: 4px; padding-top: 20px; border-top: 1px solid rgba(11, 13, 14, .16); }
+.google-numeros > div { display: grid; gap: 4px; padding-top: 20px; border-top: 1px solid var(--campo-fio); }
 .google-numeros dt { font: 600 clamp(3rem, 5.4vw, 5rem)/.9 var(--display); letter-spacing: -.08em; font-variant-numeric: tabular-nums; }
-.google-numeros dd { margin: 0; font-size: .98rem; color: #45514d; }
-.google-numeros p { margin: 0; font: 500 .68rem var(--display); letter-spacing: .04em; color: #7b8884; }
+.google-numeros dd { margin: 0; font-size: .98rem; color: var(--campo-texto-2); }
+.google-numeros p { margin: 0; font: 500 .68rem var(--display); letter-spacing: .04em; color: var(--campo-texto-2); }
 
 /* a rotina é uma régua de uma linha só: o que entra todo mês, sem parágrafo */
-.google-rotina {
-  position: relative;
-  list-style: none; margin: clamp(52px, 6vw, 84px) 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid rgba(11, 13, 14, .16);
-}
 /* o traço verde risca a régua ao entrar, como na seção do processo */
-.google-rotina::after { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: #188f86; transform: scaleX(0); transform-origin: 0 50%; }
-.google-rotina li { display: grid; gap: 6px; padding: 22px 22px 0 0; }
-.google-rotina li + li { padding-left: 22px; border-left: 1px solid rgba(11, 13, 14, .16); }
-.google-rotina b { font: 500 clamp(1.1rem, 1.55vw, 1.4rem) var(--display); letter-spacing: -.04em; font-weight: 500; }
-.google-rotina span { font-size: .88rem; color: #6b7873; text-wrap: pretty; }
 
 /* o pé fecha a seção numa linha só: a chamada à esquerda, o que vem depois
    à direita, apoiados no mesmo fio das outras réguas */
 .google-pe {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px;
   margin-top: clamp(44px, 5vw, 68px); padding-top: clamp(26px, 3vw, 38px);
-  border-top: 1px solid rgba(11, 13, 14, .16);
+  border-top: 1px solid var(--campo-fio);
 }
-.google-pe p { margin: 0; font: 500 .76rem var(--display); letter-spacing: .02em; color: #8a9793; }
+.google-pe p { margin: 0; font: 500 .76rem var(--display); letter-spacing: .02em; color: var(--campo-texto-2); }
 
 /* ------------------------------------------------------- o que fazemos */
 
-.services { background: var(--deep); }
-.service-list { margin-top: clamp(56px, 6vw, 80px); border-top: 1px solid rgba(240, 242, 237, .28); }
+.services { background: var(--campo-fundo); }
+.service-list { margin-top: clamp(56px, 6vw, 80px); border-top: 1px solid var(--campo-fio); }
 .service {
+  position: relative;
   display: grid; grid-template-columns: 70px minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; gap: 20px;
-  padding: 26px 0; border-bottom: 1px solid rgba(240, 242, 237, .28);
+  padding: 26px 0; border-bottom: 1px solid var(--campo-fio);
 }
-.service-tag { font: 500 .75rem var(--display); color: var(--cyan); }
-.service h3 { font: 500 clamp(1.7rem, 3vw, 3rem) var(--display); letter-spacing: -.07em; margin: 0; }
-.service p { color: #b0beb9; max-width: 21rem; margin: 0; font-size: .95rem; }
+.service-tag { font: 500 .75rem var(--display); color: var(--campo-indice); }
+.service h3 { font: 500 clamp(1.7rem, 3vw, 3rem) var(--display); letter-spacing: -.07em; margin: 0; transition: translate var(--t-ui) var(--curva); }
+.service p { color: var(--campo-texto-2); max-width: 21rem; margin: 0; font-size: .95rem; transition: color var(--t-ui); }
+/* no mouse a linha responde: o fio de cima corre em ciano, o nome dá um
+   passo, a descrição acende — o mesmo traço que corre nas prévias */
+.service::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--campo-realce); transform: scaleX(0); transform-origin: 0 50%; transition: transform var(--t-ui) var(--curva); }
+@media (hover: hover) and (pointer: fine) {
+  .service:hover::before { transform: scaleX(1); }
+  .service:hover h3 { translate: 8px 0; }
+  .service:hover p { color: var(--campo-texto); }
+}
 
 /* ------------------------------------------------------- como fazemos */
 
-.process-track { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(48px, 5vw, 72px); border-top: 1px solid var(--line); }
-.process-track::after { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--cyan); transform: scaleX(0); transform-origin: 0 50%; }
-.process-step { padding: 25px 25px 0 0; border-right: 1px solid var(--line); }
+.process-track { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(48px, 5vw, 72px); border-top: 1px solid var(--campo-fio); }
+.process-track::after { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--campo-realce); transform: scaleX(0); transform-origin: 0 50%; }
+.process-step { padding: 25px 25px 0 0; border-right: 1px solid var(--campo-fio); }
 .process-step:not(:first-child) { padding-left: 25px; }
 .process-step:last-child { border: 0; }
-.process-step span { color: var(--cyan); font: 500 .8rem var(--display); }
+.process-step span { color: var(--campo-indice); font: 500 .8rem var(--display); }
 .process-step h3 { font: 500 2rem var(--display); letter-spacing: -.06em; margin: 30px 0 10px; }
-.process-step p { color: #aebbb7; max-width: 19rem; font-size: .92rem; line-height: 1.55; margin: 0; }
+.process-step p { color: var(--campo-texto-2); max-width: 19rem; font-size: .92rem; line-height: 1.55; margin: 0; }
 
 /* ------------------------------------------------------------ prova real */
 
-.proof { background: var(--cyan); color: var(--ink); }
-.proof .section-index { color: var(--ink); }
-.proof-panel .eyebrow { color: var(--ink); }
+.proof { background: var(--campo-fundo); color: var(--campo-texto); }
 .proof-panel h2 { font: 600 clamp(3rem, 7vw, 7rem)/.9 var(--display); letter-spacing: -.1em; margin: 30px 0; text-wrap: balance; }
-.proof-panel em { color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; }
+.proof-panel em { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; }
 .proof-panel p { max-width: 30rem; margin: 0 0 32px; }
 
 .proof-trilho { grid-column: 1 / -1; }
-.proof-previas {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin-top: clamp(56px, 6vw, 88px);
-  /* teto pela altura: cada tela 16:10 com no máximo ~55% da janela */
-  width: 100%; margin-inline: auto; max-width: calc(min(55svh, 38rem) * 1.6 * 2 + clamp(16px, 2vw, 28px));
-}
-.proof-previa { display: grid; gap: 14px; }
+/* A FITA: as cinco telas numa linha só. No desktop ela anda com a rolagem
+   enquanto o palco fica preso, começa na borda da coluna e sangra até a
+   borda direita da tela (a seção corta ali, sem rolagem lateral); no celular
+   anda no dedo, com a barra medindo o arrasto. */
+.proof { overflow-x: clip; }
+.proof-fita-env { margin-top: clamp(56px, 6vw, 88px); container-type: inline-size; }
+.proof-fita { list-style: none; margin: 0; padding: 0; display: flex; gap: clamp(16px, 2vw, 28px); width: max-content; }
+.proof-previa { width: clamp(300px, 30vw, 520px); flex: none; }
+.proof-previa a { display: grid; gap: 14px; }
+.proof-barra { display: none; }
 .proof-janela {
   position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 12px;
   background: var(--ink); outline: 1px solid rgba(11, 13, 14, .22); outline-offset: -1px;
   box-shadow: 0 28px 44px -30px rgba(11, 13, 14, .7);
-  transition: translate .35s var(--curva);
+  transition: translate var(--t-ui) var(--curva);
 }
 .proof-legenda { display: flex; justify-content: space-between; gap: 1rem; font: 500 .78rem var(--display); letter-spacing: .02em; }
 .proof-legenda b { font-weight: 600; }
-@media (hover: hover) { .proof-previa:hover .proof-janela { translate: 0 -4px; } }
+@media (hover: hover) and (pointer: fine) { .proof-previa:hover .proof-janela { translate: 0 -4px; } }
 
 /* A página inicial da prévia, mais alta que a janela: rola dentro dela. */
 .tela-rola { position: absolute; top: 0; left: 0; display: block; width: 100%; height: auto; }
 
 /* ---------------------------------------------------------------- dúvidas */
 
-.faq-list { margin-top: clamp(56px, 6vw, 75px); border-top: 1px solid var(--line); }
-.faq-list details { border-bottom: 1px solid var(--line); padding: 24px 0; }
-.faq-list summary { cursor: pointer; list-style: none; font: 500 1.2rem var(--display); display: flex; justify-content: space-between; align-items: center; gap: 2rem; transition: color .25s; }
+.faq-list { margin-top: clamp(56px, 6vw, 75px); border-top: 1px solid var(--campo-fio); }
+.faq-list details { border-bottom: 1px solid var(--campo-fio); }
+.faq-list summary { cursor: pointer; list-style: none; min-height: 44px; padding: 20px 0; font: 500 1.2rem var(--display); display: flex; justify-content: space-between; align-items: center; gap: 2rem; transition: color var(--t-micro); }
 .faq-list summary::-webkit-details-marker { display: none; }
-.faq-list summary span { color: var(--cyan); font-size: 1.6rem; font-weight: 300; line-height: 1; transition: transform .25s var(--curva); }
+.faq-list summary span { color: var(--campo-realce); font-size: 1.6rem; font-weight: 300; line-height: 1; transition: transform var(--t-ui) var(--curva); }
 .faq-list details[open] summary span { transform: rotate(45deg); }
-.faq-list p { max-width: 35rem; color: #afbbb7; margin: 16px 0 0; }
+.faq-list p { max-width: 35rem; color: var(--campo-texto-2); margin: 16px 0 0; }
 .faq-list summary:active { color: var(--cyan); }
 /* A resposta abre e fecha deslizando (navegadores com ::details-content);
    nos demais, abre direto como antes. */
@@ -275,41 +319,60 @@ p { text-wrap: pretty; }
     .faq-list { interpolate-size: allow-keywords; }
     .faq-list details::details-content {
       block-size: 0; overflow: clip;
-      transition: block-size .45s var(--curva-entrada), content-visibility .45s allow-discrete;
+      transition: block-size var(--t-ui) var(--curva), content-visibility var(--t-ui) allow-discrete;
     }
     .faq-list details[open]::details-content { block-size: auto; }
-    .faq-list details p { opacity: 0; translate: 0 -6px; transition: opacity .3s ease, translate .45s var(--curva-entrada); }
+    .faq-list details p { padding-bottom: 24px; opacity: 0; translate: 0 -6px; transition: opacity var(--t-ui) var(--curva), translate var(--t-ui) var(--curva); }
     .faq-list details[open] p { opacity: 1; translate: 0 0; transition-delay: .08s; }
   }
 }
 
 /* --------------------------------------------------------- chamada final */
 
-.final-cta { background: var(--deep); overflow: hidden; padding-block: clamp(110px, 13vw, 200px); }
+.final-cta { background: var(--campo-fundo); overflow: hidden; padding-block: clamp(110px, 13vw, 200px); }
 .final-cta > div:not(.aneis) { position: relative; z-index: 1; }
-.final-cta .aneis { width: 60vw; aspect-ratio: 1; right: -20vw; bottom: -30vw; border-color: rgba(110, 244, 231, .2); box-shadow: 0 0 0 50px rgba(110, 244, 231, .03), 0 0 0 100px rgba(110, 244, 231, .03), 0 0 0 150px rgba(110, 244, 231, .03); }
+/* o overflow:hidden da chamada faz dela o "rolador" do índice grudento e o
+   top:112px vira deslocamento fixo — aqui o índice não gruda, nasce na linha do título */
+.section-grid.final-cta > .section-index { position: relative; top: auto; z-index: 1; }   /* (0,3,0): vence a regra grudenta (0,2,0) */
+.final-cta .aneis { width: 60vw; aspect-ratio: 1; right: -20vw; bottom: -30vw; border-color: rgba(110, 244, 231, .2); }
 .cta-title { font: 600 clamp(4rem, 8.2vw, 8.4rem)/.85 var(--display); letter-spacing: -.11em; margin: 0; text-wrap: balance; }
-.cta-text { font-size: 1.1rem; color: #b9c5c1; margin: 38px 0; }
+.cta-text { font-size: 1.1rem; color: var(--campo-texto-2); margin: 38px 0; }
 .email-note { font-size: .7rem; color: #84958f; margin: 22px 0 0; }
 
 /* ----------------------------------------------------------------- rodapé */
 
+/* fora do main: fundo próprio, porque o body pode estar no campo do fecho */
 .site-footer {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); column-gap: var(--coluna-gap);
-  padding: 48px var(--margem) 40px; color: #aebbb7; border-top: 1px solid var(--line); font-size: .85rem;
+  padding: 48px var(--margem) 40px; background: var(--ink); color: #aebbb7; border-top: 1px solid var(--line); font-size: .85rem;
 }
 .site-footer .brand { color: var(--paper); align-self: start; }
 .rodape-corpo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px var(--coluna-gap); }
 .rodape-corpo p { margin: 0; }
-.rodape-corpo nav { display: flex; flex-wrap: wrap; gap: 10px 28px; align-content: start; }
-.rodape-corpo small { grid-column: 1 / -1; padding-top: 22px; border-top: 1px solid var(--line); color: #71807c; font-size: .75rem; }
+.rodape-corpo nav { display: flex; flex-wrap: wrap; gap: 4px 28px; align-content: start; }
+.rodape-corpo nav a { display: inline-flex; align-items: center; min-height: 44px; }
+.rodape-corpo small { grid-column: 1 / -1; padding-top: 22px; border-top: 1px solid var(--line); color: #8d9a96; font-size: .75rem; }
 
 /* ---------------------------------------------------------------- utilidades */
 
-.js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s var(--curva); }
+/* APARIÇÕES — gestos por papel, não um só para tudo:
+   bloco sobe e aparece; parágrafo só aparece (texto não precisa se mexer);
+   irmãos entram em fila (--i vem do JS: posição entre os irmãos que aparecem);
+   título entra linha a linha (abaixo, em MOVIMENTO). */
+.js .reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--t-entrada) var(--curva-entrada), transform var(--t-entrada) var(--curva-entrada); transition-delay: calc(var(--i, 0) * var(--passo)); }
+/* só aparece, sem subir: parágrafos, o bloco de texto do Google e o painel da
+   prova (cujo título já entra linha a linha — subir junto era gesto duplo) */
+.js .section-text.reveal, .js .cta-text.reveal, .js .reveal-suave, .js .proof-panel.reveal { transform: none; }
 .js .reveal.is-visible { opacity: 1; transform: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+/* nao havia scroll-margin nenhum: clicar no menu jogava a secao atras do
+   cabecalho fixo, no celular e na navegacao por teclado */
+section[id], main[id] { scroll-margin-top: calc(var(--topo) + 18px); }
+
 :focus-visible { outline: 2px solid var(--cyan); outline-offset: 5px; border-radius: 6px; }
+/* sobre o campo ciano o contorno ciano dava 1:1 — invisivel */
+.proof :focus-visible { outline-color: var(--ink); }
+.button:focus-visible { outline-color: var(--campo-texto); }
 .menu-toggle:focus-visible { outline-offset: 2px; border-radius: 12px; }
 
 /* ============================================================== MOVIMENTO
@@ -325,25 +388,29 @@ p { text-wrap: pretty; }
 .section-index::after { content: ""; display: block; width: 44px; height: 1px; margin-top: 14px; background: currentColor; opacity: .45; transform-origin: 0 50%; }
 .em-linhas .linha { display: block; }
 @keyframes entra { from { opacity: 0; translate: 0 22px; } }
-@keyframes entra-linha { from { opacity: 0; translate: 0 .4em; filter: blur(10px); } }
+@keyframes entra-linha { from { opacity: 0; translate: 0 .4em; } }
 @keyframes aneis-entram { from { opacity: 0; scale: .78; } }
+@keyframes luz-assenta { from { opacity: 0; rotate: -40deg; } 35% { opacity: 1; } }
+@keyframes filete { from { transform: scaleX(0); } }
 @keyframes enche { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes rola-tela { to { translate: 0 -66.6667%; } }
 
 @media (prefers-reduced-motion: no-preference) {
-  .entra { animation: entra .95s var(--curva-entrada) both; animation-delay: calc(var(--ordem, 0) * 95ms + 80ms); }
-  .hero-title .linha, .port-title .linha { animation: entra-linha 1.1s var(--curva-entrada) both; animation-delay: calc(var(--ordem, 0) * 95ms + 80ms); }
-  .hero-aneis .aneis { animation: aneis-entram 1.9s var(--curva-entrada) both; animation-delay: .15s; }
+  .entra { animation: entra var(--t-cena) var(--curva-entrada) both; animation-delay: calc(var(--ordem, 0) * var(--passo) + 80ms); }
+  .hero-title .linha, .port-title .linha { animation: entra-linha var(--t-cena) var(--curva-entrada) both; animation-delay: calc(var(--ordem, 0) * var(--passo) + 80ms); }
+  /* a abertura, em ordem: frase (0,08–1,3 s) → anel assenta (0,15–1,80 s) →
+     a luz chega ao anel e o arco assenta (1,0–2,1 s) → o filete se desenha
+     (1,4–2,1 s). Termina em 2,1 s e para. */
+  .hero-aneis .aneis { animation: aneis-entram calc(var(--t-cena) * 1.5) var(--curva-entrada) both; animation-delay: .15s; }
+  .hero-aneis .aneis::before { animation: luz-assenta var(--t-cena) var(--curva-entrada) 1s both; }
+  .hero-foot .line { animation: filete var(--t-entrada) var(--curva) 1.4s both; }
 
   .js .em-linhas.reveal { opacity: 1; transform: none; transition: none; }
-  .js .reveal .linha { opacity: 0; translate: 0 .5em; transition: opacity .7s ease, translate 1s var(--curva-entrada); transition-delay: calc(var(--i, 0) * 90ms); }
+  .js .reveal .linha { opacity: 0; translate: 0 .5em; transition: opacity var(--t-entrada) var(--curva-entrada), translate var(--t-cena) var(--curva-entrada); transition-delay: calc(var(--i, 0) * var(--passo)); }
   .js .reveal.is-visible .linha { opacity: 1; translate: 0 0; }
-  .js .google-numeros.reveal, .js .google-rotina.reveal { opacity: 1; transform: none; transition: none; }
-  .js .google-numeros.reveal > div, .js .google-rotina.reveal li { opacity: 0; translate: 0 18px; transition: opacity .7s ease, translate .9s var(--curva-entrada); transition-delay: calc(var(--i, 0) * 90ms + 100ms); }
-  .js .google-numeros.reveal.is-visible > div, .js .google-rotina.reveal.is-visible li { opacity: 1; translate: 0 0; }
-  .js .trust-principios.reveal { opacity: 1; transform: none; transition: none; }
-  .js .trust-principios.reveal li { opacity: 0; translate: 0 18px; transition: opacity .7s ease, translate .9s var(--curva-entrada); transition-delay: calc(var(--i, 0) * 110ms + 120ms); }
-  .js .trust-principios.reveal.is-visible li { opacity: 1; translate: 0 0; }
+
+  /* de uma página para a outra: o conteúdo cruza no tempo de interface */
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--t-ui); }
 
   .button:active { transform: scale(.97); }
 }
@@ -367,16 +434,32 @@ p { text-wrap: pretty; }
 
     /* processo: a linha ciano risca da primeira à última etapa */
     .process-track::after { animation: enche linear both; animation-timeline: view(); animation-range: cover 12% cover 48%; }
-    .google-rotina::after { animation: enche linear both; animation-timeline: view(); animation-range: cover 10% cover 42%; }
 
     /* prova real: quando as prévias chegam, o palco fica preso no meio da
        tela e só os sites rolam, do topo ao fim. O trilho é o palco + a
        distância da rolagem; "contain" = exatamente o trecho em que ele está
-       preso, então a rolagem de dentro começa e termina com o palco parado. */
-    .proof-trilho { height: calc(100svh - var(--topo) + 110svh); margin-bottom: calc(-1 * var(--secao-y) + 4svh); view-timeline: --trilho-prova block; }
-    .proof-palco { position: sticky; top: var(--topo); height: calc(100svh - var(--topo)); display: flex; flex-direction: column; justify-content: center; }
-    .proof-previas { margin-top: 0; }
-    .proof-janela .tela-rola { animation: rola-tela linear both; animation-timeline: --trilho-prova; animation-range: contain 8% contain 92%; }
+       preso, então a rolagem de dentro começa e termina com o palco parado.
+
+       SÓ acima de 800px. Abaixo disso as prévias viram uma coluna só e as três
+       empilhadas (778px) não cabem no palco preso (776px): vazavam, e as telas
+       congelavam no meio da página em vez de mostrar a abertura de cada site.
+       No celular elas são uma lista comum, cada uma enquadrada no próprio topo. */
+    @media (min-width: 801px) {
+      .proof-trilho { height: calc(100svh - var(--topo) + 110svh); margin-bottom: calc(-1 * var(--secao-y) + 4svh); view-timeline: --trilho-prova block; }
+      .proof-palco { position: sticky; top: var(--topo); height: calc(100svh - var(--topo)); display: flex; flex-direction: column; justify-content: center; }
+      .proof-fita-env { margin-top: 0; }
+      /* a fita anda até a última tela parar na borda direita da coluna:
+         100cqw é a largura útil da coluna */
+      .proof-fita { animation: anda-fita linear both; animation-timeline: --trilho-prova; animation-range: contain 8% contain 92%; }
+    }
+    @keyframes anda-fita { to { translate: calc(-100% + 100cqw) 0; } }
+    /* celular: a barra acompanha o arrasto da fita */
+    @media (max-width: 800px) {
+      .proof { timeline-scope: --fita-prova; }
+      .proof-fita-env { scroll-timeline: --fita-prova x; }
+      .proof-barra span { animation: risca linear both; animation-timeline: --fita-prova; }
+    }
+    @keyframes risca { to { transform: scaleX(1); } }
 
     /* chamada final: os anéis que abriram a página voltam para fechá-la */
     .final-cta .aneis { animation: aneis-fecham linear both; animation-timeline: view(); animation-range: entry 0% cover 55%; }
@@ -417,6 +500,7 @@ html.lenis, html.lenis body { height: auto; }
   .google-numeros > div + div { padding-left: 26px; border-left: 1px solid rgba(11, 13, 14, .16); }
   .google-numeros dt { font-size: clamp(4rem, 4.6vw, 6.5rem); }
   .google-numeros p { grid-column: 1 / -1; margin-top: 18px; }
+  .site-footer { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
 }
 @media (min-width: 2400px) {
   :root { --largura: 1800px; }
@@ -432,9 +516,6 @@ html.lenis, html.lenis body { height: auto; }
   .google-numeros > div { padding: 18px 18px 0 0; }
   .google-numeros > div + div { padding-left: 18px; border-left: 1px solid rgba(11, 13, 14, .16); }
   .google-numeros p { grid-column: 1 / -1; margin-top: 16px; }
-  .google-rotina { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .google-rotina li:nth-child(odd) { padding-left: 0; border-left: 0; }
-  .google-rotina li:nth-child(n+3) { margin-top: 20px; border-top: 1px solid rgba(11, 13, 14, .16); }
 }
 
 @media (max-width: 800px) {
@@ -448,7 +529,7 @@ html.lenis, html.lenis body { height: auto; }
   }
   .menu-toggle span:not(.sr-only) {
     display: block; width: 22px; height: 1.5px; border-radius: 2px; background: var(--paper);
-    transition: translate .35s var(--curva-entrada), rotate .35s var(--curva-entrada), opacity .2s ease, scale .35s var(--curva-entrada);
+    transition: translate var(--t-ui) var(--curva-entrada), rotate var(--t-ui) var(--curva-entrada), opacity var(--t-micro), scale var(--t-ui) var(--curva-entrada);
   }
   .menu-toggle[aria-expanded="true"] span:nth-child(1) { translate: 0 6.5px; rotate: 45deg; }
   .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; scale: .4 1; }
@@ -464,22 +545,22 @@ html.lenis, html.lenis body { height: auto; }
     box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
     transform-origin: 100% 0;
     visibility: hidden; opacity: 0; translate: 0 -10px; scale: .97; pointer-events: none;
-    transition: opacity .18s ease, translate .22s ease, scale .22s ease, visibility 0s linear .22s;
+    transition: opacity var(--t-micro), translate var(--t-micro), scale var(--t-micro), visibility 0s linear var(--t-micro);
   }
   .mobile-nav.is-open {
     visibility: visible; opacity: 1; translate: 0 0; scale: 1; pointer-events: auto;
-    transition: opacity .28s ease, translate .45s var(--curva-entrada), scale .45s var(--curva-entrada), visibility 0s;
+    transition: opacity var(--t-ui), translate var(--t-ui) var(--curva-entrada), scale var(--t-ui) var(--curva-entrada), visibility 0s;
   }
   .mobile-nav a {
     display: flex; align-items: center; justify-content: space-between;
     min-height: 48px; padding: 0 14px; border-radius: 12px; font-size: 1.02rem;
-    opacity: 0; translate: 0 6px; transition: opacity .2s ease, translate .2s ease, background-color .2s ease, color .2s ease;
+    opacity: 0; translate: 0 6px; transition: opacity var(--t-micro), translate var(--t-micro), background-color var(--t-micro), color var(--t-micro);
   }
   .mobile-nav a::after { content: "→"; color: var(--cyan); opacity: .55; font-size: .95rem; }
   .mobile-nav a:active { background: rgba(240, 242, 237, .07); }
   .mobile-nav a:last-child { margin-top: 8px; background: var(--cyan); color: var(--ink); font-weight: 600; }
   .mobile-nav a:last-child::after { color: var(--ink); opacity: 1; }
-  .mobile-nav.is-open a { opacity: 1; translate: 0 0; transition: opacity .4s ease, translate .5s var(--curva-entrada), background-color .2s ease, color .2s ease; }
+  .mobile-nav.is-open a { opacity: 1; translate: 0 0; transition: opacity var(--t-ui), translate var(--t-ui) var(--curva-entrada), background-color var(--t-micro), color var(--t-micro); }
   .mobile-nav.is-open a:nth-child(1) { transition-delay: 60ms; }
   .mobile-nav.is-open a:nth-child(2) { transition-delay: 100ms; }
   .mobile-nav.is-open a:nth-child(3) { transition-delay: 140ms; }
@@ -497,9 +578,6 @@ html.lenis, html.lenis body { height: auto; }
   .hero-foot .line { width: 35px; margin-left: .4rem; }
   .hero-foot span:last-child { display: none; }
 
-  .trust-principios { grid-template-columns: minmax(0, 1fr); margin-top: 48px; }
-  .trust-principios li, .trust-principios li + li { padding: 20px 0; border-left: 0; border-bottom: 1px solid rgba(11, 13, 14, .22); }
-  .trust-principios li:last-child { border-bottom: 0; padding-bottom: 0; }
 
   .service { grid-template-columns: 35px minmax(0, 1fr); gap: 6px 10px; padding: 22px 0; }
   .service h3 { font-size: 1.7rem; }
@@ -510,12 +588,8 @@ html.lenis, html.lenis body { height: auto; }
   .google-numeros > div { padding: 16px 16px 0 0; }
   .google-numeros > div + div { padding-left: 16px; border-left: 1px solid rgba(11, 13, 14, .16); }
   .google-numeros p { grid-column: 1 / -1; margin-top: 14px; }
-  .google-rotina { grid-template-columns: minmax(0, 1fr); margin-top: 40px; }
-  .google-rotina li, .google-rotina li + li { padding: 16px 0; border-left: 0; border-bottom: 1px solid rgba(11, 13, 14, .16); }
   /* empilhado, cada item já tem o fio de baixo: o fio de cima do 2x2 sobraria
      e apareciam dois traços no mesmo vão */
-  .google-rotina li:nth-child(n+3) { margin-top: 0; border-top: 0; }
-  .google-rotina li:last-child { border-bottom: 0; }
   /* empilhado, o fio do pé é o fio que fecha a régua: ele encosta no último
      item como todos os outros, e o respiro fica embaixo, antes do botão */
   .google-pe { gap: 14px; margin-top: 0; padding-top: 28px; }
@@ -525,7 +599,18 @@ html.lenis, html.lenis body { height: auto; }
   .process-step h3 { margin: 18px 0 6px; }
 
   .proof-panel h2 { font-size: clamp(3rem, 14vw, 6rem); }
-  .proof-previas { grid-template-columns: minmax(0, 1fr); }
+  /* A fita no dedo: sangra as duas margens, uma tela por vez (snap), com a
+     barra embaixo. A moldura continua 16:10 (uma tela de desktop inteira). */
+  .proof-fita-env {
+    margin-inline: calc(-1 * var(--margem)); padding-inline: var(--margem);
+    overflow-x: auto; overflow-y: hidden; touch-action: pan-x pinch-zoom; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-padding-inline: var(--margem); scrollbar-width: none;
+  }
+  .proof-fita-env::-webkit-scrollbar { display: none; }
+  .proof-fita { padding-bottom: 4px; }
+  .proof-previa { width: min(76vw, 340px); scroll-snap-align: start; }
+  .proof-barra { display: block; position: relative; height: 2px; margin-top: 18px; background: rgba(11, 13, 14, .18); }
+  .proof-barra span { position: absolute; inset: 0; background: var(--ink); transform: scaleX(.2); transform-origin: 0 50%; }
 
   .final-cta { padding-block: 96px 120px; }
   .final-cta .aneis { width: 120vw; right: -60vw; bottom: -50vw; }
@@ -537,7 +622,80 @@ html.lenis, html.lenis body { height: auto; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
-  .button, .proof-janela, .faq-list summary span, .menu-toggle span, .mobile-nav, .mobile-nav a { transition: none !important; }
+  /* `.reveal` (0,1,0) perdia para `.js .reveal` (0,2,0) — media query nao soma
+     especificidade. Resultado: com movimento reduzido, 29 de 49 elementos
+     ficavam em opacity 0, ou seja, a pagina sumia para quem desliga animacao. */
+  .js .reveal, .js .reveal .linha, .entra { opacity: 1; transform: none; translate: none; transition: none; animation: none; }
+  .button, .button::after, .proof-janela, .faq-list summary span, .menu-toggle span, .mobile-nav, .mobile-nav a, .service::before, .service h3, .service p, .hero-aneis { transition: none !important; }
   .mobile-nav, .mobile-nav a { translate: none !important; scale: none !important; }
+  html.js body { transition: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
+
+/* ================================================================ CAMPOS
+   Cada seção declara o próprio campo (fundo + tokens de texto): sem JS é
+   isso que vale — fundos sólidos, emenda dura entre eles. COM JS, o body
+   assume a cor da seção que cruza o meio da tela, com transição, e as seções
+   ficam transparentes: a virada de preto para papel acontece na página
+   inteira, sem serrilha entre blocos. Como todo texto lê dos tokens, o rabo
+   da seção anterior troca de cor junto — nunca fica claro sobre claro.
+   O seletor precisa do `main`: `html.js [data-campo]` pegaria o próprio body. */
+.google, .previas, [data-campo="paper"] { --campo-fundo: var(--paper); --campo-texto: var(--ink); --campo-texto-2: #45514d; --campo-fio: rgba(11, 13, 14, .16); --campo-realce: #188f86; --campo-indice: #166f68; }
+.services, .final-cta, [data-campo="deep"] { --campo-fundo: var(--deep); --campo-texto: var(--paper); --campo-texto-2: #b0beb9; --campo-fio: rgba(240, 242, 237, .28); --campo-realce: var(--cyan); --campo-indice: var(--cyan); }
+.proof, [data-campo="cyan"] { --campo-fundo: var(--cyan); --campo-texto: var(--ink); --campo-texto-2: #1e3d39; --campo-fio: rgba(11, 13, 14, .22); --campo-realce: var(--ink); --campo-indice: var(--ink); }
+body[data-campo="ink"] { --campo-fundo: var(--ink); --campo-texto: var(--paper); --campo-texto-2: #aebbb7; --campo-fio: var(--line); --campo-realce: var(--cyan); --campo-indice: var(--cyan); }
+html.js body {
+  transition: background-color var(--t-campo) var(--curva), color var(--t-campo) var(--curva),
+    --campo-fundo var(--t-campo) var(--curva), --campo-texto var(--t-campo) var(--curva), --campo-texto-2 var(--t-campo) var(--curva),
+    --campo-fio var(--t-campo) var(--curva), --campo-realce var(--t-campo) var(--curva), --campo-indice var(--t-campo) var(--curva);
+}
+html.js main [data-campo] { background: transparent; --campo-fundo: inherit; --campo-texto: inherit; --campo-texto-2: inherit; --campo-fio: inherit; --campo-realce: inherit; --campo-indice: inherit; }
+/* depois do bloco acima, senão a transição do body vencia a regra de
+   movimento reduzido pela ordem no arquivo */
+@media (prefers-reduced-motion: reduce) { html.js body { transition: none; } }
+
+/* O que a rolagem conduz nasce PRONTO onde ela não conduz nada: a linha do
+   processo inteira, e a barra da fita some (uma barra parada em 20% mentiria). */
+@media (prefers-reduced-motion: reduce) {
+  .process-track::after { transform: scaleX(1); }
+  .proof-barra { display: none; }
+}
+@supports not (animation-timeline: view()) {
+  .process-track::after { transform: scaleX(1); }
+  .proof-barra { display: none; }
+}
+/* e a fita, que no desktop anda pela rolagem, vira fita de rolagem própria
+   onde nada a conduz — senão duas prévias ficavam fora da tela, tabuláveis */
+@media (min-width: 801px) and (prefers-reduced-motion: reduce) {
+  .proof-fita-env { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; padding-bottom: 8px; }
+}
+@supports not (animation-timeline: view()) {
+  @media (min-width: 801px) { .proof-fita-env { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; padding-bottom: 8px; } }
+}
+
+/* -------------------------------------------------------------- karaokê */
+
+/* A frase enche palavra por palavra conforme a seção sobe: o leitor lê no
+   ritmo da rolagem, e o argumento chega inteiro em vez de de uma vez.
+   TUDO fica dentro do @supports porque o efeito exige `color: transparent`
+   — sem o guard, quem não suporta background-clip vê texto invisível. */
+@supports (animation-timeline: view()) and ((background-clip: text) or (-webkit-background-clip: text)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .karaoke .k {
+      background-image: linear-gradient(90deg, var(--paper) 50%, #8d9a96 50%);
+      background-size: 200% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      animation: karaoke steps(1, start) both;   /* cada palavra vira inteira, nunca pela metade */
+      animation-timeline: view();
+      /* delay não existe em linha do tempo de rolagem: o escalonamento é a faixa */
+      /* o passo entre palavras é 55%/n; a varredura de CADA palavra tem que ser
+         curta perto disso, senão dezenas ficam meio-cheias ao mesmo tempo e o
+         texto vira mosaico em vez de encher da esquerda para a direita */
+      animation-range: contain calc(var(--i) * (55% / var(--n)))
+                       contain calc(var(--i) * (55% / var(--n)) + 7%);
+    }
+  }
+}
+@keyframes karaoke { to { background-position: 0 0; } }

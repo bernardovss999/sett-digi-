@@ -1,11 +1,17 @@
 /* SETT DIGITAL — comportamento do site (home e /portfolio/).
    1. menu do celular e topo que escurece ao rolar
    2. títulos em linhas (sobem uma de cada vez quando aparecem)
-   3. aparições ao rolar (.reveal)
-   4. botões principais que seguem o cursor de leve (só mouse)
-   5. rolagem suave no computador (Lenis)
+   3. karaokê: o parágrafo vira uma palavra por span
+   4. aparições ao rolar (.reveal), em cascata por posição no bloco
+   5. números que contam uma vez, quando aparecem
+   6. o campo: o body assume a cor da seção que cruza o meio da tela
+   7. seção ativa no menu
+   8. rolagem suave no computador (Lenis)
    Se este arquivo não carregar, o CSS mostra tudo parado e completo. */
 
+const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// 1. menu e topo
 const menuButton = document.querySelector('.menu-toggle');
 const mobileNav = document.querySelector('.mobile-nav');
 const siteHeader = document.querySelector('.site-header');
@@ -37,39 +43,88 @@ document.querySelectorAll('.section-title, .cta-title, .proof-panel h2').forEach
   titulo.classList.add('em-linhas');
 });
 
-// 3. Aparições: marcam .is-visible uma vez e param de observar.
+// 3. O parágrafo do karaokê vira uma palavra por span, para encher na rolagem.
+//    O CSS só liga isso onde há suporte; aqui a marcação é inofensiva.
+document.querySelectorAll('.karaoke').forEach(alvo => {
+  const palavras = alvo.textContent.trim().split(/\s+/);
+  alvo.innerHTML = palavras
+    .map((p, i) => `<span class="k" style="--i:${i};--n:${palavras.length}">${p}</span>`)
+    .join(' ');
+});
+
+// 5. Números que contam: correm de zero até o valor quando o bloco aparece.
+//    requestAnimationFrame não roda em aba de fundo, então um setTimeout de
+//    garantia escreve o valor final: número na tela nunca fica velho.
+function contaNumeros(bloco) {
+  bloco.querySelectorAll('[data-conta]').forEach(n => {
+    const alvo = Number(n.dataset.conta);
+    const sufixo = n.dataset.sufixo || '';
+    const escreve = v => { n.textContent = Math.round(v).toLocaleString('pt-BR') + sufixo; };
+    if (quieto || document.hidden || !Number.isFinite(alvo)) { escreve(alvo); return; }
+    const inicio = performance.now();
+    const dur = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--t-cena')) || 1.1) * 1000;   // o mesmo tempo da cena
+    let quadro = 0;
+    const passo = agora => {
+      const t = Math.min(1, (agora - inicio) / dur);
+      escreve(alvo * (1 - Math.pow(1 - t, 3)));            // sai rápido, assenta devagar
+      if (t < 1) quadro = requestAnimationFrame(passo);
+    };
+    quadro = requestAnimationFrame(passo);
+    setTimeout(() => { cancelAnimationFrame(quadro); escreve(alvo); }, dur + 120);
+  });
+}
+
+// 4. Aparições: marcam .is-visible uma vez e param de observar. A cascata é
+//    por posição entre os irmãos que também aparecem (--i), não pela altura
+//    na tela: assim uma lista entra em fila, e um bloco sozinho entra na hora.
 const reveals = document.querySelectorAll('.reveal');
+reveals.forEach(item => {
+  const irmaos = [...item.parentElement.children].filter(el => el.classList.contains('reveal'));
+  item.style.setProperty('--i', irmaos.indexOf(item));
+});
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.transitionDelay = `${Math.min(entry.target.getBoundingClientRect().top / 700, .25)}s`;
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      setTimeout(() => contaNumeros(entry.target), 250);   // o bloco já está visível quando o número arranca
+      observer.unobserve(entry.target);
     });
   }, { threshold: .12 });
   reveals.forEach(item => observer.observe(item));
 } else {
-  reveals.forEach(item => item.classList.add('is-visible'));
+  reveals.forEach(item => { item.classList.add('is-visible'); contaNumeros(item); });
+}
+
+// 6. O campo: a seção que cruza o meio da tela decide a cor do body (e, pelos
+//    tokens, a cor de todo o texto na tela — ver CAMPOS no CSS). Sem JS cada
+//    seção mantém o próprio fundo sólido; a classe .js é o que libera a troca.
+const campos = document.querySelectorAll('main [data-campo]');
+if (campos.length && 'IntersectionObserver' in window) {
+  const olhoCampo = new IntersectionObserver(entradas => {
+    entradas.forEach(e => { if (e.isIntersecting) document.body.dataset.campo = e.target.dataset.campo; });
+  }, { rootMargin: '-50% 0px -49% 0px', threshold: 0 });
+  campos.forEach(s => olhoCampo.observe(s));
+}
+
+// 7. Seção ativa no menu do computador.
+const linksMenu = [...document.querySelectorAll('.desktop-nav a[href^="#"]')];
+if (linksMenu.length && 'IntersectionObserver' in window) {
+  const olhoMenu = new IntersectionObserver(entradas => {
+    entradas.forEach(e => {
+      if (!e.isIntersecting) return;
+      linksMenu.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + e.target.id));
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  linksMenu.forEach(a => {
+    const alvo = document.querySelector(a.getAttribute('href'));
+    if (alvo) olhoMenu.observe(alvo);
+  });
 }
 
 const comMouse = window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 
-// 4. Botões de chamada puxados de leve na direção do cursor.
-if (comMouse.matches) {
-  document.querySelectorAll('.hero .button, .port-hero .button, .final-cta .button, .proof-panel .button').forEach(botao => {
-    botao.addEventListener('pointermove', evento => {
-      const caixa = botao.getBoundingClientRect();
-      const x = (evento.clientX - caixa.left - caixa.width / 2) * .2;
-      const y = (evento.clientY - caixa.top - caixa.height / 2) * .3;
-      botao.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
-    });
-    botao.addEventListener('pointerleave', () => { botao.style.translate = ''; });
-  });
-}
-
-// 5. Rolagem suave só no computador; se a biblioteca não vier, a rolagem normal segue.
+// 8. Rolagem suave só no computador; se a biblioteca não vier, a rolagem normal segue.
 if (comMouse.matches) {
   const lenisScript = document.createElement('script');
   lenisScript.src = 'https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js';

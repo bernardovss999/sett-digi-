@@ -4,7 +4,6 @@
    3. karaokê: o parágrafo vira uma palavra por span
    4. aparições ao rolar (.reveal), em cascata por posição no bloco
    5. números que contam uma vez, quando aparecem
-   6. o campo: o body assume a cor da seção que cruza o meio da tela
    7. seção ativa no menu
    8. rolagem suave no computador (Lenis)
    Se este arquivo não carregar, o CSS mostra tudo parado e completo. */
@@ -90,21 +89,10 @@ if ('IntersectionObserver' in window) {
       setTimeout(() => contaNumeros(entry.target), 250);   // o bloco já está visível quando o número arranca
       observer.unobserve(entry.target);
     });
-  }, { threshold: .12 });
+  }, { threshold: 0, rootMargin: '0px 0px 8% 0px' });   // começa um pouco antes de entrar: rolando rápido, nada chega vazio
   reveals.forEach(item => observer.observe(item));
 } else {
   reveals.forEach(item => { item.classList.add('is-visible'); contaNumeros(item); });
-}
-
-// 6. O campo: a seção que cruza o meio da tela decide a cor do body (e, pelos
-//    tokens, a cor de todo o texto na tela — ver CAMPOS no CSS). Sem JS cada
-//    seção mantém o próprio fundo sólido; a classe .js é o que libera a troca.
-const campos = document.querySelectorAll('main [data-campo]');
-if (campos.length && 'IntersectionObserver' in window) {
-  const olhoCampo = new IntersectionObserver(entradas => {
-    entradas.forEach(e => { if (e.isIntersecting) document.body.dataset.campo = e.target.dataset.campo; });
-  }, { rootMargin: '-50% 0px -49% 0px', threshold: 0 });
-  campos.forEach(s => olhoCampo.observe(s));
 }
 
 // 7. Seção ativa no menu do computador.

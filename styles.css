@@ -15,14 +15,6 @@
 @font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 300 700; font-display: swap; src: url('/fonts/space-grotesk.woff2') format('woff2'); }
 @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 100 1000; font-display: swap; src: url('/fonts/dm-sans.woff2') format('woff2'); }
 
-/* os tokens do campo são registrados como cor para poderem TRANSICIONAR no
-   body quando a página troca de campo ao rolar (ver CAMPOS) */
-@property --campo-fundo { syntax: "<color>"; inherits: true; initial-value: #0b0d0e; }
-@property --campo-texto { syntax: "<color>"; inherits: true; initial-value: #f0f2ed; }
-@property --campo-texto-2 { syntax: "<color>"; inherits: true; initial-value: #aebbb7; }
-@property --campo-fio { syntax: "<color>"; inherits: true; initial-value: rgba(240, 242, 237, .17); }
-@property --campo-realce { syntax: "<color>"; inherits: true; initial-value: #6ef4e7; }
-@property --campo-indice { syntax: "<color>"; inherits: true; initial-value: #6ef4e7; }
 
 /* de uma página para a outra (home ↔ portfólio) o conteúdo cruza e o
    cabeçalho fica no lugar; onde não há suporte, é a navegação comum */
@@ -59,7 +51,6 @@
   --t-ui: .32s;        /* menu, pergunta abrindo, topo, estados */
   --t-entrada: .7s;    /* aparições ao rolar */
   --t-cena: 1.1s;      /* a abertura e o número que conta */
-  --t-campo: .8s;      /* o body atravessando de um campo para o outro */
   --passo: 80ms;       /* o passo de toda cascata (frase, linhas, irmãos) */
   --curva: cubic-bezier(.2, .8, .2, 1);
   --curva-entrada: cubic-bezier(.16, 1, .3, 1);
@@ -175,10 +166,7 @@ p { text-wrap: pretty; }
   position: absolute; pointer-events: none; border-radius: 50%;
   border: 1px solid rgba(110, 244, 231, .3);
 }
-.hero-aneis { position: absolute; pointer-events: none; width: min(56vw, 900px); aspect-ratio: 1; right: -22vw; top: 50%; transform: translateY(-46%); transition: opacity var(--t-campo) var(--curva); }
-/* o anel pertence ao campo preto: quando o body vira papel, ele sai junto (senão
-   vazava em menta sobre o papel enquanto o hero ainda está na tela) */
-html.js body:not([data-campo="ink"]) .hero-aneis { opacity: 0; }
+.hero-aneis { position: absolute; pointer-events: none; width: min(56vw, 900px); aspect-ratio: 1; right: -22vw; top: 50%; transform: translateY(-46%); }
 .hero-aneis .aneis { inset: 0; }
 /* A ASSINATURA: um arco de luz na borda do anel, entre 10 e 11 horas — a
    aresta do monograma pegando luz. É a única coisa que a abertura deixa
@@ -422,10 +410,9 @@ section[id], main[id] { scroll-margin-top: calc(var(--topo) + 18px); }
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* abertura: ao rolar, a frase recua e os anéis se abrem */
-    .hero .hero-copy { animation: hero-recua linear both; animation-timeline: scroll(root block); animation-range: 0 760px; }
+    /* abertura: ao rolar, os anéis se abrem. A frase fica inteira até sair da
+       tela — desbotá-la deixava o hero parecendo vazio no celular. */
     .hero-aneis { animation: aneis-abrem linear both; animation-timeline: scroll(root block); animation-range: 0 1000px; }
-    @keyframes hero-recua { to { translate: 0 -80px; opacity: .15; } }
     @keyframes aneis-abrem { to { scale: 1.5; } }
 
     /* régua do índice: enche enquanto a seção ocupa a tela */
@@ -626,33 +613,21 @@ html.lenis, html.lenis body { height: auto; }
      especificidade. Resultado: com movimento reduzido, 29 de 49 elementos
      ficavam em opacity 0, ou seja, a pagina sumia para quem desliga animacao. */
   .js .reveal, .js .reveal .linha, .entra { opacity: 1; transform: none; translate: none; transition: none; animation: none; }
-  .button, .button::after, .proof-janela, .faq-list summary span, .menu-toggle span, .mobile-nav, .mobile-nav a, .service::before, .service h3, .service p, .hero-aneis { transition: none !important; }
+  .button, .button::after, .proof-janela, .faq-list summary span, .menu-toggle span, .mobile-nav, .mobile-nav a, .service::before, .service h3, .service p { transition: none !important; }
   .mobile-nav, .mobile-nav a { translate: none !important; scale: none !important; }
-  html.js body { transition: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 
 /* ================================================================ CAMPOS
-   Cada seção declara o próprio campo (fundo + tokens de texto): sem JS é
-   isso que vale — fundos sólidos, emenda dura entre eles. COM JS, o body
-   assume a cor da seção que cruza o meio da tela, com transição, e as seções
-   ficam transparentes: a virada de preto para papel acontece na página
-   inteira, sem serrilha entre blocos. Como todo texto lê dos tokens, o rabo
-   da seção anterior troca de cor junto — nunca fica claro sobre claro.
-   O seletor precisa do `main`: `html.js [data-campo]` pegaria o próprio body. */
+   Cada seção declara o próprio campo (fundo sólido + tokens de texto) e a cor
+   muda exatamente onde a seção começa: a borda anda com o dedo, a seção nova
+   sobe cobrindo a anterior. (Houve uma versão em que o body inteiro trocava
+   de cor por tempo ao cruzar o meio da tela: no celular a tela virava papel
+   com o hero ainda nela, e os vãos entre seções, sem borda de cor, viravam
+   buraco. Reprovada em 2026-09-24.) Seções pretas herdam o preto do body. */
 .google, .previas, [data-campo="paper"] { --campo-fundo: var(--paper); --campo-texto: var(--ink); --campo-texto-2: #45514d; --campo-fio: rgba(11, 13, 14, .16); --campo-realce: #188f86; --campo-indice: #166f68; }
 .services, .final-cta, [data-campo="deep"] { --campo-fundo: var(--deep); --campo-texto: var(--paper); --campo-texto-2: #b0beb9; --campo-fio: rgba(240, 242, 237, .28); --campo-realce: var(--cyan); --campo-indice: var(--cyan); }
 .proof, [data-campo="cyan"] { --campo-fundo: var(--cyan); --campo-texto: var(--ink); --campo-texto-2: #1e3d39; --campo-fio: rgba(11, 13, 14, .22); --campo-realce: var(--ink); --campo-indice: var(--ink); }
-body[data-campo="ink"] { --campo-fundo: var(--ink); --campo-texto: var(--paper); --campo-texto-2: #aebbb7; --campo-fio: var(--line); --campo-realce: var(--cyan); --campo-indice: var(--cyan); }
-html.js body {
-  transition: background-color var(--t-campo) var(--curva), color var(--t-campo) var(--curva),
-    --campo-fundo var(--t-campo) var(--curva), --campo-texto var(--t-campo) var(--curva), --campo-texto-2 var(--t-campo) var(--curva),
-    --campo-fio var(--t-campo) var(--curva), --campo-realce var(--t-campo) var(--curva), --campo-indice var(--t-campo) var(--curva);
-}
-html.js main [data-campo] { background: transparent; --campo-fundo: inherit; --campo-texto: inherit; --campo-texto-2: inherit; --campo-fio: inherit; --campo-realce: inherit; --campo-indice: inherit; }
-/* depois do bloco acima, senão a transição do body vencia a regra de
-   movimento reduzido pela ordem no arquivo */
-@media (prefers-reduced-motion: reduce) { html.js body { transition: none; } }
 
 /* O que a rolagem conduz nasce PRONTO onde ela não conduz nada: a linha do
    processo inteira, e a barra da fita some (uma barra parada em 20% mentiria). */

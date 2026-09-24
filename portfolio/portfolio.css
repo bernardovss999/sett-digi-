@@ -25,6 +25,9 @@
    mesmas linhas do título da seção. */
 .previas { background: var(--campo-fundo); color: var(--campo-texto); --S: calc(100svh - var(--topo)); }
 .previas .section-text { color: var(--campo-texto-2); }
+/* aqui "o que vem no site" é preta: verde colado no verde da chamada final
+   fazia um vão de 200px da mesma cor, sem borda — lia como buraco */
+.services { --campo-fundo: var(--ink); --campo-texto-2: #aebbb7; --campo-fio: var(--line); }
 /* Aqui cada prévia tem o próprio número: o índice da seção não acompanha. */
 .previas > .section-index { position: static; }
 

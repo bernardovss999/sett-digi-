@@ -511,8 +511,7 @@ html.lenis, html.lenis body { height: auto; }
   /* no celular o topo não desfoca o que passa por baixo: o desfoque é refeito
      pela GPU a cada quadro da rolagem, caro em aparelho médio, e com o fundo
      quase opaco a diferença não se vê */
-  .site-header { backdrop-filter: none; background: rgba(11, 13, 14, .94); }
-  .site-header.is-scrolled { background: rgba(11, 13, 14, .96); }
+  .site-header, .site-header.is-scrolled { backdrop-filter: none; background: var(--ink); }   /* opaco: sem o desfoque, 4% de transparência já deixava ver o texto passando por baixo */
   .desktop-nav, .site-header > .button { display: none; }
   /* Botão do menu: as três linhas viram um X (as de fora giram, a do meio some). */
   .menu-toggle {

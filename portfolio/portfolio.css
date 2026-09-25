@@ -62,7 +62,13 @@
   font: 500 .66rem var(--display); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
   color: var(--c-tinta2); border: 1px solid var(--c-fio); border-radius: 999px; padding: 7px 12px;
 }
-.caso .text-link { color: var(--c-tinta); border-color: var(--c-fio); white-space: nowrap; }
+.caso .text-link {
+  color: var(--c-tinta); white-space: nowrap;
+  /* sublinhado colado no texto (não na base da caixa de 44px): assim o texto
+     fica no mesmo centro do selo ao lado, e a área de toque continua 44px */
+  border-bottom: 0; padding-bottom: 0;
+  text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--c-fio); text-underline-offset: 6px;
+}
 
 /* As duas telas lado a lado, topo E base na mesma linha, com a altura
    --telas-h; a largura sai dela: computador = (altura − barra de 36px) × 1,6;
@@ -204,18 +210,27 @@
      primeira linha sempre cabe inteira e o título fica maior que os h2. */
   .port-title { font-size: min(4.6rem, calc((100vw - 40px) / 7.3)); margin: 22px 0 26px; }
 
-  .caso { margin-top: 18px; --pad: 18px; }
+  .caso { margin-top: 18px; --pad: 20px; }
   .caso:first-of-type { margin-top: 44px; }
-  .caso-cartao { margin-inline: 0; padding: 20px var(--pad) 22px; border-radius: 18px; grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; }
-  .caso-num { padding-top: .75em; }
-  .caso-cab { grid-template-columns: auto minmax(0, 1fr); gap: 16px 14px; }
+  /* UMA margem só, igual dos dois lados: o número deixa de ser uma coluna (que
+     empurrava o conteúdo ~30px para dentro) e vira um rótulo em cima do nome. */
+  .caso-cartao { margin-inline: 0; padding: 22px var(--pad) 24px; border-radius: 18px; grid-template-columns: minmax(0, 1fr); }
+  .caso-num { grid-column: 1; padding-top: 0; margin-bottom: 12px; }
+  .caso-conteudo { grid-column: 1; }
+  /* selo à esquerda e "Ver ao vivo" à direita, no mesmo centro */
+  .caso-cab { grid-template-columns: auto auto; justify-content: space-between; align-items: center; gap: 16px 12px; }
   .caso-nome { grid-column: 1 / -1; }
+  /* sem isto a pílula estica até o fim da coluna (a coluna cresce com o nome que atravessa as duas) */
+  .caso-selo { justify-self: start; }
   .caso-link { justify-self: end; }
 
-  .caso-telas { display: grid; grid-template-columns: repeat(100, minmax(0, 1fr)); gap: 0; margin-top: 22px; max-width: none; }
-  .tela-desktop { grid-column: 1 / 87; grid-row: 1; border-radius: 10px; }
+  /* as duas telas: o computador na margem da esquerda, o celular na da direita
+     e CENTRADO na altura do computador — sobra o mesmo tanto em cima e embaixo
+     (antes ele pendurava ~100px abaixo e deixava um buraco à esquerda) */
+  .caso-telas { display: grid; grid-template-columns: repeat(100, minmax(0, 1fr)); align-items: center; gap: 0; margin-top: 22px; max-width: none; }
+  .tela-desktop { grid-column: 1 / 88; grid-row: 1; align-self: center; border-radius: 10px; }
   .tela-barra { height: 24px; padding: 0 10px; font-size: .58rem; }
-  .caso-telas .tela-celular { grid-column: 63 / 101; grid-row: 1; align-self: start; margin-top: 18cqw; border-width: 5px; border-radius: 20px; box-sizing: content-box; aspect-ratio: 780 / 1688; }
+  .caso-telas .tela-celular { grid-column: 65 / 101; grid-row: 1; align-self: center; margin-top: 0; border-width: 5px; border-radius: 20px; box-sizing: content-box; aspect-ratio: 780 / 1688; }
 
   .caso-feitos-bloco { margin-top: 22px; padding-top: 16px; }
   .caso-feitos { grid-template-columns: minmax(0, 1fr); margin-top: 4px; }

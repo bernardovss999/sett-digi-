@@ -318,7 +318,7 @@ p { text-wrap: pretty; }
 
 /* --------------------------------------------------------- chamada final */
 
-.final-cta { background: var(--campo-fundo); overflow: hidden; padding-block: clamp(110px, 13vw, 200px); }
+.final-cta { background: var(--campo-fundo); overflow: clip;   /* clip, não hidden: hidden faz da seção um "rolador" e o view() dos anéis passava a medir ELA (que nunca rola) — a animação saía da GPU e pesava toda a rolagem */ padding-block: clamp(110px, 13vw, 200px); }
 .final-cta > div:not(.aneis) { position: relative; z-index: 1; }
 /* o overflow:hidden da chamada faz dela o "rolador" do índice grudento e o
    top:112px vira deslocamento fixo — aqui o índice não gruda, nasce na linha do título */
@@ -508,6 +508,11 @@ html.lenis, html.lenis body { height: auto; }
 
 @media (max-width: 800px) {
   :root { --secao-y: 80px; --topo: 68px; }
+  /* no celular o topo não desfoca o que passa por baixo: o desfoque é refeito
+     pela GPU a cada quadro da rolagem, caro em aparelho médio, e com o fundo
+     quase opaco a diferença não se vê */
+  .site-header { backdrop-filter: none; background: rgba(11, 13, 14, .94); }
+  .site-header.is-scrolled { background: rgba(11, 13, 14, .96); }
   .desktop-nav, .site-header > .button { display: none; }
   /* Botão do menu: as três linhas viram um X (as de fora giram, a do meio some). */
   .menu-toggle {
@@ -681,26 +686,20 @@ html.campos body:not([data-campo="ink"]) .hero-aneis { opacity: 0; }
 
 /* A frase enche palavra por palavra conforme a seção sobe: o leitor lê no
    ritmo da rolagem, e o argumento chega inteiro em vez de de uma vez.
-   TUDO fica dentro do @supports porque o efeito exige `color: transparent`
-   — sem o guard, quem não suporta background-clip vê texto invisível. */
-@supports (animation-timeline: view()) and ((background-clip: text) or (-webkit-background-clip: text)) {
+   Cada palavra é só OPACIDADE (apagada → acesa, inteira): é o que a GPU anima
+   sozinha. A versão anterior pintava um gradiente por background-position, que
+   só o processador anima — no celular a home perdia ~700 quadros na rolagem. */
+@supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .karaoke .k {
-      /* lê do campo: no computador o body pode virar ciano com o fim da frase ainda na tela */
-      background-image: linear-gradient(90deg, var(--campo-texto) 50%, color-mix(in srgb, var(--campo-texto-2) 75%, var(--campo-fundo)) 50%);
-      background-size: 200% 100%;
-      background-position: 100% 0;
-      -webkit-background-clip: text; background-clip: text;
-      color: transparent;
+      opacity: .5;
       animation: karaoke steps(1, start) both;   /* cada palavra vira inteira, nunca pela metade */
       animation-timeline: view();
-      /* delay não existe em linha do tempo de rolagem: o escalonamento é a faixa */
-      /* o passo entre palavras é 55%/n; a varredura de CADA palavra tem que ser
-         curta perto disso, senão dezenas ficam meio-cheias ao mesmo tempo e o
-         texto vira mosaico em vez de encher da esquerda para a direita */
+      /* delay não existe em linha do tempo de rolagem: o escalonamento é a faixa
+         (o passo entre palavras é 55%/n) */
       animation-range: contain calc(var(--i) * (55% / var(--n)))
                        contain calc(var(--i) * (55% / var(--n)) + 7%);
     }
   }
 }
-@keyframes karaoke { to { background-position: 0 0; } }
+@keyframes karaoke { to { opacity: 1; } }

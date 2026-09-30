@@ -83,6 +83,8 @@ p { text-wrap: pretty; }
 .brand { display: flex; align-items: center; gap: 10px; font: 600 1.35rem var(--display); letter-spacing: -.06em; }
 .brand-mark { width: 28px; height: 28px; border: 1px solid var(--cyan); border-radius: 50%; display: grid; place-items: center; color: var(--cyan); font-size: .8rem; letter-spacing: 0; }
 .brand-dot { color: var(--cyan); }
+/* área de toque de 44px na logo, sem mexer no espaçamento (a margem negativa desfaz o padding) */
+.brand { padding-block: 8px; margin-block: -8px; }
 .desktop-nav {
   display: flex; gap: 2.4rem; margin-left: auto; margin-right: 2rem;
   padding: 10px 22px; border: 1px solid rgba(240, 242, 237, .12); border-radius: 999px;
@@ -183,7 +185,7 @@ p { text-wrap: pretty; }
 .hero-foot {
   position: absolute; bottom: 34px; left: var(--margem); right: var(--margem);
   display: flex; align-items: center; gap: 1rem;
-  font: 500 .7rem var(--display); color: var(--campo-texto-2);
+  font: 500 .75rem var(--display); color: var(--campo-texto-2);
 }
 .hero-foot .line { width: 80px; height: 1px; background: var(--campo-realce); margin-left: 1rem; transform-origin: 0 50%; }
 .hero-foot span:last-child { margin-left: auto; }
@@ -214,7 +216,7 @@ p { text-wrap: pretty; }
 .google-numeros > div { display: grid; gap: 4px; padding-top: 20px; border-top: 1px solid var(--campo-fio); }
 .google-numeros dt { font: 600 clamp(3rem, 5.4vw, 5rem)/.9 var(--display); letter-spacing: -.08em; font-variant-numeric: tabular-nums; }
 .google-numeros dd { margin: 0; font-size: .98rem; color: var(--campo-texto-2); }
-.google-numeros p { margin: 0; font: 500 .68rem var(--display); letter-spacing: .04em; color: var(--campo-texto-2); }
+.google-numeros p { margin: 0; font: 500 .75rem var(--display); letter-spacing: .04em; color: var(--campo-texto-2); }
 
 /* a rotina é uma régua de uma linha só: o que entra todo mês, sem parágrafo */
 /* o traço verde risca a régua ao entrar, como na seção do processo */
@@ -230,11 +232,13 @@ p { text-wrap: pretty; }
 
 /* ------------------------------------------------------- o que fazemos */
 
-.services { background: var(--campo-fundo); }
+.services, .escolher { background: var(--campo-fundo); }
+.agencia .section-text + .section-text { margin-top: 20px; }
+.escolher .section-text { margin-bottom: 0; }
 .service-list { margin-top: clamp(56px, 6vw, 80px); border-top: 1px solid var(--campo-fio); }
 .service {
   position: relative;
-  display: grid; grid-template-columns: 70px minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; gap: 20px;
+  display: grid; grid-template-columns: 70px minmax(0, 1.2fr) minmax(0, 1fr); align-items: center; gap: 20px;
   padding: 26px 0; border-bottom: 1px solid var(--campo-fio);
 }
 .service-tag { font: 500 .75rem var(--display); color: var(--campo-indice); }
@@ -326,7 +330,7 @@ p { text-wrap: pretty; }
 .final-cta .aneis { width: 60vw; aspect-ratio: 1; right: -20vw; bottom: -30vw; border-color: rgba(110, 244, 231, .2); }
 .cta-title { font: 600 clamp(4rem, 8.2vw, 8.4rem)/.85 var(--display); letter-spacing: -.11em; margin: 0; text-wrap: balance; }
 .cta-text { font-size: 1.1rem; color: var(--campo-texto-2); margin: 38px 0; }
-.email-note { font-size: .7rem; color: #84958f; margin: 22px 0 0; }
+.email-note { font-size: .75rem; color: #84958f; margin: 22px 0 0; }
 
 /* ----------------------------------------------------------------- rodapé */
 
@@ -566,7 +570,7 @@ html.lenis, html.lenis body { height: auto; }
   .hero-lead { font-size: 1.05rem; max-width: 21rem; }
   .hero-actions { align-items: flex-start; flex-direction: column; gap: 20px; margin-top: 30px; }
   .hero-aneis { width: 110vw; right: -64vw; top: auto; bottom: -62vw; transform: none; opacity: .8; }
-  .hero-foot { bottom: 24px; gap: .6rem; font-size: .62rem; }
+  .hero-foot { bottom: 24px; gap: .6rem; font-size: .75rem; }
   .hero-foot .line { width: 35px; margin-left: .4rem; }
   .hero-foot span:last-child { display: none; }
 
@@ -702,3 +706,6 @@ html.campos body:not([data-campo="ink"]) .hero-aneis { opacity: 0; }
   }
 }
 @keyframes karaoke { to { opacity: 1; } }
+
+/* celulares muito estreitos (320px): o título cabe em duas linhas em vez de três */
+@media (max-width: 350px) { .hero-title { font-size: 2.6rem; } }

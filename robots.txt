@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+# versão antiga do site, duplicada da página inicial
+Disallow: /sett-digital-site/
+Disallow: /sett-digital-site.zip
+
+Sitemap: https://www.sett.company/sitemap.xml

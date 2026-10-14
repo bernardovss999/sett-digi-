@@ -6,7 +6,7 @@
 
 - [Início](https://www.sett.company/): o que a Sett faz, como funciona, perguntas frequentes e contato.
 - [Agentes de IA para empresas](https://www.sett.company/agentes-de-ia-para-empresas/): agentes de IA feitos para a rotina da empresa, instalados no ambiente dela, com regras escritas e uma pessoa responsável. Exemplos, limites, perguntas frequentes e como começar.
-- [Portfólio](https://www.sett.company/portfolio/): cinco sites feitos para negócios reais de Niterói (prévias não oficiais).
+- [Portfólio](https://www.sett.company/portfolio/): quatro sites feitos para negócios reais de Niterói (prévias não oficiais): restaurante, casa de eventos, barbearia e clínica veterinária.
 
 ## O que a Sett faz
 

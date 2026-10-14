@@ -31,12 +31,12 @@
 /* Aqui cada prévia tem o próprio número: o índice da seção não acompanha. */
 .previas > .section-index { position: static; }
 
-/* a paleta de cada cliente, tirada do próprio site dele */
-.c-fatima  { --c-fundo: #f3e4df; --c-tinta: #3f101c; --c-tinta2: #7a4a54; --c-fio: rgba(63, 16, 28, .22);    --c-realce: #8a1e33; }
-.c-leal    { --c-fundo: #0b1024; --c-tinta: #eef0f5; --c-tinta2: #aab2c6; --c-fio: rgba(238, 240, 245, .18); --c-realce: #6e83ff; }
-.c-cemevi  { --c-fundo: #dcefe9; --c-tinta: #103f39; --c-tinta2: #3f625d; --c-fio: rgba(16, 63, 57, .22);    --c-realce: #a8412f; }   /* o coral da marca escurecido: #d95f4d dava 3,08:1 no número */
-.c-tannuri { --c-fundo: #f0e7db; --c-tinta: #33241d; --c-tinta2: #5f4d44; --c-fio: rgba(51, 36, 29, .22);    --c-realce: #8b3a2f; }
-.c-rcold   { --c-fundo: #0e0f10; --c-tinta: #f1f2f0; --c-tinta2: #a9aeab; --c-fio: rgba(241, 242, 240, .16); --c-realce: #3a86ff; }
+/* a paleta de cada cliente, tirada do próprio site dele (contraste medido:
+   tinta2 e realce ≥ 4,5:1 sobre o fundo de cada carta) */
+.c-suud     { --c-fundo: #f5f0e6; --c-tinta: #3b2722; --c-tinta2: #6b4f45; --c-fio: rgba(59, 39, 34, .2);     --c-realce: #914b3c; }   /* marfim, café e terracota do Suud */
+.c-casaviva { --c-fundo: #a8321a; --c-tinta: #f6eedf; --c-tinta2: #f3d9c6; --c-fio: rgba(246, 238, 223, .3);  --c-realce: #ffd86b; }   /* o terracota e o amarelo da Casa Viva */
+.c-carvalho { --c-fundo: #141814; --c-tinta: #efe9dd; --c-tinta2: #bdb6a8; --c-fio: rgba(239, 233, 221, .16); --c-realce: #d4a869; }   /* o preto, o osso e o latão da Carvalho */
+.c-cemevi   { --c-fundo: #dcefe9; --c-tinta: #103f39; --c-tinta2: #3f625d; --c-fio: rgba(16, 63, 57, .22);    --c-realce: #a8412f; }   /* o coral da marca escurecido: #d95f4d dava 3,08:1 no número */
 
 .caso {
   grid-column: 1 / -1; margin-top: clamp(56px, 6vw, 96px);

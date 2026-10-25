@@ -1,0 +1,210 @@
+{
+  "schema": 1,
+  "project": "Sett Digital (sett-digi)",
+  "environment": "production",
+  "commit": "a45b50e",
+  "checked_at": "2026-10-25T17:25:33Z",
+  "implementer": "Farol",
+  "reviewer": "",
+  "operator": "",
+  "operation_plan": "docs/sett/OPERACAO.md",
+  "findings": [
+    {
+      "id": "F-01",
+      "descricao": "sitemap.xml não lista sett-agenda.html (indexável)",
+      "status": "aberto",
+      "responsavel": "Nexo"
+    },
+    {
+      "id": "F-02",
+      "descricao": "sem página 404 personalizada",
+      "status": "aberto",
+      "responsavel": "Nexo"
+    },
+    {
+      "id": "F-03",
+      "descricao": "confirmar uso de sett-digital-site/, zip e PNGs antes de qualquer remoção",
+      "status": "aberto",
+      "responsavel": "Nexo"
+    },
+    {
+      "id": "F-04",
+      "descricao": "script.js carrega Lenis do CDN sem integrity",
+      "status": "aberto",
+      "responsavel": "Nexo"
+    }
+  ],
+  "evidence": {
+    "riscos_readme": {
+      "path": "docs/seguranca/README.md",
+      "sha256": "180b0ac20c4dd504f876fded5892220087c1427817314864e6a74d65161aafa1",
+      "command": "grep no HTML publicado (sem fetch/form/iframe) e leitura de docs/seguranca/README.md",
+      "expected": "inventário sem dados coletados nem endpoints",
+      "observed": "inventário escrito; nenhum fetch/form/iframe nas páginas publicadas"
+    },
+    "testes": {
+      "path": "docs/seguranca/evidencias/npm-test.txt",
+      "sha256": "5c89fad4ff83940fec431a2f978bbc5db5d8a06895d85c3c722f00b2d95ee6eb",
+      "command": "npm test",
+      "expected": "todos os testes passam, fail 0",
+      "observed": "tests 76, pass 76, fail 0 (commit a45b50e)"
+    },
+    "audit": {
+      "path": "docs/seguranca/evidencias/npm-audit.txt",
+      "sha256": "ab43ade1433d4be034349b8bc1a13d04c8f2d00b468f86f787aff189222f7786",
+      "command": "npm audit",
+      "expected": "sem vulnerabilidade conhecida",
+      "observed": "found 0 vulnerabilities"
+    },
+    "segredos": {
+      "path": "docs/seguranca/evidencias/segredos-varredura-basica.txt",
+      "sha256": "862ed60d517e3f970b511d37ddfd81bc1e7be323f7d0d010307b3dc28f65a499",
+      "command": "git grep -l -I -E <padrões de segredo> HEAD",
+      "expected": "nenhum arquivo casa padrão de segredo",
+      "observed": "nenhum arquivo casou; gitleaks não executado"
+    },
+    "mutacoes": {
+      "path": "docs/seguranca/evidencias/mutacoes.txt",
+      "sha256": "3f9468ebcd6943bc93109592f4d484031166dd8a87cfd77f0bc8aeb0ede5deb9",
+      "command": "cópia do HEAD com CSP sem hash e com link quebrado/overflow; node --test",
+      "expected": "testes falham nas mutações",
+      "observed": "falharam: CSP/console/hash e links/overflow"
+    },
+    "operacao": {
+      "path": "docs/sett/OPERACAO.md",
+      "sha256": "8fd7516c7eea3a54772a5fe7c7a1ea783aa7f4a1d5d67badca325edecaf42c23",
+      "command": "leitura de docs/sett/OPERACAO.md",
+      "expected": "procedimentos escritos com estado real",
+      "observed": "procedimentos escritos; monitoramento, recuperação e responsável não existem"
+    },
+    "headers": {
+      "path": "vercel.json",
+      "sha256": "7045273993bf610de60c51ed723915d924248c068cc2da98553ed462eb153cc7",
+      "command": "node --test tests/browser/headers-e-publicacao.test.mjs (dentro de npm test)",
+      "expected": "headers de vercel.json servidos localmente; entradas do .vercelignore 404",
+      "observed": "verificado no servidor local; domínio real não verificado"
+    },
+    "handoff": {
+      "path": "docs/sett/handoffs/20261025T172329-344fd0e19f85.md",
+      "sha256": "af7edc197c0db6234efa4d98b24e67f23a74444b70bf180c9e75d76a7a788fe7",
+      "command": "memoria.py save --kind handoff",
+      "expected": "handoff com pendências",
+      "observed": "registro salvo com pendências e achados abertos"
+    }
+  },
+  "controls": {
+    "riscos": {
+      "status": "passed",
+      "evidence": [
+        "riscos_readme"
+      ],
+      "reason": "",
+      "reviewed_by": ""
+    },
+    "funcional": {
+      "status": "pending",
+      "evidence": [
+        "testes"
+      ],
+      "reason": "Overflow e console automatizados passam; falta inspeção visual/mobile manual.",
+      "reviewed_by": ""
+    },
+    "servidor": {
+      "status": "pending",
+      "evidence": [
+        "riscos_readme"
+      ],
+      "reason": "Sem código de servidor próprio. Candidato a N/A; aguarda justificativa revisada por pessoa distinta.",
+      "reviewed_by": ""
+    },
+    "segredos": {
+      "status": "pending",
+      "evidence": [
+        "segredos"
+      ],
+      "reason": "Varredura básica sem achado; gitleaks e CI não executados.",
+      "reviewed_by": ""
+    },
+    "autenticacao": {
+      "status": "pending",
+      "evidence": [
+        "riscos_readme"
+      ],
+      "reason": "Sem login. Candidato a N/A; aguarda revisão.",
+      "reviewed_by": ""
+    },
+    "autorizacao": {
+      "status": "pending",
+      "evidence": [
+        "riscos_readme"
+      ],
+      "reason": "Sem recursos por usuário. Candidato a N/A; aguarda revisão.",
+      "reviewed_by": ""
+    },
+    "uploads": {
+      "status": "pending",
+      "evidence": [
+        "riscos_readme"
+      ],
+      "reason": "Sem upload. Candidato a N/A; aguarda revisão.",
+      "reviewed_by": ""
+    },
+    "abuso": {
+      "status": "pending",
+      "evidence": [
+        "riscos_readme"
+      ],
+      "reason": "Sem endpoint próprio. Candidato a N/A; aguarda revisão.",
+      "reviewed_by": ""
+    },
+    "dependencias": {
+      "status": "passed",
+      "evidence": [
+        "audit"
+      ],
+      "reason": "",
+      "reviewed_by": ""
+    },
+    "regressao": {
+      "status": "pending",
+      "evidence": [
+        "testes",
+        "mutacoes"
+      ],
+      "reason": "Suíte local passa; CI no GitHub não executado no commit entregue.",
+      "reviewed_by": ""
+    },
+    "hospedagem": {
+      "status": "pending",
+      "evidence": [
+        "headers"
+      ],
+      "reason": "Headers verificados só em servidor local; domínio, HTTPS e .vercelignore na Vercel não verificados.",
+      "reviewed_by": ""
+    },
+    "recuperacao": {
+      "status": "pending",
+      "evidence": [
+        "operacao"
+      ],
+      "reason": "Procedimento escrito, não ensaiado.",
+      "reviewed_by": ""
+    },
+    "operacao": {
+      "status": "pending",
+      "evidence": [
+        "operacao"
+      ],
+      "reason": "Sem monitoramento, alertas, responsável nem canal de incidente.",
+      "reviewed_by": ""
+    },
+    "revisao": {
+      "status": "pending",
+      "evidence": [
+        "handoff"
+      ],
+      "reason": "Sem revisor distinto do implementador.",
+      "reviewed_by": ""
+    }
+  }
+}

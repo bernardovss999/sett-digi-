@@ -1,0 +1,114 @@
+# npm test em a45b50e (2026-10-25T17:24:15Z)
+# comando: npm test
+
+> sett-digi@0.1.0 test
+> node --test "tests/static/*.test.mjs" "tests/regression/*.test.mjs" "tests/browser/*.test.mjs"
+
+▶ headers servidos
+  ✔ /agentes-de-ia-para-empresas/ recebe todos os headers globais de vercel.json (56.377ms)
+  ✔ / recebe todos os headers globais de vercel.json (6.103ms)
+  ✔ /portfolio/ recebe todos os headers globais de vercel.json (8.9649ms)
+  ✔ /sett-agenda.html recebe todos os headers globais de vercel.json (6.5273ms)
+✔ headers servidos (92.9045ms)
+▶ publicação
+  ✔ entradas de .vercelignore não são servidas (404) (25.2689ms)
+  ✔ a página publicada é servida (controle do próprio teste) (3.168ms)
+✔ publicação (29.1287ms)
+▶ overflow horizontal
+  ✔ agentes-de-ia-para-empresas/index.html em 390px (celular) não tem rolagem horizontal (391.8844ms)
+  ✔ index.html em 390px (celular) não tem rolagem horizontal (293.6824ms)
+  ✔ portfolio/index.html em 390px (celular) não tem rolagem horizontal (195.2338ms)
+  ✔ sett-agenda.html em 390px (celular) não tem rolagem horizontal (212.6407ms)
+  ✔ agentes-de-ia-para-empresas/index.html em 768px (tablet) não tem rolagem horizontal (343.7495ms)
+  ✔ index.html em 768px (tablet) não tem rolagem horizontal (276.7002ms)
+  ✔ portfolio/index.html em 768px (tablet) não tem rolagem horizontal (191.9637ms)
+  ✔ sett-agenda.html em 768px (tablet) não tem rolagem horizontal (200.2447ms)
+  ✔ agentes-de-ia-para-empresas/index.html em 1440px (desktop) não tem rolagem horizontal (321.4084ms)
+  ✔ index.html em 1440px (desktop) não tem rolagem horizontal (253.5009ms)
+  ✔ portfolio/index.html em 1440px (desktop) não tem rolagem horizontal (206.7172ms)
+  ✔ sett-agenda.html em 1440px (desktop) não tem rolagem horizontal (193.6298ms)
+✔ overflow horizontal (3192.9681ms)
+▶ console
+  ✔ agentes-de-ia-para-empresas/index.html carrega sem erro de console, exceção ou violação de CSP (835.4385ms)
+  ✔ index.html carrega sem erro de console, exceção ou violação de CSP (786.0749ms)
+  ✔ portfolio/index.html carrega sem erro de console, exceção ou violação de CSP (741.796ms)
+  ✔ sett-agenda.html carrega sem erro de console, exceção ou violação de CSP (736.1166ms)
+✔ console (3100.1273ms)
+▶ headers de segurança em vercel.json
+  ✔ regra global existe em "/(.*)" (1.2812ms)
+  ✔ X-Content-Type-Options é nosniff (0.2745ms)
+  ✔ X-Frame-Options e frame-ancestors bloqueiam enquadramento por terceiros (1.5478ms)
+  ✔ Strict-Transport-Security com max-age de pelo menos 1 ano (0.305ms)
+  ✔ HSTS sem includeSubDomains/preload (subdomínios não inventariados) (0.2915ms)
+  ✔ Referrer-Policy e Permissions-Policy presentes (0.1899ms)
+✔ headers de segurança em vercel.json (7.1511ms)
+▶ CSP
+  ✔ default-src restrito a self (0.4603ms)
+  ✔ script-src sem unsafe-inline nem unsafe-eval (0.2599ms)
+  ✔ script-src libera o host da biblioteca Lenis carregada por script.js (0.6225ms)
+  ✔ cada <script> inline publicado tem hash na script-src (9.2812ms)
+  ✔ estilos: style-src permite estilos inline (style="" e <style> usados no projeto) (0.2307ms)
+  ✔ fontes e imagens só do próprio domínio (fontes são hospedadas em /fonts) (0.1707ms)
+  ✔ object-src none e base-uri restrita (0.1884ms)
+✔ CSP (11.9036ms)
+▶ links internos e âncoras
+  ✔ agentes-de-ia-para-empresas/index.html: links internos apontam para página publicada existente (22.8901ms)
+  ✔ agentes-de-ia-para-empresas/index.html: fragmentos (#id) internos existem no destino (19.4863ms)
+  ✔ index.html: links internos apontam para página publicada existente (8.4218ms)
+  ✔ index.html: fragmentos (#id) internos existem no destino (27.5116ms)
+  ✔ portfolio/index.html: links internos apontam para página publicada existente (5.7262ms)
+  ✔ portfolio/index.html: fragmentos (#id) internos existem no destino (12.7408ms)
+  ✔ sett-agenda.html: links internos apontam para página publicada existente (6.3739ms)
+  ✔ sett-agenda.html: fragmentos (#id) internos existem no destino (10.9177ms)
+✔ links internos e âncoras (132.3243ms)
+▶ ids
+  ✔ agentes-de-ia-para-empresas/index.html: não há id duplicado (1.8991ms)
+  ✔ index.html: não há id duplicado (1.242ms)
+  ✔ portfolio/index.html: não há id duplicado (2.9753ms)
+  ✔ sett-agenda.html: não há id duplicado (0.7156ms)
+✔ ids (7.3854ms)
+▶ arquivos referenciados
+  ✔ agentes-de-ia-para-empresas/index.html: stylesheet, script, imagem, fonte e og:image existem (4.0734ms)
+  ✔ index.html: stylesheet, script, imagem, fonte e og:image existem (6.4404ms)
+  ✔ portfolio/index.html: stylesheet, script, imagem, fonte e og:image existem (9.0565ms)
+  ✔ sett-agenda.html: stylesheet, script, imagem, fonte e og:image existem (5.164ms)
+✔ arquivos referenciados (25.1265ms)
+▶ metadados obrigatórios
+  ✔ agentes-de-ia-para-empresas/index.html: title, description e canonical presentes e coerentes com o caminho (12.8024ms)
+  ✔ agentes-de-ia-para-empresas/index.html: og:url e og:title acompanham o canonical (5.0743ms)
+  ✔ agentes-de-ia-para-empresas/index.html: idioma pt-BR, charset e viewport declarados (2.14ms)
+  ✔ agentes-de-ia-para-empresas/index.html: toda imagem tem atributo alt (pode ser vazio para decorativa) (3.4292ms)
+  ✔ agentes-de-ia-para-empresas/index.html: JSON-LD é JSON válido (1.351ms)
+  ✔ index.html: title, description e canonical presentes e coerentes com o caminho (1.6898ms)
+  ✔ index.html: og:url e og:title acompanham o canonical (2.8301ms)
+  ✔ index.html: idioma pt-BR, charset e viewport declarados (1.8753ms)
+  ✔ index.html: toda imagem tem atributo alt (pode ser vazio para decorativa) (1.6862ms)
+  ✔ index.html: JSON-LD é JSON válido (1.847ms)
+  ✔ portfolio/index.html: title, description e canonical presentes e coerentes com o caminho (2.8365ms)
+  ✔ portfolio/index.html: og:url e og:title acompanham o canonical (2.1203ms)
+  ✔ portfolio/index.html: idioma pt-BR, charset e viewport declarados (2.2001ms)
+  ✔ portfolio/index.html: toda imagem tem atributo alt (pode ser vazio para decorativa) (1.514ms)
+  ✔ portfolio/index.html: JSON-LD é JSON válido (0.4301ms)
+  ✔ sett-agenda.html: title, description e canonical presentes e coerentes com o caminho (1.0968ms)
+  ✔ sett-agenda.html: og:url e og:title acompanham o canonical (1.2895ms)
+  ✔ sett-agenda.html: idioma pt-BR, charset e viewport declarados (2.7231ms)
+  ✔ sett-agenda.html: toda imagem tem atributo alt (pode ser vazio para decorativa) (0.813ms)
+  ✔ sett-agenda.html: JSON-LD é JSON válido (0.4241ms)
+✔ metadados obrigatórios (55.1343ms)
+▶ sitemap e robots
+  ✔ sitemap: cada <loc> pertence ao domínio e aponta para página publicada (1.0906ms)
+  ✔ sitemap: cada URL tem canonical da própria página (mesma URL) (5.6365ms)
+  ✔ robots: aponta para o sitemap no mesmo domínio (0.2477ms)
+  ✔ robots: não bloqueia páginas publicadas (0.2568ms)
+✔ sitemap e robots (7.6251ms)
+▶ llms.txt
+  ✔ todo link https://www.sett.company/ do llms.txt aponta para página publicada (1.5616ms)
+✔ llms.txt (1.7441ms)
+ℹ tests 76
+ℹ suites 12
+ℹ pass 76
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6991.425

@@ -1,0 +1,22 @@
+# Mutações em cópia do HEAD a45b50e. Cada mutação deve fazer o teste falhar.
+## M1: remover o hash do script inline da CSP
+✖ console (3051.5665ms)
+✖ CSP (15.8943ms)
+ℹ pass 24
+ℹ fail 5
+✖ failing tests:
+✖ agentes-de-ia-para-empresas/index.html carrega sem erro de console, exceção ou violação de CSP (833.6706ms)
+✖ index.html carrega sem erro de console, exceção ou violação de CSP (769.0385ms)
+✖ portfolio/index.html carrega sem erro de console, exceção ou violação de CSP (739.2791ms)
+✖ sett-agenda.html carrega sem erro de console, exceção ou violação de CSP (708.4841ms)
+✖ cada <script> inline publicado tem hash na script-src (11.9767ms)
+## M2: link interno quebrado e elemento de 2000 px na página inicial
+✖ overflow horizontal (3135.9595ms)
+✖ links internos e âncoras (88.8866ms)
+ℹ pass 28
+ℹ fail 4
+✖ failing tests:
+✖ index.html em 390px (celular) não tem rolagem horizontal (252.3012ms)
+✖ index.html em 768px (tablet) não tem rolagem horizontal (245.9537ms)
+✖ index.html em 1440px (desktop) não tem rolagem horizontal (256.6094ms)
+✖ index.html: links internos apontam para página publicada existente (8.8437ms)

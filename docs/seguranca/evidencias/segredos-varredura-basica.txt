@@ -1,0 +1,3 @@
+# varredura básica de padrões de segredo no HEAD (NÃO é gitleaks; só nomes de arquivo, sem valores)
+# comando: git grep -l -I -E '<padrões>' HEAD
+exit=1 (1 = nenhum arquivo casou)

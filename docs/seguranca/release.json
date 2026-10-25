@@ -2,34 +2,76 @@
   "schema": 1,
   "project": "Sett Digital (sett-digi)",
   "environment": "production",
-  "commit": "a45b50e14ed8b082cf0c10eae0b2889d542c061c",
-  "checked_at": "2026-10-25T17:25:33Z",
-  "implementer": "Farol",
-  "reviewer": "",
+  "commit": "a7e1a7490d7296eff4a69b2060d30ba0ecc1def1",
+  "checked_at": "2026-10-25T17:40:27Z",
+  "implementer": "Farol (base a45b50e..083ae25); Sentinela (correções 083ae25..a7e1a74)",
+  "reviewer": "Sentinela (base); Farol (correções)",
   "operator": "",
   "operation_plan": "docs/sett/OPERACAO.md",
   "findings": [
     {
-      "id": "F-01",
-      "descricao": "sitemap.xml não lista sett-agenda.html (indexável)",
-      "status": "aberto",
-      "responsavel": "Nexo"
+      "id": "F-01/R-05",
+      "descricao": "sitemap.xml não lista sett-agenda.html, que é indexável (index, follow). Decisão do usuário em 25/10/2026: página fica como está. Aceito pelo usuário; não torna nenhum controle passed.",
+      "status": "aceito pelo usuário",
+      "responsavel": "usuário"
     },
     {
       "id": "F-02",
-      "descricao": "sem página 404 personalizada",
+      "descricao": "sem página 404 personalizada (exige decisão visual)",
       "status": "aberto",
       "responsavel": "Nexo"
     },
     {
       "id": "F-03",
-      "descricao": "confirmar uso de sett-digital-site/, zip e PNGs antes de qualquer remoção",
+      "descricao": "confirmar uso de sett-digital-site/, zip e PNGs antes de qualquer remoção (hoje fora do deploy por .vercelignore)",
       "status": "aberto",
       "responsavel": "Nexo"
     },
     {
-      "id": "F-04",
-      "descricao": "script.js carrega Lenis do CDN sem integrity",
+      "id": "F-04/R-10",
+      "descricao": "Lenis carregado do CDN sem integrity; style-src com unsafe-inline necessário hoje",
+      "status": "aberto",
+      "responsavel": "Nexo"
+    },
+    {
+      "id": "R-06",
+      "descricao": "teste de overflow usa scrollWidth e não acusa conteúdo cortado por overflow-x:hidden",
+      "status": "aberto",
+      "responsavel": "Farol"
+    },
+    {
+      "id": "R-07",
+      "descricao": "console medido só em 1440 px no carregamento; interações não exercitadas sob a CSP",
+      "status": "aberto",
+      "responsavel": "Farol"
+    },
+    {
+      "id": "R-08",
+      "descricao": ".vercelignore em sintaxe gitignore casaria pastas aninhadas docs/tests/scripts (não existem hoje)",
+      "status": "aberto",
+      "responsavel": "Farol"
+    },
+    {
+      "id": "R-09",
+      "descricao": "job gate-de-liberacao falha na main enquanto houver pendência; Actions e gitleaks fixados por tag, não por SHA",
+      "status": "aberto",
+      "responsavel": "Farol"
+    },
+    {
+      "id": "D-01",
+      "descricao": "domínio real não verificado: HTTPS/HSTS/CSP servidos pela Vercel e efeito do .vercelignore em deploy por Git",
+      "status": "aberto",
+      "responsavel": "Farol"
+    },
+    {
+      "id": "D-02",
+      "descricao": "CI do GitHub e gitleaks não executados",
+      "status": "aberto",
+      "responsavel": "Farol"
+    },
+    {
+      "id": "D-03",
+      "descricao": "sem responsável de operação, monitoramento, alertas nem ensaio de recuperação/rollback",
       "status": "aberto",
       "responsavel": "Nexo"
     }
@@ -37,36 +79,43 @@
   "evidence": {
     "riscos_readme": {
       "path": "docs/seguranca/README.md",
-      "sha256": "180b0ac20c4dd504f876fded5892220087c1427817314864e6a74d65161aafa1",
-      "command": "grep no HTML publicado (sem fetch/form/iframe) e leitura de docs/seguranca/README.md",
-      "expected": "inventário sem dados coletados nem endpoints",
-      "observed": "inventário escrito; nenhum fetch/form/iframe nas páginas publicadas"
+      "sha256": "6877c635dbc392093868fc81b19f3ebfcc160e17383702aea15b371eaef1887b",
+      "command": "leitura de docs/seguranca/README.md e grep no HTML publicado (sem fetch/form/iframe)",
+      "expected": "inventário de riscos sem dados coletados nem endpoints",
+      "observed": "inventário, decisões de headers, controles e ressalvas R-05 a R-10 registrados"
     },
     "testes": {
       "path": "docs/seguranca/evidencias/npm-test.txt",
-      "sha256": "5c89fad4ff83940fec431a2f978bbc5db5d8a06895d85c3c722f00b2d95ee6eb",
+      "sha256": "2c40dff7770b53083470046f0f35cc90009be1300b0e295af57a8d63a51398c5",
       "command": "npm test",
       "expected": "todos os testes passam, fail 0",
-      "observed": "tests 76, pass 76, fail 0 (commit a45b50e)"
+      "observed": "tests 85, pass 85, fail 0 (commit a7e1a74, Node 24.21)"
+    },
+    "regressao": {
+      "path": "docs/seguranca/evidencias/regressao-antes-e-depois.txt",
+      "sha256": "efc8c0461293edcc54df711224fafc930900fb8c009e590df9363b4c291759e4",
+      "command": "node --test tests/regression/*.test.mjs contra git archive 083ae25 + testes de a7e1a74",
+      "expected": "5 dos 9 testes falham antes da correção",
+      "observed": "5 falharam em 083ae25; 9/9 passam em a7e1a74; mutação sem docs em .vercelignore falha"
     },
     "audit": {
       "path": "docs/seguranca/evidencias/npm-audit.txt",
-      "sha256": "ab43ade1433d4be034349b8bc1a13d04c8f2d00b468f86f787aff189222f7786",
+      "sha256": "2a0aab4a484fce96ba81af7e7d37af12c0d956a222062330dd69f8f1a8272036",
       "command": "npm audit",
       "expected": "sem vulnerabilidade conhecida",
       "observed": "found 0 vulnerabilities"
     },
     "segredos": {
       "path": "docs/seguranca/evidencias/segredos-varredura-basica.txt",
-      "sha256": "862ed60d517e3f970b511d37ddfd81bc1e7be323f7d0d010307b3dc28f65a499",
-      "command": "git grep -l -I -E <padrões de segredo> HEAD",
+      "sha256": "40e11a21e53cd3d63176d42f66c5c3086c36b3a4e3d2bfaea198723dc9cd3281",
+      "command": "git grep -l -I -E <padrões> em cada commit de git rev-list a7e1a74",
       "expected": "nenhum arquivo casa padrão de segredo",
-      "observed": "nenhum arquivo casou; gitleaks não executado"
+      "observed": "32 commits varridos, 0 casamentos; gitleaks não executado"
     },
     "mutacoes": {
       "path": "docs/seguranca/evidencias/mutacoes.txt",
       "sha256": "3f9468ebcd6943bc93109592f4d484031166dd8a87cfd77f0bc8aeb0ede5deb9",
-      "command": "cópia do HEAD com CSP sem hash e com link quebrado/overflow; node --test",
+      "command": "cópia de a45b50e com CSP sem hash e com link quebrado/overflow; node --test",
       "expected": "testes falham nas mutações",
       "observed": "falharam: CSP/console/hash e links/overflow"
     },
@@ -79,17 +128,24 @@
     },
     "headers": {
       "path": "vercel.json",
-      "sha256": "7045273993bf610de60c51ed723915d924248c068cc2da98553ed462eb153cc7",
+      "sha256": "48673d8a7b64ea243901d91158c7a6c9f0eeb5129fa7692b7d4c4a0ecea2e8b8",
       "command": "node --test tests/browser/headers-e-publicacao.test.mjs (dentro de npm test)",
       "expected": "headers de vercel.json servidos localmente; entradas do .vercelignore 404",
-      "observed": "verificado no servidor local; domínio real não verificado"
+      "observed": "verificado só no servidor local; domínio real não verificado"
     },
-    "handoff": {
-      "path": "docs/sett/handoffs/20261025T172329-344fd0e19f85.md",
-      "sha256": "af7edc197c0db6234efa4d98b24e67f23a74444b70bf180c9e75d76a7a788fe7",
-      "command": "memoria.py save --kind handoff",
-      "expected": "handoff com pendências",
-      "observed": "registro salvo com pendências e achados abertos"
+    "revisao_sentinela": {
+      "path": "docs/sett/revisao-SETT-DIGI-02.md",
+      "sha256": "a359b13110d90cf22950ea510b7274c325f3132e08a5f01e7d0fbc17ba83a198",
+      "command": "revisão independente de acef210..083ae25 pelo Sentinela, com 26 mutações e testes de regressão",
+      "expected": "diff conferido, achados corrigidos e retestados",
+      "observed": "aprovado com ressalvas; R-01 a R-04 corrigidos; R-05 a R-10 abertos"
+    },
+    "revisao_farol": {
+      "path": "docs/seguranca/re-revisao-SETT-DIGI-04.md",
+      "sha256": "bb3446cce8849cc6b24089e89952f664349922e3958ca31995a036b39ac68741",
+      "command": "re-revisão de 083ae25..a7e1a74 pelo Farol; npm test; regressão contra 083ae25; mutação em .vercelignore",
+      "expected": "correções conferidas e nenhum teste enfraquecido",
+      "observed": "aprovado; 85/85; 5 de 9 regressões falham na base"
     }
   },
   "controls": {
@@ -106,7 +162,7 @@
       "evidence": [
         "testes"
       ],
-      "reason": "Overflow e console automatizados passam; falta inspeção visual/mobile manual.",
+      "reason": "Overflow e console automatizados passam (R-06 e R-07 limitam o alcance); falta inspeção visual/mobile manual.",
       "reviewed_by": ""
     },
     "servidor": {
@@ -122,7 +178,7 @@
       "evidence": [
         "segredos"
       ],
-      "reason": "Varredura básica sem achado; gitleaks e CI não executados.",
+      "reason": "Varredura básica do histórico sem achado; gitleaks e CI não executados.",
       "reviewed_by": ""
     },
     "autenticacao": {
@@ -169,9 +225,10 @@
       "status": "pending",
       "evidence": [
         "testes",
+        "regressao",
         "mutacoes"
       ],
-      "reason": "Suíte local passa; CI no GitHub não executado no commit entregue.",
+      "reason": "Suíte local 85/85 e regressões provadas (falham antes, passam depois); CI no GitHub não executado no commit entregue.",
       "reviewed_by": ""
     },
     "hospedagem": {
@@ -199,11 +256,12 @@
       "reviewed_by": ""
     },
     "revisao": {
-      "status": "pending",
+      "status": "passed",
       "evidence": [
-        "handoff"
+        "revisao_sentinela",
+        "revisao_farol"
       ],
-      "reason": "Sem revisor distinto do implementador.",
+      "reason": "Base revisada pelo Sentinela e correções pelo Farol. Ressalvas R-06 a R-10 seguem abertas em findings.",
       "reviewed_by": ""
     }
   }

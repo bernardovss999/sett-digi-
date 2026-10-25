@@ -1,0 +1,23 @@
+# Testes de regressão do Sentinela (4 arquivos, 9 testes) contra 083ae25 (2026-10-25T17:39:15Z)
+# método: git archive 083ae25 em pasta temporária + os 4 arquivos de tests/regression/ de a7e1a74; comando: node --test tests/regression/*.test.mjs
+# esperado: falhar antes da correção (5 dos 9; os 4 restantes são controles que já passam na base)
+✖ script-src não libera host externo inteiro (só URL com caminho) (5.517ms)
+✖ script-src libera exatamente a URL externa carregada por script.js (1.6615ms)
+✖ caminho com percent-encoding inválido recebe 400 em vez de travar (3015.2544ms)
+✔ o servidor continua respondendo depois de um caminho inválido (3015.9855ms)
+✖ isPublished ignora variações de caixa das entradas de .vercelignore (9.9801ms)
+✖ servidor responde 404 a arquivos internos escritos com outra caixa (60.1791ms)
+✔ .vercelignore exclui código, testes, docs, configuração interna e artefatos antigos (4.0141ms)
+✔ .vercelignore não exclui nada que o site publicado usa (0.4571ms)
+✔ .vercelignore não contém curingas nem barras que mudariam o casamento na Vercel (0.3513ms)
+ℹ tests 9
+ℹ pass 4
+ℹ fail 5
+✖ failing tests:
+✖ script-src não libera host externo inteiro (só URL com caminho) (5.517ms)
+✖ script-src libera exatamente a URL externa carregada por script.js (1.6615ms)
+✖ caminho com percent-encoding inválido recebe 400 em vez de travar (3015.2544ms)
+✖ isPublished ignora variações de caixa das entradas de .vercelignore (9.9801ms)
+✖ servidor responde 404 a arquivos internos escritos com outra caixa (60.1791ms)
+# depois (a7e1a74): 9/9 passam dentro de npm test (85/85)
+# mutação R-04: .vercelignore sem 'docs' em cópia de a7e1a74 -> teste vercelignore-entradas-obrigatorias falha (pass 2, fail 1)

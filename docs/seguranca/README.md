@@ -1,6 +1,6 @@
 # Segurança e liberação: Sett Digital
 
-Status em 2026-10-25, branch `infra/base-operacional` (base acef210, commit de código a45b50e). Este documento não certifica segurança nem autoriza publicação. A liberação para produção depende dos controles pendentes abaixo, de revisão independente e de autorização do usuário.
+Status em 2026-10-25, branch `infra/liberacao` (base acef210; commit de código revisado a7e1a74, que inclui as correções da revisão do Sentinela sobre 083ae25). Este documento não certifica segurança nem autoriza publicação. A liberação para produção depende dos controles pendentes abaixo, de revisão independente e de autorização do usuário.
 
 ## 1. Escopo e riscos
 
@@ -54,11 +54,11 @@ Estado real em `release.json`. "passed" só quando há evidência executada nest
 | uploads | pending | Sem upload. Candidato a N/A, aguarda revisão. |
 | abuso | pending | Sem endpoint próprio. Candidato a N/A, aguarda revisão. |
 | dependencias | passed | `npm audit`: 0 vulnerabilidades (2026-10-25). Única dependência é de desenvolvimento (`playwright` 1.64.1 fixo). Scan verde não prova ausência de falhas. |
-| regressao | pending | Suíte local passa (76/76). Falta CI executado no GitHub no commit entregue. |
+| regressao | pending | Suíte local passa (85/85 em a7e1a74). Falta CI executado no GitHub no commit entregue. |
 | hospedagem | pending | Headers verificados só em servidor local. Domínio real, HTTPS e `.vercelignore` na Vercel não verificados. |
 | recuperacao | pending | Procedimento escrito em `docs/sett/OPERACAO.md`; não ensaiado. |
 | operacao | pending | Sem monitoramento, alertas, responsável nem canal de incidente. |
-| revisao | pending | Nenhum revisor distinto do implementador ainda. |
+| revisao | passed | Diff `acef210..083ae25` revisado pelo Sentinela; correções `083ae25..a7e1a74` re-revisadas por Farol (revisor distinto de quem as escreveu). Ver `docs/sett/revisao-SETT-DIGI-02.md` e `docs/seguranca/re-revisao-SETT-DIGI-04.md`. Ressalvas R-06 a R-10 seguem abertas e bloqueiam o gate. Qualquer mudança de código posterior invalida a revisão afetada. |
 
 Sem N/A aceito: os candidatos a N/A exigem justificativa e revisão de pessoa distinta do implementador. Até lá, ficam pendentes.
 
@@ -66,10 +66,16 @@ Sem N/A aceito: os candidatos a N/A exigem justificativa e revisão de pessoa di
 
 Não corrigidos aqui por serem texto, SEO ou decisão visual, fora do escopo de infra.
 
-- **F-01 sitemap**: `sitemap.xml` não lista `sett-agenda.html`, que é indexável (`robots: index, follow`). Decisão de SEO. (`sitemap.xml` não está no escopo desta tarefa.)
+- **F-01 sitemap (= R-05)** [aceito pelo usuário em 25/10/2026: a página fica como está, inclusive `index, follow`; não torna nenhum controle passed]: `sitemap.xml` não lista `sett-agenda.html`, que é indexável (`robots: index, follow`). Decisão de SEO. (`sitemap.xml` não está no escopo desta tarefa.)
 - **F-02 página 404**: não há 404 personalizada; a Vercel mostra a padrão. Exige decisão visual.
 - **F-03 artefatos**: confirmar se `sett-digital-site/`, o `.zip` e os PNGs de preview são usados por alguém antes de apagar.
 - **F-04 Lenis sem SRI**: `script.js` carrega a biblioteca do CDN sem `integrity`. Recomenda-se fixar o hash do arquivo; altera JS, então precisa de aprovação.
+
+- **R-06** (Sentinela): o teste de overflow usa `scrollWidth`; `overflow-x:hidden` em `html/body` mascararia um elemento largo. Hoje o site não usa isso. Pendente.
+- **R-07**: console medido só em 1440 px, no carregamento; cliques (menu, FAQ, demos) não são exercitados sob a CSP. Pendente.
+- **R-08**: `.vercelignore` em sintaxe estilo gitignore casaria pastas aninhadas `docs`/`tests`/`scripts`; hoje não existem. Pendente.
+- **R-09**: o job `gate-de-liberacao` do CI falha de propósito em push na `main`; Actions e gitleaks fixados por tag, não por SHA. Pendente.
+- **R-10** (= F-04): `style-src 'unsafe-inline'` é necessário hoje; Lenis sem SRI. Pendente.
 
 ## 6. Não executado nesta etapa
 
@@ -83,7 +89,8 @@ Não corrigidos aqui por serem texto, SEO ou decisão visual, fora do escopo de 
 ## 7. Evidências
 
 Saídas reais em `docs/seguranca/evidencias/`:
-- `npm-test.txt`: `npm test` no commit a45b50e, 76 testes, 0 falhas.
+- `npm-test.txt`: `npm test` no commit a7e1a74, 85 testes, 0 falhas.
+- `regressao-antes-e-depois.txt`: os 9 testes de regressão do Sentinela contra 083ae25 (5 falham) e depois (passam).
 - `npm-audit.txt`: `found 0 vulnerabilities`.
 - `segredos-varredura-basica.txt`: padrões comuns no HEAD, sem casamento (só nomes de arquivo).
-- `mutacoes.txt`: duas mutações que devem falhar e falharam.
+- `mutacoes.txt`: duas mutações (feitas em a45b50e) que devem falhar e falharam.

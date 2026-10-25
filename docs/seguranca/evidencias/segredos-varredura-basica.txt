@@ -1,3 +1,3 @@
-# varredura básica de padrões de segredo no HEAD (NÃO é gitleaks; só nomes de arquivo, sem valores)
-# comando: git grep -l -I -E '<padrões>' HEAD
-exit=1 (1 = nenhum arquivo casou)
+# Varredura básica de padrões de segredo em TODO o histórico local de a7e1a74 (NÃO é gitleaks; só nomes de arquivo)
+# comando: git grep -l -I -E '<padrões>' $(git rev-list a7e1a74)
+commits varridos: 32; commits com casamento: 0

@@ -1,0 +1,20 @@
+{
+  "name": "sett-digi",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Site estático da Sett Digital (Vercel). Testes: node:test + Playwright, sem framework de testes.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"tests/static/*.test.mjs\" \"tests/regression/*.test.mjs\" \"tests/browser/*.test.mjs\"",
+    "test:static": "node --test \"tests/static/*.test.mjs\" \"tests/regression/*.test.mjs\"",
+    "test:browser": "node --test \"tests/browser/*.test.mjs\"",
+    "serve": "node scripts/serve.mjs",
+    "gate": "python scripts/release_gate.py docs/seguranca/release.json --root . --environment production"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
+  }
+}

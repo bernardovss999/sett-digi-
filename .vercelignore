@@ -1,0 +1,25 @@
+# Arquivos que não fazem parte do site publicado. Use só caminhos exatos ou pastas
+# (sem curingas): tests/static/... valida essa restrição e site-config.mjs lê este arquivo.
+# Efeito na Vercel: documentado em docs/seguranca/README.md; confirme no painel após o primeiro deploy.
+
+# Código, testes, documentação interna e configuração do repositório
+.git
+.github
+node_modules
+tests
+scripts
+docs
+package.json
+package-lock.json
+.gitignore
+.vercelignore
+AGENTS.md
+CLAUDE.md
+README.md
+
+# Artefatos antigos: nenhuma página publicada referencia estes arquivos (verificado nos testes).
+# Não apagados; decisão de remoção fica com o responsável pelo site.
+sett-digital-site
+sett-digital-site.zip
+sett-digital-preview.png
+sett-digital-mobile-preview.png

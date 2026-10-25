@@ -35,7 +35,12 @@ function headersFor(urlPath) {
 }
 
 function resolveFile(urlPath) {
-  const decoded = decodeURIComponent(urlPath);
+  let decoded;
+  try {
+    decoded = decodeURIComponent(urlPath);
+  } catch {
+    return null; // percent-encoding inválido (ex.: /%): vira 400 em vez de rejeição não tratada
+  }
   const rel = normalize(decoded.endsWith('/') ? decoded + 'index.html' : decoded).replace(/^[\\/]+/, '');
   const full = join(ROOT, rel);
   if (!full.startsWith(ROOT) || rel.split(sep).includes('..')) return null;

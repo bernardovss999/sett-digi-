@@ -67,12 +67,12 @@ describe('CSP', () => {
     assert.ok(!sources.includes("'unsafe-eval'"), 'script-src não pode ter unsafe-eval');
   });
 
-  test('script-src libera o host da biblioteca Lenis carregada por script.js', () => {
+  test('script-src libera a URL exata da biblioteca Lenis carregada por script.js', () => {
     const scriptJs = readFileSync(join(ROOT, 'script.js'), 'utf8');
-    const hosts = [...scriptJs.matchAll(/src\s*=\s*'(https:\/\/[^/']+)/g)].map((m) => m[1]);
-    assert.ok(hosts.length > 0, 'esperado ao menos um host externo em script.js');
-    for (const host of hosts) {
-      assert.ok((directive('script-src') ?? []).includes(host), `script-src sem ${host}`);
+    const urls = [...scriptJs.matchAll(/src\s*=\s*'(https:\/\/[^']+)'/g)].map((m) => m[1]);
+    assert.ok(urls.length > 0, 'esperado ao menos um script externo em script.js');
+    for (const url of urls) {
+      assert.ok((directive('script-src') ?? []).includes(url), `script-src sem ${url}`);
     }
   });
 

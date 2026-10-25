@@ -26,8 +26,9 @@ function readLines(file) {
 const IGNORED = readLines('.vercelignore').map((entry) => entry.replace(/^\/+/, '').replace(/\/+$/, ''));
 
 export function isPublished(relPath) {
-  const rel = relPath.split('\\').join('/');
-  return !IGNORED.some((entry) => rel === entry || rel.startsWith(entry + '/'));
+  // Sem distinção de caixa: em Windows/macOS /Docs/x abre docs/x, então o servidor local não pode ser contornado por isso.
+  const rel = relPath.split('\\').join('/').toLowerCase();
+  return !IGNORED.some((entry) => rel === entry.toLowerCase() || rel.startsWith(entry.toLowerCase() + '/'));
 }
 
 export function readVercelConfig() {

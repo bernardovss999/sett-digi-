@@ -22,7 +22,7 @@ Definidos em `vercel.json`, regra `/(.*)`.
 
 - **Strict-Transport-Security: `max-age=31536000`.** Sem `includeSubDomains` e sem `preload`, porque não há inventário dos subdomínios de `sett.company`. Browsers guardam HSTS pelo tempo do `max-age`; antes de subir, confirme no domínio real que HTTPS funciona.
 - **Content-Security-Policy aplicada (não Report-Only).** Diretivas:
-  - `default-src 'self'`; `script-src 'self' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' https://cdn.jsdelivr.net`.
+  - `default-src 'self'`; `script-src 'self' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js` (URL exata, não o host inteiro; ajustado na revisão SETT-DIGI-02).
   - `style-src 'self' 'unsafe-inline'`: necessário porque o HTML usa muitos `style="--ordem:…"` e há um `<style>` em `sett-agenda.html`. Hash não cobre atributo `style`, então `unsafe-inline` ficou só para estilo, não para script.
   - `img-src 'self'`, `font-src 'self'` (fontes em `/fonts`, sem Google Fonts), `connect-src 'self'`, `frame-src 'none'`, `frame-ancestors 'self'`, `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`.
   - Verificação: no Chromium, com a CSP aplicada, as quatro páginas carregam sem erro de console e a biblioteca Lenis é carregada (HTTP 200 do CDN, `window.Lenis` definido). Mutação removendo o hash faz o teste falhar (`evidencias/mutacoes.txt`).

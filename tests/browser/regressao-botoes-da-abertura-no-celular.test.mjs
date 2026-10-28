@@ -18,7 +18,7 @@ for (const [w, h] of [[320, 568], [390, 844], [430, 932]]) {
     for (const rota of ROTAS) {
       await page.goto(site.origin + rota, { waitUntil: 'load' });
       const r = await page.evaluate(() => {
-        const itens = [...document.querySelectorAll('main > section:first-child .hero-actions > *')].map((e) => e.getBoundingClientRect());
+        const itens = [...document.querySelectorAll('main > section:first-child .hero-actions > *')].filter((e) => e.getClientRects().length).map((e) => e.getBoundingClientRect());   // em telefone baixo o link de texto sai (fica o botão)
         return itens.map((b) => ({ topo: b.top, fundo: b.bottom, meio: (b.left + b.right) / 2 }));
       });
       if (r.length < 2) continue;
@@ -30,11 +30,11 @@ for (const [w, h] of [[320, 568], [390, 844], [430, 932]]) {
   });
 }
 
-test('390x844: a abertura de "O que fazemos" (texto, botões e constelação) cabe numa tela', async () => {
+test('390x844: a abertura de "O que fazemos" (texto, botões e visor) cabe numa tela', async () => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.goto(site.origin + '/o-que-fazemos/', { waitUntil: 'load' });
-  const fundo = await page.evaluate(() => Math.max(...[...document.querySelectorAll('.constelacao li')].map((e) => e.getBoundingClientRect().bottom)));
+  const fundo = await page.evaluate(() => Math.max(...[...document.querySelectorAll('.foco-frentes li')].map((e) => e.getBoundingClientRect().bottom)));
   await context.close();
-  assert.ok(fundo <= 844, `constelação termina em ${fundo}px`);
+  assert.ok(fundo <= 844, `visor termina em ${fundo}px`);
 });

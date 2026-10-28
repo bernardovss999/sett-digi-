@@ -21,8 +21,9 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.css?v=1793200000">
-  <link rel="stylesheet" href="/portfolio/portfolio.css?v=1793200000">
+  <link rel="stylesheet" href="/styles.css?v=1793300000">
+  <link rel="stylesheet" href="/portfolio/portfolio.css?v=1793300000">
+  <link rel="stylesheet" href="/telas.css?v=1793300000">
   <script>document.documentElement.classList.add('js')</script>
   <style>
     /* Só o texto corrido da política; o resto vem do styles.css do site. */
@@ -72,42 +73,50 @@
     <section id="privacidade" class="section-grid" data-campo="paper" aria-labelledby="politica-title">
       <div class="section-index">03 / política de privacidade</div>
       <div>
-        <h2 id="politica-title" class="section-title reveal">Política de<br><span>privacidade.</span></h2>
-        <div class="politica">
-          <p class="atualizada">Sett Agenda, da Sett Digital. Atualizada em 20 de outubro de 2026.</p>
-
-          <h3>Quem somos</h3>
-          <p>A Sett Digital é uma agência de automação e serviços digitais. O Sett Agenda é uma integração de uso interno: conecta a conta Google da Sett ao atendimento digital da Sett no WhatsApp. Não é um aplicativo aberto ao público e não oferece cadastro.</p>
-
-          <h3>Dados do Google que usamos</h3>
-          <ul>
+        <div class="politica-cab"><h2 id="politica-title" class="section-title reveal">Política de<br><span>privacidade.</span></h2><div class="trilho-setas" data-trilho-de="politica"><button type="button" data-passo="-1" aria-label="Tópico anterior"><span aria-hidden="true">←</span></button><button type="button" data-passo="1" aria-label="Próximo tópico"><span aria-hidden="true">→</span></button></div></div>
+        <div id="politica" class="politica" tabindex="0" aria-label="Política de privacidade: deslize para o lado para ler cada tópico">
+          <article class="politica-item">
+            <p class="atualizada">Sett Agenda, da Sett Digital. Atualizada em 20 de outubro de 2026.</p>
+            <h3>Quem somos</h3>
+            <p>A Sett Digital é uma agência de automação e serviços digitais. O Sett Agenda é uma integração de uso interno: conecta a conta Google da Sett ao atendimento digital da Sett no WhatsApp. Não é um aplicativo aberto ao público e não oferece cadastro.</p>
+          </article>
+          <article class="politica-item">
+            <h3>Dados do Google que usamos</h3>
+            <ul>
             <li>Eventos da Google Agenda da conta autorizada: título, dia, horário, descrição, local, convidados, link do Google Meet e lembretes.</li>
             <li>O endereço de e-mail da conta que autoriza, só para conferir que a autorização veio da conta certa.</li>
-          </ul>
-          <p>Não acessamos e-mails, contatos, arquivos ou qualquer outro dado da conta.</p>
-
-          <h3>Para que usamos</h3>
-          <ul>
+            </ul>
+            <p>Não acessamos e-mails, contatos, arquivos ou qualquer outro dado da conta.</p>
+          </article>
+          <article class="politica-item">
+            <h3>Para que usamos</h3>
+            <ul>
             <li>Marcar, consultar, mudar, confirmar e cancelar compromissos quando a equipe da Sett pede.</li>
             <li>Registrar como "a confirmar" o dia e o horário que um cliente pediu para uma reunião com a Sett.</li>
             <li>Enviar os lembretes de cada compromisso no WhatsApp da equipe, no horário do aviso combinado.</li>
-          </ul>
-          <p>Os pedidos feitos pela equipe ao atendimento digital são interpretados por um serviço de inteligência artificial contratado pela Sett. Os dados da agenda passam por ele só na medida do necessário para responder a cada pedido.</p>
-
-          <h3>Uso limitado</h3>
-          <p>O uso e a transferência, para qualquer outro aplicativo, de informações recebidas das APIs do Google seguem a <a href="https://developers.google.com/terms/api-services-user-data-policy">Política de Dados do Usuário dos Serviços de API do Google</a>, incluindo os requisitos de Uso Limitado. Não vendemos esses dados, não os usamos para publicidade e não os compartilhamos com terceiros além do necessário para o funcionamento descrito acima.</p>
-
-          <h3>Onde ficam e como protegemos</h3>
-          <p>Os eventos ficam na própria Google Agenda. A autorização de acesso fica guardada no servidor da Sett, com acesso restrito à equipe. Os lembretes vão só para a equipe da Sett; clientes não recebem dados da agenda.</p>
-
-          <h3>Por quanto tempo e como excluir</h3>
-          <p>Os eventos permanecem na Google Agenda até serem alterados ou excluídos. A autorização pode ser revogada a qualquer momento em <a href="https://myaccount.google.com/connections">Conexões da Conta Google</a>; depois disso, o Sett Agenda não acessa mais a agenda. Revogar não apaga eventos nem mensagens que já existam. Para pedir a exclusão de dados ligados a você, fale com a Sett pelo WhatsApp.</p>
-
-          <h3>Contato</h3>
-          <p>Dúvidas sobre esta política ou sobre os seus dados: <a href="https://wa.me/5521936181695?text=Ol%C3%A1%21%20Tenho%20uma%20d%C3%BAvida%20sobre%20a%20privacidade%20do%20Sett%20Agenda.">WhatsApp da Sett, +55 21 93618-1695</a>.</p>
-
-          <h3>Mudanças nesta política</h3>
-          <p>Quando esta política mudar, a data no topo é atualizada e a versão nova vale a partir dela.</p>
+            </ul>
+            <p>Os pedidos feitos pela equipe ao atendimento digital são interpretados por um serviço de inteligência artificial contratado pela Sett. Os dados da agenda passam por ele só na medida do necessário para responder a cada pedido.</p>
+          </article>
+          <article class="politica-item">
+            <h3>Uso limitado</h3>
+            <p>O uso e a transferência, para qualquer outro aplicativo, de informações recebidas das APIs do Google seguem a <a href="https://developers.google.com/terms/api-services-user-data-policy">Política de Dados do Usuário dos Serviços de API do Google</a>, incluindo os requisitos de Uso Limitado. Não vendemos esses dados, não os usamos para publicidade e não os compartilhamos com terceiros além do necessário para o funcionamento descrito acima.</p>
+          </article>
+          <article class="politica-item">
+            <h3>Onde ficam e como protegemos</h3>
+            <p>Os eventos ficam na própria Google Agenda. A autorização de acesso fica guardada no servidor da Sett, com acesso restrito à equipe. Os lembretes vão só para a equipe da Sett; clientes não recebem dados da agenda.</p>
+          </article>
+          <article class="politica-item">
+            <h3>Por quanto tempo e como excluir</h3>
+            <p>Os eventos permanecem na Google Agenda até serem alterados ou excluídos. A autorização pode ser revogada a qualquer momento em <a href="https://myaccount.google.com/connections">Conexões da Conta Google</a>; depois disso, o Sett Agenda não acessa mais a agenda. Revogar não apaga eventos nem mensagens que já existam. Para pedir a exclusão de dados ligados a você, fale com a Sett pelo WhatsApp.</p>
+          </article>
+          <article class="politica-item">
+            <h3>Contato</h3>
+            <p>Dúvidas sobre esta política ou sobre os seus dados: <a href="https://wa.me/5521936181695?text=Ol%C3%A1%21%20Tenho%20uma%20d%C3%BAvida%20sobre%20a%20privacidade%20do%20Sett%20Agenda.">WhatsApp da Sett, +55 21 93618-1695</a>.</p>
+          </article>
+          <article class="politica-item">
+            <h3>Mudanças nesta política</h3>
+            <p>Quando esta política mudar, a data no topo é atualizada e a versão nova vale a partir dela.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -141,6 +150,6 @@
 
   <footer class="site-footer"><a class="brand" href="/"><span>sett<span class="brand-dot">.</span></span></a><div class="rodape-corpo"><p>Agência de automação e serviços digitais.<br>Marca, site e Google, todo mês.</p><nav aria-label="Rodapé"><a href="/#servicos">Serviços</a><a href="/agentes-de-ia-para-empresas/">Agentes de IA</a><a href="/portfolio/">Portfólio</a><a href="/sett-agenda.html">Sett Agenda</a><a href="https://wa.me/5521936181695">Contato</a></nav><small>© 2026 Sett Company. Feito com intenção.</small></div></footer>
   <a class="wa-flutuante" href="https://wa.me/5521936181695" target="_blank" rel="noopener noreferrer" aria-label="Falar com a Sett no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.42.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26C2.16 6.45 6.6 2.02 12.05 2.02c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.49-8.42"/></svg></a>
-  <script src="/script.js?v=1793000013"></script>
+  <script src="/script.js?v=1793300000"></script>
 </body>
 </html>

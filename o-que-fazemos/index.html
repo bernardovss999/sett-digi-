@@ -58,9 +58,10 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.css?v=1793200000">
-  <link rel="stylesheet" href="/agentes-de-ia-para-empresas/agentes.css?v=1793200000">
-  <link rel="stylesheet" href="/servicos.css?v=1793200000">
+  <link rel="stylesheet" href="/styles.css?v=1793300000">
+  <link rel="stylesheet" href="/agentes-de-ia-para-empresas/agentes.css?v=1793300000">
+  <link rel="stylesheet" href="/servicos.css?v=1793300000">
+  <link rel="stylesheet" href="/telas.css?v=1793300000">
   <script>document.documentElement.classList.add('js')</script>
 </head>
 <body class="pg-servico" data-campo="paper">
@@ -87,20 +88,30 @@
           <p class="ab-lead entra" style="--ordem:3">A Sett Company cria sites, cuida da presença no Google e nas redes sociais e desenvolve automações com IA para conectar as tarefas do seu negócio.</p>
           <div class="hero-actions entra" style="--ordem:5"><a class="button button-ink" href="https://wa.me/5521936181695" data-wa>Conversar sobre meu negócio</a><a class="text-link" href="/portfolio/">Conhecer nosso trabalho</a></div>
         </div>
-        <figure class="constelacao entra" style="--ordem:4" aria-label="As quatro frentes da Sett ligadas ao seu negócio">
-          <svg class="constelacao-fios" viewBox="0 0 115 100" aria-hidden="true">
-            <circle class="orbita-fora" cx="57.5" cy="50" r="31" />
-            <circle class="orbita" cx="57.5" cy="50" r="22" />
-            <path pathLength="1" d="M45.6 37.85 L34 26" /><path pathLength="1" d="M69.4 37.85 L81 26" /><path pathLength="1" d="M45.6 62.15 L34 74" /><path pathLength="1" d="M69.4 62.15 L81 74" />
-            <circle class="no" cx="42.1" cy="34.3" r="1.15" /><circle class="no" cx="72.9" cy="34.3" r="1.15" /><circle class="no" cx="42.1" cy="65.7" r="1.15" /><circle class="no" cx="72.9" cy="65.7" r="1.15" />
+        <figure class="foco entra" style="--ordem:4" aria-label="O seu negócio em foco, com as quatro frentes da Sett">
+          <!-- O visor: o negócio no centro, em foco; as quatro frentes ficam nos
+               cantos, como as leituras de uma câmera. Linguagem da referência:
+               base preta de cinema, uma luz só (ciano), cantos de enquadramento
+               e um selo redondo. Cada frente leva à sua seção. -->
+          <span class="foco-cantos" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <svg class="foco-alvo" viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="foco-escala" cx="50" cy="50" r="30" pathLength="360" />
+            <circle class="foco-anel" cx="50" cy="50" r="22" />
+            <path class="foco-mira" d="M50 12v8M50 80v8M12 50h8M80 50h8" />
           </svg>
-          <p class="constelacao-centro"><span>seu</span> negócio</p>
-          <ol>
-            <li class="frente-1"><small class="frente-num">01</small><a href="#sites">Sites</a><small>apresentação e contato</small></li>
-            <li class="frente-2"><small class="frente-num">02</small><a href="#google">Google</a><small>informações e avaliações</small></li>
-            <li class="frente-3"><small class="frente-num">03</small><a href="#redes-sociais">Redes sociais</a><small>conteúdo do negócio</small></li>
-            <li class="frente-4"><small class="frente-num">04</small><a href="#automacao">Automação com IA</a><small>rotina conectada</small></li>
+          <p class="foco-centro"><span>seu</span> negócio<small>em foco</small></p>
+          <ol class="foco-frentes">
+            <li class="frente-1"><a href="#sites"><small>01</small>Sites</a><span>apresentação e contato</span></li>
+            <li class="frente-2"><a href="#google"><small>02</small>Google</a><span>informações e avaliações</span></li>
+            <li class="frente-3"><a href="#redes-sociais"><small>03</small>Redes sociais</a><span>conteúdo do negócio</span></li>
+            <li class="frente-4"><a href="#automacao"><small>04</small>Automação com IA</a><span>rotina conectada</span></li>
           </ol>
+          <svg class="foco-selo" viewBox="0 0 100 100" aria-hidden="true">
+            <defs><path id="selo-volta" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" /></defs>
+            <circle cx="50" cy="50" r="49" />
+            <text><textPath href="#selo-volta" textLength="224">PRESENÇA · ROTINA · SETT COMPANY ·</textPath></text>
+            <circle class="foco-selo-ponto" cx="50" cy="50" r="7" />
+          </svg>
         </figure>
       </div>
     </section>
@@ -161,7 +172,7 @@
 
   <footer class="site-footer"><a class="brand" href="/" aria-label="Sett Company, início"><span>sett<span class="brand-dot">.</span></span></a><div class="rodape-corpo"><p>Presença digital e automação para negócios.<br>Niterói e Rio de Janeiro.</p><nav aria-label="Rodapé"><a href="/o-que-fazemos/" aria-current="page">O que fazemos</a><a href="/portfolio/">Portfólio</a><a href="/gestao-google-meu-negocio/">Google Meu Negócio</a><a href="/criacao-de-sites/">Criação de sites</a><a href="/agentes-de-ia-para-empresas/">Automatização</a><a href="https://wa.me/5521936181695">Falar com a Sett</a><a href="/sett-agenda.html">Privacidade</a></nav><small>© 2026 Sett Company. Feito com intenção.</small></div></footer>
   <a class="wa-flutuante" href="https://wa.me/5521936181695" target="_blank" rel="noopener noreferrer" aria-label="Falar com a Sett no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.42.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26C2.16 6.45 6.6 2.02 12.05 2.02c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.49-8.42"/></svg></a>
-  <script src="/script.js?v=1793000013"></script>
+  <script src="/script.js?v=1793300000"></script>
   <script src="/agentes-de-ia-para-empresas/agentes.js?v=1790800000"></script>
 </body>
 </html>

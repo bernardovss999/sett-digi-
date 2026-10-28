@@ -163,3 +163,50 @@ if (comMouse.matches) {
   document.head.appendChild(lenisScript);
 }
 
+
+// 9. Trilhos do celular: onde uma lista anda para o lado (telas.css), um ponto
+//    por cartão logo abaixo, e o ponto do cartão à vista fica em destaque.
+//    Os pontos só ilustram (o dedo desliza a lista); leitores de tela já leem a lista.
+document.querySelectorAll('.service-list, .ex-lista, .process-track, .caminho, .termo, .caso-trilho, .politica').forEach(trilho => {
+  const itens = [...trilho.children];
+  if (itens.length < 2) return;
+  const pontos = document.createElement('div');
+  pontos.className = 'trilho-pontos';
+  pontos.setAttribute('aria-hidden', 'true');
+  pontos.innerHTML = itens.map(() => '<i></i>').join('');
+  trilho.after(pontos);
+  const marca = () => {
+    const meio = trilho.scrollLeft + trilho.clientWidth * .35;
+    let atual = 0;
+    itens.forEach((item, k) => { if (item.offsetLeft - trilho.firstElementChild.offsetLeft <= meio) atual = k; });
+    if (trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 2) atual = itens.length - 1;
+    [...pontos.children].forEach((p, k) => p.classList.toggle('atual', k === atual));
+  };
+  trilho.addEventListener('scroll', marca, { passive: true });
+  marca();
+});
+
+// 10. Setas de um trilho (prévias do portfólio, política): andam um cartão
+//     para cada lado e se apagam na ponta. Cartão à vista ganha .a-vista
+//     (o site rola de leve dentro das molduras, uma vez).
+document.querySelectorAll('[data-trilho-de]').forEach(setas => {
+  const trilho = document.getElementById(setas.dataset.trilhoDe);
+  if (!trilho) return;
+  const botoes = [...setas.querySelectorAll('[data-passo]')];
+  const passo = () => (trilho.firstElementChild?.getBoundingClientRect().width || trilho.clientWidth) + parseFloat(getComputedStyle(trilho).columnGap || 0);
+  const pontas = () => {
+    botoes.forEach(b => {
+      const vai = Number(b.dataset.passo);
+      b.disabled = vai < 0 ? trilho.scrollLeft <= 2 : trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 2;
+    });
+  };
+  botoes.forEach(b => b.addEventListener('click', () => trilho.scrollBy({ left: Number(b.dataset.passo) * passo(), behavior: quieto ? 'auto' : 'smooth' })));
+  trilho.addEventListener('scroll', pontas, { passive: true });
+  pontas();
+});
+if ('IntersectionObserver' in window) {
+  document.querySelectorAll('.caso-trilho').forEach(trilho => {
+    const olho = new IntersectionObserver(entradas => entradas.forEach(e => { if (e.isIntersecting) e.target.classList.add('a-vista'); }), { root: trilho, threshold: .6 });
+    [...trilho.children].forEach(caso => olho.observe(caso));
+  });
+}

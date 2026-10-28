@@ -1120,7 +1120,8 @@ a.service-card { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
 @media (min-width: 1100px) {
   .hero-copy { position: relative; }
   .mascote {
-    position: absolute; z-index: 1; margin: 0; right: 0; top: 50%; translate: 0 -50%;
+    /* um pouco abaixo do meio do texto: assenta mais baixo, perto do chão da abertura */
+    position: absolute; z-index: 1; margin: 0; right: 0; top: 50%; translate: 0 calc(-50% + clamp(48px, 10svh, 130px));
     width: min(460px, calc((100svh - var(--topo)) * .78), calc(100% - var(--titulo-hero) * 10 - 40px));
   }
 }

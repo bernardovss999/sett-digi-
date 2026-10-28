@@ -70,8 +70,9 @@
   <!-- fontes hospedadas e pré-carregadas: o título nasce na fonte certa, sem trocar no meio da carga -->
   <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.css?v=1793200000">
-  <link rel="stylesheet" href="/portfolio/portfolio.css?v=1793200000">
+  <link rel="stylesheet" href="/styles.css?v=1793300000">
+  <link rel="stylesheet" href="/portfolio/portfolio.css?v=1793300000">
+  <link rel="stylesheet" href="/telas.css?v=1793300000">
   <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -102,186 +103,188 @@
       </div>
     </section>
 
-    <!-- As quatro prévias são um baralho no desktop: cada uma gruda embaixo do
-         cabeçalho, o site rola dentro das molduras, e a seguinte sobe por cima
-         enquanto a anterior recua. No celular são cartões em sequência. A
-         ordem (número) é a do baralho; o artigo de fora é o trilho que mede a
-         rolagem de cada prévia, o cartão de dentro é o que gruda. Em volta de
-         cada site, só os RECURSOS que ele oferece (nada de nota ou avaliação). -->
+    <!-- As prévias: uma tela só, com a fila de cartões. Em volta de cada site,
+         só os RECURSOS que ele oferece (nada de nota ou avaliação). -->
     <section id="previas" class="previas section-grid" data-campo="paper" aria-labelledby="previas-title">
       <div class="section-index" aria-hidden="true"></div>
-      <div>
-        <h2 id="previas-title" class="section-title reveal">Cada negócio<br>tem uma <span>história.</span></h2>
-        <p class="section-text reveal">Estas demonstrações são projetos conceituais independentes, criados com informações públicas para apresentar possibilidades de conteúdo e design.</p>
+      <div class="previas-cab">
+        <div>
+          <h2 id="previas-title" class="section-title reveal">Cada negócio<br>tem uma <span>história.</span></h2>
+          <p class="section-text reveal">Estas demonstrações são projetos conceituais independentes, criados com informações públicas para apresentar possibilidades de conteúdo e design.</p>
+        </div>
+        <div class="trilho-setas" data-trilho-de="casos"><button type="button" data-passo="-1" aria-label="Prévia anterior"><span aria-hidden="true">←</span></button><button type="button" data-passo="1" aria-label="Próxima prévia"><span aria-hidden="true">→</span></button></div>
       </div>
 
-      <!-- Cada cartão veste a paleta do próprio cliente (classe c-*). O artigo de
-           fora é o trilho que mede a rolagem; .caso-palco gruda; .caso-cartao é
-           a carta. Dentro, número + conteúdo; o conteúdo tem o texto (nome e os
-           recursos do site) e as molduras, que trocam de arranjo com a tela. -->
-      <article class="caso c-suud" aria-labelledby="caso-suud">
-        <div class="caso-palco">
-          <div class="caso-cartao">
-            <span class="caso-num" aria-hidden="true"></span>
-            <div class="caso-conteudo">
-              <div class="caso-texto">
-                <div class="caso-cab">
-                  <div class="caso-nome"><h3 id="caso-suud">Suud</h3><p>Restaurante árabe · Icaraí, Niterói</p></div>
-                  <span class="caso-selo">Prévia independente</span>
-                  <a class="text-link caso-link" href="https://suud.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+      <!-- As cinco prévias numa fila, numa tela só, em qualquer aparelho: cada
+           cartão ocupa a largura toda; desliza com o dedo, com as setas (no
+           topo) ou com o teclado, e os pontos embaixo mostram qual está à vista.
+           Cada cartão veste a paleta do próprio cliente (classe c-*). Dentro:
+           o nome, as duas telas (o site rola devagar na moldura) e os recursos. -->
+      <div id="casos" class="caso-trilho" tabindex="0" aria-label="Prévias: deslize para o lado">
+        <article class="caso c-suud" aria-labelledby="caso-suud">
+          <div class="caso-palco">
+            <div class="caso-cartao">
+              <span class="caso-num" aria-hidden="true"></span>
+              <div class="caso-conteudo">
+                <div class="caso-texto">
+                  <div class="caso-cab">
+                    <div class="caso-nome"><h3 id="caso-suud">Suud</h3><p>Restaurante árabe · Icaraí, Niterói</p></div>
+                    <span class="caso-selo">Prévia independente</span>
+                    <a class="text-link caso-link" href="https://suud.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+                  </div>
+                  <div class="caso-feitos-bloco">
+                    <ul class="caso-feitos">
+                      <li><b>Ahlan, o atendente do site</b><span>Monta o pedido de delivery ou de retirada, reserva mesa e tira dúvidas sobre os pratos.</span></li>
+                      <li><b>Cardápio que vira pedido</b><span>Busca, filtro de pratos vegetarianos e um toque no + para cada prato entrar no pedido.</span></li>
+                      <li><b>Pedido pronto no WhatsApp</b><span>O total aparece antes de enviar; itens, endereço e pagamento chegam numa mensagem só.</span></li>
+                    </ul>
+                  </div>
                 </div>
-                <div class="caso-feitos-bloco">
-                  <ul class="caso-feitos">
-                    <li><b>Ahlan, o atendente do site</b><span>Monta o pedido de delivery ou de retirada, reserva mesa e tira dúvidas sobre os pratos.</span></li>
-                    <li><b>Cardápio que vira pedido</b><span>Busca, filtro de pratos vegetarianos e um toque no + para cada prato entrar no pedido.</span></li>
-                    <li><b>Pedido pronto no WhatsApp</b><span>O total aparece antes de enviar; itens, endereço e pagamento chegam numa mensagem só.</span></li>
-                  </ul>
+                <div class="caso-telas">
+                  <figure class="tela-desktop">
+                    <div class="tela-barra" aria-hidden="true">suud.vercel.app</div>
+                    <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/suud-inicio-desktop.webp" srcset="/portfolio/img/suud-inicio-desktop-960.webp 960w, /portfolio/img/suud-inicio-desktop.webp 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" decoding="async" alt="Página inicial do Suud no computador: a mesa de mezze em foto grande com o logo, o atendente Ahlan aberto ao lado com os atalhos de pedir delivery, retirar e reservar mesa, e logo abaixo a seção de delivery pelo WhatsApp."></div>
+                  </figure>
+                  <figure class="tela-celular">
+                    <img class="tela-rola" src="/portfolio/img/suud-inicio-celular.webp" srcset="/portfolio/img/suud-inicio-celular-390.webp 390w, /portfolio/img/suud-inicio-celular.webp 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" decoding="async" alt="Página inicial do Suud no celular: o logo sobre a foto, o atendente Ahlan com os atalhos de pedido e reserva, e o endereço com o horário.">
+                  </figure>
                 </div>
-              </div>
-              <div class="caso-telas">
-                <figure class="tela-desktop">
-                  <div class="tela-barra" aria-hidden="true">suud.vercel.app</div>
-                  <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/suud-inicio-desktop.webp" srcset="/portfolio/img/suud-inicio-desktop-960.webp 960w, /portfolio/img/suud-inicio-desktop.webp 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" decoding="async" alt="Página inicial do Suud no computador: a mesa de mezze em foto grande com o logo, o atendente Ahlan aberto ao lado com os atalhos de pedir delivery, retirar e reservar mesa, e logo abaixo a seção de delivery pelo WhatsApp."></div>
-                </figure>
-                <figure class="tela-celular">
-                  <img class="tela-rola" src="/portfolio/img/suud-inicio-celular.webp" srcset="/portfolio/img/suud-inicio-celular-390.webp 390w, /portfolio/img/suud-inicio-celular.webp 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" decoding="async" alt="Página inicial do Suud no celular: o logo sobre a foto, o atendente Ahlan com os atalhos de pedido e reserva, e o endereço com o horário.">
-                </figure>
               </div>
             </div>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <article class="caso c-casaviva" aria-labelledby="caso-casaviva">
-        <div class="caso-palco">
-          <div class="caso-cartao">
-            <span class="caso-num" aria-hidden="true"></span>
-            <div class="caso-conteudo">
-              <div class="caso-texto">
-                <div class="caso-cab">
-                  <div class="caso-nome"><h3 id="caso-casaviva">Casa Viva Itacoá</h3><p>Casa de encontro · Itacoatiara, Niterói</p></div>
-                  <span class="caso-selo">Prévia independente</span>
-                  <a class="text-link caso-link" href="https://casa-viva1-anue.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+        <article class="caso c-casaviva" aria-labelledby="caso-casaviva">
+          <div class="caso-palco">
+            <div class="caso-cartao">
+              <span class="caso-num" aria-hidden="true"></span>
+              <div class="caso-conteudo">
+                <div class="caso-texto">
+                  <div class="caso-cab">
+                    <div class="caso-nome"><h3 id="caso-casaviva">Casa Viva Itacoá</h3><p>Casa de encontro · Itacoatiara, Niterói</p></div>
+                    <span class="caso-selo">Prévia independente</span>
+                    <a class="text-link caso-link" href="https://casa-viva1-anue.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+                  </div>
+                  <div class="caso-feitos-bloco">
+                    <ul class="caso-feitos">
+                      <li><b>Abertura com a ilustração da casa</b><span>As letras de Casa Viva se montam sobre o desenho do mar, da montanha e da casa.</span></li>
+                      <li><b>Programação da semana</b><span>Sexta, sábado e domingo, com o horário de cada show, aula e refeição.</span></li>
+                      <li><b>Reservas e aniversários</b><span>O botão de reservar fica sempre à vista, e as festas e os eventos privados têm página própria.</span></li>
+                    </ul>
+                  </div>
                 </div>
-                <div class="caso-feitos-bloco">
-                  <ul class="caso-feitos">
-                    <li><b>Abertura com a ilustração da casa</b><span>As letras de Casa Viva se montam sobre o desenho do mar, da montanha e da casa.</span></li>
-                    <li><b>Programação da semana</b><span>Sexta, sábado e domingo, com o horário de cada show, aula e refeição.</span></li>
-                    <li><b>Reservas e aniversários</b><span>O botão de reservar fica sempre à vista, e as festas e os eventos privados têm página própria.</span></li>
-                  </ul>
+                <div class="caso-telas">
+                  <figure class="tela-desktop">
+                    <div class="tela-barra" aria-hidden="true">casa-viva1-anue.vercel.app</div>
+                    <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/casaviva-inicio-desktop.webp" srcset="/portfolio/img/casaviva-inicio-desktop-960.webp 960w, /portfolio/img/casaviva-inicio-desktop.webp 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" loading="lazy" decoding="async" alt="Página inicial da Casa Viva Itacoá no computador: o letreiro Casa Viva sobre o fundo terracota, a frase “Entre o mar e a montanha”, a foto em arco e os caminhos para A Casa, Gastronomia, Programação, Aniversários e Visite."></div>
+                  </figure>
+                  <figure class="tela-celular">
+                    <img class="tela-rola" src="/portfolio/img/casaviva-inicio-celular.webp" srcset="/portfolio/img/casaviva-inicio-celular-390.webp 390w, /portfolio/img/casaviva-inicio-celular.webp 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" loading="lazy" decoding="async" alt="Página inicial da Casa Viva Itacoá no celular: o letreiro, a frase “Entre o mar e a montanha”, a foto em arco e os cartões para explorar a casa.">
+                  </figure>
                 </div>
-              </div>
-              <div class="caso-telas">
-                <figure class="tela-desktop">
-                  <div class="tela-barra" aria-hidden="true">casa-viva1-anue.vercel.app</div>
-                  <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/casaviva-inicio-desktop.webp" srcset="/portfolio/img/casaviva-inicio-desktop-960.webp 960w, /portfolio/img/casaviva-inicio-desktop.webp 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" loading="lazy" decoding="async" alt="Página inicial da Casa Viva Itacoá no computador: o letreiro Casa Viva sobre o fundo terracota, a frase “Entre o mar e a montanha”, a foto em arco e os caminhos para A Casa, Gastronomia, Programação, Aniversários e Visite."></div>
-                </figure>
-                <figure class="tela-celular">
-                  <img class="tela-rola" src="/portfolio/img/casaviva-inicio-celular.webp" srcset="/portfolio/img/casaviva-inicio-celular-390.webp 390w, /portfolio/img/casaviva-inicio-celular.webp 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" loading="lazy" decoding="async" alt="Página inicial da Casa Viva Itacoá no celular: o letreiro, a frase “Entre o mar e a montanha”, a foto em arco e os cartões para explorar a casa.">
-                </figure>
               </div>
             </div>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <article class="caso c-carvalho" aria-labelledby="caso-carvalho">
-        <div class="caso-palco">
-          <div class="caso-cartao">
-            <span class="caso-num" aria-hidden="true"></span>
-            <div class="caso-conteudo">
-              <div class="caso-texto">
-                <div class="caso-cab">
-                  <div class="caso-nome"><h3 id="caso-carvalho">Barbearia Carvalho</h3><p>Barbearia · Santa Rosa, Niterói</p></div>
-                  <span class="caso-selo">Prévia independente</span>
-                  <a class="text-link caso-link" href="https://cavalhobarbearia.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+        <article class="caso c-carvalho" aria-labelledby="caso-carvalho">
+          <div class="caso-palco">
+            <div class="caso-cartao">
+              <span class="caso-num" aria-hidden="true"></span>
+              <div class="caso-conteudo">
+                <div class="caso-texto">
+                  <div class="caso-cab">
+                    <div class="caso-nome"><h3 id="caso-carvalho">Barbearia Carvalho</h3><p>Barbearia · Santa Rosa, Niterói</p></div>
+                    <span class="caso-selo">Prévia independente</span>
+                    <a class="text-link caso-link" href="https://cavalhobarbearia.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+                  </div>
+                  <div class="caso-feitos-bloco">
+                    <ul class="caso-feitos">
+                      <li><b>Agendamento em quatro campos</b><span>Nome, serviço, dia e período: o pedido chega pronto no WhatsApp, direto e rápido.</span></li>
+                      <li><b>Galeria de cortes com filtro</b><span>Degradê, tesoura, freestyle, barba e kids, com cada foto aberta em tela cheia.</span></li>
+                      <li><b>Do serviço ao horário</b><span>O botão de cada serviço abre o agendamento com ele já escolhido.</span></li>
+                    </ul>
+                  </div>
                 </div>
-                <div class="caso-feitos-bloco">
-                  <ul class="caso-feitos">
-                    <li><b>Agendamento em quatro campos</b><span>Nome, serviço, dia e período: o pedido chega pronto no WhatsApp, direto e rápido.</span></li>
-                    <li><b>Galeria de cortes com filtro</b><span>Degradê, tesoura, freestyle, barba e kids, com cada foto aberta em tela cheia.</span></li>
-                    <li><b>Do serviço ao horário</b><span>O botão de cada serviço abre o agendamento com ele já escolhido.</span></li>
-                  </ul>
+                <div class="caso-telas">
+                  <figure class="tela-desktop">
+                    <div class="tela-barra" aria-hidden="true">cavalhobarbearia.vercel.app</div>
+                    <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/carvalho-inicio-desktop.webp" srcset="/portfolio/img/carvalho-inicio-desktop-960.webp 960w, /portfolio/img/carvalho-inicio-desktop.webp 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" loading="lazy" decoding="async" alt="Página inicial da Barbearia Carvalho no computador: os dois fundadores em preto e branco, o formulário de agendamento ao lado e, logo abaixo, a galeria de cortes."></div>
+                  </figure>
+                  <figure class="tela-celular">
+                    <img class="tela-rola" src="/portfolio/img/carvalho-inicio-celular.webp" srcset="/portfolio/img/carvalho-inicio-celular-390.webp 390w, /portfolio/img/carvalho-inicio-celular.webp 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" loading="lazy" decoding="async" alt="Página inicial da Barbearia Carvalho no celular: o nome da barbearia, os fundadores e o formulário de agendamento com o botão de enviar pelo WhatsApp.">
+                  </figure>
                 </div>
-              </div>
-              <div class="caso-telas">
-                <figure class="tela-desktop">
-                  <div class="tela-barra" aria-hidden="true">cavalhobarbearia.vercel.app</div>
-                  <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/carvalho-inicio-desktop.webp" srcset="/portfolio/img/carvalho-inicio-desktop-960.webp 960w, /portfolio/img/carvalho-inicio-desktop.webp 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" loading="lazy" decoding="async" alt="Página inicial da Barbearia Carvalho no computador: os dois fundadores em preto e branco, o formulário de agendamento ao lado e, logo abaixo, a galeria de cortes."></div>
-                </figure>
-                <figure class="tela-celular">
-                  <img class="tela-rola" src="/portfolio/img/carvalho-inicio-celular.webp" srcset="/portfolio/img/carvalho-inicio-celular-390.webp 390w, /portfolio/img/carvalho-inicio-celular.webp 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" loading="lazy" decoding="async" alt="Página inicial da Barbearia Carvalho no celular: o nome da barbearia, os fundadores e o formulário de agendamento com o botão de enviar pelo WhatsApp.">
-                </figure>
               </div>
             </div>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <article class="caso c-cemevi" aria-labelledby="caso-cemevi">
-        <div class="caso-palco">
-          <div class="caso-cartao">
-            <span class="caso-num" aria-hidden="true"></span>
-            <div class="caso-conteudo">
-              <div class="caso-texto">
-                <div class="caso-cab">
-                  <div class="caso-nome"><h3 id="caso-cemevi">Cemevi</h3><p>Clínica veterinária 24 horas · Icaraí, Niterói</p></div>
-                  <span class="caso-selo">Prévia independente</span>
-                  <a class="text-link caso-link" href="https://cemevi-pi.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+        <article class="caso c-cemevi" aria-labelledby="caso-cemevi">
+          <div class="caso-palco">
+            <div class="caso-cartao">
+              <span class="caso-num" aria-hidden="true"></span>
+              <div class="caso-conteudo">
+                <div class="caso-texto">
+                  <div class="caso-cab">
+                    <div class="caso-nome"><h3 id="caso-cemevi">Cemevi</h3><p>Clínica veterinária 24 horas · Icaraí, Niterói</p></div>
+                    <span class="caso-selo">Prévia independente</span>
+                    <a class="text-link caso-link" href="https://cemevi-pi.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+                  </div>
+                  <div class="caso-feitos-bloco">
+                    <ul class="caso-feitos">
+                      <li><b>Aberto 24 horas, à vista</b><span>Telefone e WhatsApp em destaque do topo ao rodapé, para quem precisa agora.</span></li>
+                      <li><b>Cada serviço com a sua página</b><span>Clínica, internação 24h, banho e tosa, farmácia e contato, cada um com o seu caminho.</span></li>
+                      <li><b>Área do cliente</b><span>Caderneta de vacinas, exames e agendamentos no SimplesPet, a um toque do site.</span></li>
+                    </ul>
+                  </div>
                 </div>
-                <div class="caso-feitos-bloco">
-                  <ul class="caso-feitos">
-                    <li><b>Aberto 24 horas, à vista</b><span>Telefone e WhatsApp em destaque do topo ao rodapé, para quem precisa agora.</span></li>
-                    <li><b>Cada serviço com a sua página</b><span>Clínica, internação 24h, banho e tosa, farmácia e contato, cada um com o seu caminho.</span></li>
-                    <li><b>Área do cliente</b><span>Caderneta de vacinas, exames e agendamentos no SimplesPet, a um toque do site.</span></li>
-                  </ul>
+                <div class="caso-telas">
+                  <figure class="tela-desktop">
+                    <div class="tela-barra" aria-hidden="true">cemevi-pi.vercel.app</div>
+                    <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/cemevi-inicio-desktop.webp?v=1014" srcset="/portfolio/img/cemevi-inicio-desktop-960.webp?v=1014 960w, /portfolio/img/cemevi-inicio-desktop.webp?v=1014 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" loading="lazy" decoding="async" alt="Página inicial do Cemevi no computador: a manchete sobre cuidado veterinário 24 horas por dia, a foto do cão, os botões de agendar consulta e conhecer os serviços, e a faixa com horário, telefone e estacionamento."></div>
+                  </figure>
+                  <figure class="tela-celular">
+                    <img class="tela-rola" src="/portfolio/img/cemevi-inicio-celular.webp?v=1014" srcset="/portfolio/img/cemevi-inicio-celular-390.webp?v=1014 390w, /portfolio/img/cemevi-inicio-celular.webp?v=1014 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" loading="lazy" decoding="async" alt="Página inicial do Cemevi no celular: a manchete, a foto do cão e os botões de agendar, ligar e chamar no WhatsApp.">
+                  </figure>
                 </div>
-              </div>
-              <div class="caso-telas">
-                <figure class="tela-desktop">
-                  <div class="tela-barra" aria-hidden="true">cemevi-pi.vercel.app</div>
-                  <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/cemevi-inicio-desktop.webp?v=1014" srcset="/portfolio/img/cemevi-inicio-desktop-960.webp?v=1014 960w, /portfolio/img/cemevi-inicio-desktop.webp?v=1014 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" loading="lazy" decoding="async" alt="Página inicial do Cemevi no computador: a manchete sobre cuidado veterinário 24 horas por dia, a foto do cão, os botões de agendar consulta e conhecer os serviços, e a faixa com horário, telefone e estacionamento."></div>
-                </figure>
-                <figure class="tela-celular">
-                  <img class="tela-rola" src="/portfolio/img/cemevi-inicio-celular.webp?v=1014" srcset="/portfolio/img/cemevi-inicio-celular-390.webp?v=1014 390w, /portfolio/img/cemevi-inicio-celular.webp?v=1014 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" loading="lazy" decoding="async" alt="Página inicial do Cemevi no celular: a manchete, a foto do cão e os botões de agendar, ligar e chamar no WhatsApp.">
-                </figure>
               </div>
             </div>
           </div>
-        </div>
-      </article>
-      <article class="caso c-pitangui" aria-labelledby="caso-pitangui">
-        <div class="caso-palco">
-          <div class="caso-cartao">
-            <span class="caso-num" aria-hidden="true"></span>
-            <div class="caso-conteudo">
-              <div class="caso-texto">
-                <div class="caso-cab">
-                  <div class="caso-nome"><h3 id="caso-pitangui">Pitangui Fernandes</h3><p>Governança residencial · Niterói</p></div>
-                  <span class="caso-selo">Prévia independente</span>
-                  <a class="text-link caso-link" href="https://pitanguifernandes.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+        </article>
+        <article class="caso c-pitangui" aria-labelledby="caso-pitangui">
+          <div class="caso-palco">
+            <div class="caso-cartao">
+              <span class="caso-num" aria-hidden="true"></span>
+              <div class="caso-conteudo">
+                <div class="caso-texto">
+                  <div class="caso-cab">
+                    <div class="caso-nome"><h3 id="caso-pitangui">Pitangui Fernandes</h3><p>Governança residencial · Niterói</p></div>
+                    <span class="caso-selo">Prévia independente</span>
+                    <a class="text-link caso-link" href="https://pitanguifernandes.vercel.app/" target="_blank" rel="noopener noreferrer">Conhecer a prévia</a>
+                  </div>
+                  <div class="caso-feitos-bloco">
+                    <ul class="caso-feitos">
+                      <li><b>A casa, sistema a sistema</b><span>Um desenho da casa com os doze sistemas; ao escolher um plano, o desenho e a lista mostram o que ele acompanha.</span></li>
+                      <li><b>Três planos, lado a lado</b><span>Essencial, Premium e Concierge comparados em visitas, sistemas no calendário e testes dos equipamentos.</span></li>
+                      <li><b>Compromissos à vista</b><span>As regras do serviço em seis pontos, como a aprovação dos gastos e o histórico registrado.</span></li>
+                    </ul>
+                  </div>
                 </div>
-                <div class="caso-feitos-bloco">
-                  <ul class="caso-feitos">
-                    <li><b>A casa, sistema a sistema</b><span>Um desenho da casa com os doze sistemas; ao escolher um plano, o desenho e a lista mostram o que ele acompanha.</span></li>
-                    <li><b>Três planos, lado a lado</b><span>Essencial, Premium e Concierge comparados em visitas, sistemas no calendário e testes dos equipamentos.</span></li>
-                    <li><b>Compromissos à vista</b><span>As regras do serviço em seis pontos, como a aprovação dos gastos e o histórico registrado.</span></li>
-                  </ul>
+                <div class="caso-telas">
+                  <figure class="tela-desktop">
+                    <div class="tela-barra" aria-hidden="true">pitanguifernandes.vercel.app</div>
+                    <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/pitangui-inicio-desktop.webp" srcset="/portfolio/img/pitangui-inicio-desktop-960.webp 960w, /portfolio/img/pitangui-inicio-desktop.webp 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" loading="lazy" decoding="async" alt="Página inicial da Pitangui Fernandes no computador: a manchete “Você cuida da sua família. Nós cuidamos da sua casa.” sobre o fundo azul-marinho, o monograma PF em 3D e o menu com Governança, Método, Planos, Família e Compromissos."></div>
+                  </figure>
+                  <figure class="tela-celular">
+                    <img class="tela-rola" src="/portfolio/img/pitangui-inicio-celular.webp" srcset="/portfolio/img/pitangui-inicio-celular-390.webp 390w, /portfolio/img/pitangui-inicio-celular.webp 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" loading="lazy" decoding="async" alt="Página inicial da Pitangui Fernandes no celular: o monograma PF, a manchete sobre cuidar da casa e o convite para conhecer a forma de trabalhar.">
+                  </figure>
                 </div>
-              </div>
-              <div class="caso-telas">
-                <figure class="tela-desktop">
-                  <div class="tela-barra" aria-hidden="true">pitanguifernandes.vercel.app</div>
-                  <div class="tela-janela"><img class="tela-rola" src="/portfolio/img/pitangui-inicio-desktop.webp" srcset="/portfolio/img/pitangui-inicio-desktop-960.webp 960w, /portfolio/img/pitangui-inicio-desktop.webp 1440w" sizes="(max-width: 800px) calc((100vw - 76px) * .86), min(62vw, 1100px)" width="1440" height="2700" loading="lazy" decoding="async" alt="Página inicial da Pitangui Fernandes no computador: a manchete “Você cuida da sua família. Nós cuidamos da sua casa.” sobre o fundo azul-marinho, o monograma PF em 3D e o menu com Governança, Método, Planos, Família e Compromissos."></div>
-                </figure>
-                <figure class="tela-celular">
-                  <img class="tela-rola" src="/portfolio/img/pitangui-inicio-celular.webp" srcset="/portfolio/img/pitangui-inicio-celular-390.webp 390w, /portfolio/img/pitangui-inicio-celular.webp 780w" sizes="(max-width: 800px) calc((100vw - 76px) * .36), 300px" width="780" height="5064" loading="lazy" decoding="async" alt="Página inicial da Pitangui Fernandes no celular: o monograma PF, a manchete sobre cuidar da casa e o convite para conhecer a forma de trabalhar.">
-                </figure>
               </div>
             </div>
           </div>
-        </div>
-      </article>
+        </article>
+      </div>
     </section>
 
     <section id="contato" class="final-cta section-grid" data-campo="deep" aria-labelledby="cta-title">
@@ -297,6 +300,6 @@
 
   <footer class="site-footer"><a class="brand" href="/" aria-label="Sett Company, início"><span>sett<span class="brand-dot">.</span></span></a><div class="rodape-corpo"><p>Presença digital e automação para negócios.<br>Niterói e Rio de Janeiro.</p><nav aria-label="Rodapé"><a href="/o-que-fazemos/">O que fazemos</a><a href="/portfolio/">Portfólio</a><a href="/gestao-google-meu-negocio/">Google Meu Negócio</a><a href="/criacao-de-sites/">Criação de sites</a><a href="/agentes-de-ia-para-empresas/">Automatização</a><a href="https://wa.me/5521936181695">Falar com a Sett</a><a href="/sett-agenda.html">Privacidade</a></nav><small>© 2026 Sett Company. Feito com intenção.</small></div></footer>
   <a class="wa-flutuante" href="https://wa.me/5521936181695" target="_blank" rel="noopener noreferrer" aria-label="Falar com a Sett no WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.42.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26C2.16 6.45 6.6 2.02 12.05 2.02c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.69 1.45h.01c6.55 0 11.89-5.34 11.89-11.89 0-3.18-1.24-6.17-3.49-8.42"/></svg></a>
-  <script src="/script.js?v=1793000013"></script>
+  <script src="/script.js?v=1793300000"></script>
 </body>
 </html>

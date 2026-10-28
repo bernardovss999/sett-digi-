@@ -33,7 +33,8 @@ for (const [w, h, celular] of [[1440, 900], [1318, 656], [1920, 1080], [1024, 76
     assert.equal(r.personagens, 1);
     assert.equal(r.antigos, 0, 'a órbita ou o anel antigo voltou');
     assert.equal(r.carregou, true, 'imagem do mascote não carregou');
-    assert.ok(r.largura >= 115, `mascote pequeno demais: ${r.largura}px`);
+    // a abertura tem uma tela só (28/10/2026): no telefone de 320×568 o mascote divide a pouca altura com o texto
+    assert.ok(r.largura >= (h < 600 ? 70 : 115), `mascote pequeno demais: ${r.largura}px`);
     assert.equal(r.dentro, true, 'mascote cortado ou fora da abertura');
     assert.equal(r.olhosNoRosto, true, 'olhos fora do rosto');
   });

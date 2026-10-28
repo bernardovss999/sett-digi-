@@ -37,7 +37,7 @@
 .c-pitangui { --c-fundo: #071b36; --c-tinta: #eef1f5; --c-tinta2: #b7bcc4; --c-fio: rgba(238, 241, 245, .18); --c-realce: #f0a59b; }   /* o azul-marinho e o vermelho dos detalhes da Pitangui, clareado para ler sobre o marinho */
 
 .caso {
-  grid-column: 1 / -1; margin-top: clamp(56px, 6vw, 96px);
+  grid-column: 1 / -1;
   --vao: clamp(14px, 1.8vw, 32px);
   --pad: clamp(22px, 2.4vw, 40px);
 }
@@ -117,148 +117,119 @@
 .caso-feitos b { font: 500 1.12rem var(--display); letter-spacing: -.04em; }
 .caso-feitos span { color: var(--c-tinta2); font-size: .9rem; line-height: 1.45; max-width: 22rem; }
 
-/* ------------------------------------------------------------ O BARALHO
-   Desktop com animação por rolagem. Cada artigo (.caso) é um TRILHO parado,
-   mais alto que a tela, que serve de linha do tempo; o palco de dentro gruda
-   embaixo do cabeçalho com a carta centralizada. Os trilhos se sobrepõem em
-   uma tela (margem negativa): a carta seguinte sobe por cima da anterior, que
-   ainda está grudada — e recua de leve enquanto é coberta. Dentro de cada
-   carta, o site rola nas molduras no trecho em que ela está sozinha.
-
-   Com S = altura útil da tela (100svh − topo) e D = tempo sozinha:
-   trilho = 2S + D (S subindo até grudar, D sozinha, S sendo coberta); a
-   última não é coberta: S + D. Em "cover" do trilho: gruda em S, fica
-   sozinha até S + D e é coberta até 2S + D. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 801px) {
-    .previas { --D: 75svh; }
-    .caso { margin-top: 0; height: calc(2 * var(--S) + var(--D)); view-timeline: --caso block; }
-    .caso:first-of-type { margin-top: 24px; }
-    .caso + .caso { margin-top: calc(-1 * var(--S)); }
-    .caso:last-of-type { height: calc(var(--S) + var(--D)); }
-    .caso-palco { position: sticky; top: var(--topo); height: var(--S); display: flex; flex-direction: column; justify-content: center; }
-    .caso-cartao {
-      box-shadow: 0 -30px 60px -30px rgba(11, 13, 14, .5), 0 30px 60px -40px rgba(11, 13, 14, .4);
-      transform-origin: 50% 30%;
-      animation: recua linear both; animation-timeline: --caso;
-      animation-range: cover calc(var(--S) + var(--D)) cover calc(2 * var(--S) + var(--D));
-    }
-    .caso:last-of-type .caso-cartao { animation: none; }
-    .caso-telas .tela-rola {
-      animation: rola-tela linear both; animation-timeline: --caso;
-      animation-range: cover var(--S) cover calc(var(--S) + var(--D));
-    }
-  }
-  /* celular: cartas em sequência; o site rola de leve na moldura enquanto
-     ela atravessa a tela */
-  @media (prefers-reduced-motion: no-preference) and (max-width: 800px) {
-    /* A moldura mostra o TOPO do site até chegar no meio da tela (é ali que se
-       olha) e só então o site rola junto com o dedo, devagar, até a moldura ir
-       saindo pelo topo. O inset desconta o cabeçalho grudado: "meio" é o meio da área
-       visível. (Antes a rolagem começava com a moldura entrando por baixo e,
-       no meio da tela, a primeira dobra do site já tinha passado.) */
-    .caso-telas { view-timeline: --telas block; view-timeline-inset: var(--topo) 0px; }
-    .caso-telas .tela-rola { animation: rola-leve linear both; animation-timeline: --telas; animation-range: contain 50% exit 40%; }   /* termina com a moldura saindo pelo topo: o mesmo percurso em ~40% mais rolagem, mais devagar */
-  }
+/* ------------------------------------------------------------ A FILA
+   As prévias ocupam UMA tela, como toda seção do site: em cima o título, o
+   texto e as setas; embaixo, a fila de cartões, com a altura que sobra. Cada
+   cartão tem a largura da coluna e desliza para o lado (dedo, setas ou
+   teclado); os pontos embaixo mostram qual está à vista. O cartão é um
+   container de tamanho: as molduras medem pelo espaço do próprio cartão,
+   então cabem em qualquer tela, sem passar da altura. */
+:root main > section.previas {
+  height: calc(100lvh - var(--topo)); min-height: 0; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: stretch; row-gap: clamp(14px, 2.4svh, 28px);
 }
-@keyframes recua { to { scale: .94; opacity: .3; } }
-@keyframes rola-leve { to { translate: 0 -40%; } }
+:root .previas > .section-index { display: none; }
+.previas-cab { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+:root .previas-cab .section-title { font-size: clamp(2rem, min(4.4vw, 7.4svh), 4.6rem); }
+:root .previas-cab .section-text { margin-top: 10px; max-width: 46rem; }
+@media (min-width: 801px) {
+  /* o título numa linha só: sobra altura para o cartão */
+  :root .previas-cab .section-title .linha { display: inline; }
+  :root .previas-cab .section-title .linha + .linha::before { content: " "; }
+}
+.trilho-setas { flex: none; display: flex; gap: 10px; }
+.trilho-setas button {
+  width: 48px; height: 48px; display: grid; place-content: center; border-radius: 50%;
+  border: 1px solid var(--campo-fio); background: transparent; color: var(--campo-texto);
+  font: 500 1.1rem var(--display); cursor: pointer;
+  transition: background-color var(--t-micro) var(--curva), color var(--t-micro) var(--curva), opacity var(--t-micro) var(--curva);
+}
+.trilho-setas button:disabled { opacity: .3; cursor: default; }
+.trilho-setas button:focus-visible { outline: 2px solid var(--campo-realce); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) { .trilho-setas button:not(:disabled):hover { background: var(--ink); color: var(--paper); border-color: var(--ink); } }
 
-/* ------------------------------------------------- tela larga E baixa
-   Notebook 16:10 e 16:9, 1080p e ultrawide: empilhando nome, telas e feitos
-   a altura acaba antes da largura, e as molduras ficavam soltas, com um vazio
-   à direita. Aqui o texto vai para a esquerda e as molduras para a direita,
-   encostadas na borda da coluna; os feitos ficam um embaixo do outro. A
-   coluna de texto alarga com a tela (cada recurso quebra em menos linhas) e,
-   em telas baixas, os respiros encolhem para a carta caber inteira. Acima de
-   1100px de altura (2560×1440, 3440×1440) sobra altura: volta o empilhado
-   com as molduras grandes. */
-@media (min-width: 801px) and (min-aspect-ratio: 3 / 2) and (max-height: 1100px) {
-  .caso { --texto-w: clamp(18rem, 24vw, 25rem); }
-  .caso-conteudo { display: flex; align-items: center; gap: var(--coluna-gap); }
-  .caso-texto { display: flex; flex-direction: column; flex: 1 1 var(--texto-w); min-width: 0; }
-  .caso-cab { grid-template-columns: auto auto; justify-content: start; }
-  .caso-nome { grid-column: 1 / -1; }
-  .caso-feitos-bloco { margin-top: 26px; }
-  .caso-feitos { grid-template-columns: minmax(0, 1fr); margin-top: 6px; }
-  .caso-feitos li, .caso-feitos li + li { padding: 12px 0 0; border-left: 0; }
-  .caso-feitos li + li { margin-top: 12px; border-top: 1px solid var(--c-fio); }
-  .caso-feitos span { max-width: none; }
-  .caso-telas {
-    flex: none; margin-top: 0; margin-left: auto;
-    --telas-h: min(calc(var(--S) - 2 * var(--pad) - 48px), calc((100cqw - var(--texto-w) - var(--coluna-gap) - var(--vao) + 50px) / 2.0621), 44rem);
+.caso-trilho {
+  display: flex; gap: var(--coluna-gap); min-height: 0;
+  margin-inline: calc(-1 * var(--margem)); padding-inline: var(--margem); scroll-padding-inline: var(--margem);
+  overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.caso-trilho::-webkit-scrollbar { display: none; }
+.caso-trilho:focus-visible { outline: 2px solid var(--campo-realce); outline-offset: -2px; }
+:root .caso { flex: 0 0 100%; height: 100%; margin: 0; scroll-snap-align: start; --pad: clamp(18px, 2.2vw, 36px); }
+.caso-palco { height: 100%; }
+:root .caso-cartao { height: 100%; margin-inline: 0; display: flex; container-type: size; box-sizing: border-box; }
+:root .caso-conteudo { flex: 1; min-width: 0; height: 100%; }
+:root .previas .trilho-pontos { display: flex; justify-content: center; gap: 8px; margin: 0; }
+.previas .trilho-pontos i { width: 6px; height: 6px; border-radius: 50%; background: var(--campo-fio); transition: background var(--t-micro) var(--curva), width var(--t-ui) var(--curva); }
+.previas .trilho-pontos i.atual { width: 18px; border-radius: 3px; background: var(--campo-realce); }
+
+/* computador: texto à esquerda, molduras à direita, na altura do cartão */
+@media (min-width: 801px) {
+  .caso { --texto-w: clamp(17rem, 24vw, 25rem); }
+  :root .caso-conteudo { display: flex; align-items: center; gap: var(--coluna-gap); }
+  :root .caso-texto { display: flex; flex-direction: column; flex: 1 1 var(--texto-w); min-width: 0; }
+  :root .caso-cab { grid-template-columns: auto auto; justify-content: start; }
+  :root .caso-nome { grid-column: 1 / -1; }
+  :root .caso-feitos-bloco { margin-top: 22px; }
+  :root .caso-feitos { grid-template-columns: minmax(0, 1fr); margin-top: 6px; }
+  :root .caso-feitos li, :root .caso-feitos li + li { padding: 12px 0 0; border-left: 0; }
+  :root .caso-feitos li + li { margin-top: 12px; border-top: 1px solid var(--c-fio); }
+  :root .caso-feitos span { max-width: none; }
+  :root .caso-telas {
+    flex: none; margin: 0 0 0 auto;
+    --telas-h: min(100cqh, calc((100cqw - var(--texto-w) - var(--coluna-gap) - var(--vao) + 50px) / 2.0621), 44rem);
   }
 }
-/* notebook com a janela baixa (barra de favoritos, zoom, 1366×768 com abas):
-   a carta tem menos de ~620px de altura útil */
-@media (min-width: 801px) and (min-aspect-ratio: 3 / 2) and (max-height: 720px) {
-  .caso { --pad: 20px; }
-  .caso-nome h3 { font-size: clamp(1.7rem, 2.6vw, 2.4rem); }
-  .caso-nome p { margin-top: 6px; }
-  .caso-cab { gap: 10px 22px; }
-  .caso-feitos-bloco { margin-top: 18px; padding-top: 12px; }
-  .caso-feitos li, .caso-feitos li + li { padding-top: 9px; }
-  .caso-feitos li + li { margin-top: 9px; }
-  .caso-feitos b { font-size: 1.02rem; }
-  .caso-feitos span { font-size: .86rem; line-height: 1.4; }
+/* notebook baixo: o cartão é mais curto, os recursos ficam só com o nome */
+@media (min-width: 801px) and (max-height: 760px) {
+  :root .caso-nome h3 { font-size: clamp(1.7rem, 2.6vw, 2.4rem); }
+  :root .caso-feitos-bloco { margin-top: 14px; padding-top: 10px; }
+  :root .caso-feitos li, :root .caso-feitos li + li { padding-top: 8px; }
+  :root .caso-feitos li + li { margin-top: 8px; }
+  :root .caso-feitos span { display: none; }
 }
 
-/* empilhado (telas quase quadradas e as muito altas): quando a altura limita
-   o par de molduras, ele fica no centro da carta em vez de colado à esquerda */
-@media (min-width: 801px) and (max-aspect-ratio: 1499 / 1000), (min-width: 801px) and (min-height: 1101px) {
-  .caso-telas { margin-inline: auto; }
-}
-
-/* ----------------------------------------------------------------- ultrawide
-   Acima de 1800px o site inteiro passa a uma coluna (o índice sobe para cima
-   do título): o número da carta faz o mesmo, senão o nome nascia 400px à
-   direita do título da seção. */
-@media (min-width: 1800px) {
-  .caso-cartao { grid-template-columns: minmax(0, 1fr); }
-  .caso-num { padding-top: 0; margin-bottom: 22px; }
-  .caso-conteudo { grid-column: 1; }
-}
-
-/* ----------------------------------------------------------------- celular
-   Cada carta é um bloco de cor na sequência. Tela estreita demais para as
-   duas molduras lado a lado: o celular passa por cima do canto do
-   computador, com um deslocamento claro (não "quase alinhado"). */
+/* celular: nome em cima, as duas telas no meio (o celular por cima do canto do
+   computador) e os recursos embaixo, só com o nome */
 @media (max-width: 800px) {
-  .port-hero { padding-top: 64px; }
-  .port-foot { margin-top: 64px; padding-bottom: 24px; }
-  /* "Nota 5 no Google." mede 7em: a fonte é a largura útil ÷ 7,3, então a
-     primeira linha sempre cabe inteira e o título fica maior que os h2. */
-  .port-title { font-size: min(4.6rem, calc((100vw - 40px) / 7.3)); margin: 22px 0 26px; }
-
-  .caso { margin-top: 18px; --pad: 20px; }
-  .caso:first-of-type { margin-top: 44px; }
-  /* UMA margem só, igual dos dois lados: o número deixa de ser uma coluna (que
-     empurrava o conteúdo ~30px para dentro) e vira um rótulo em cima do nome. */
-  .caso-cartao { margin-inline: 0; padding: 22px var(--pad) 24px; border-radius: 18px; grid-template-columns: minmax(0, 1fr); }
-  .caso-num { grid-column: 1; padding-top: 0; margin-bottom: 12px; }
-  .caso-conteudo { grid-column: 1; }
-  /* selo à esquerda e "Ver ao vivo" à direita, no mesmo centro */
-  .caso-cab { grid-template-columns: minmax(0, 1fr) auto; justify-content: space-between; align-items: center; gap: 16px 12px; }
-  .caso-nome { grid-column: 1 / -1; }
-  /* sem isto a pílula estica até o fim da coluna (a coluna cresce com o nome que atravessa as duas) */
-  .caso-selo { justify-self: start; }
-  .caso-link { justify-self: end; }
-
-  /* as duas telas: o computador na margem da esquerda, o celular na da direita
-     e CENTRADO na altura do computador — sobra o mesmo tanto em cima e embaixo
-     (antes ele pendurava ~100px abaixo e deixava um buraco à esquerda) */
-  .caso-telas { display: grid; grid-template-columns: repeat(100, minmax(0, 1fr)); align-items: center; gap: 0; margin-top: 22px; max-width: none; }
-  .tela-desktop { grid-column: 1 / 88; grid-row: 1; align-self: center; border-radius: 10px; }
-  .tela-barra { height: 24px; padding: 0 10px; font-size: .58rem; }
-  .caso-telas .tela-celular { grid-column: 65 / 101; grid-row: 1; align-self: center; margin-top: 0; border-width: 5px; border-radius: 20px; box-sizing: content-box; aspect-ratio: 780 / 1688; }
-
-  .caso-feitos-bloco { margin-top: 22px; padding-top: 16px; }
-  .caso-feitos { grid-template-columns: minmax(0, 1fr); margin-top: 4px; }
-  .caso-feitos li, .caso-feitos li + li { padding: 14px 0; border-left: 0; border-bottom: 1px solid var(--c-fio); }
-  .caso-feitos li:last-child { border-bottom: 0; padding-bottom: 0; }
-  .caso-feitos span { max-width: none; }
+  :root .previas-cab .trilho-setas { display: none; }
+  :root .caso { --pad: 18px; }
+  :root .caso-cartao { padding: 16px var(--pad); border-radius: 18px; }
+  :root .caso-conteudo { display: flex; flex-direction: column; gap: 14px; }
+  /* selo e link na mesma linha quando cabem; em tela estreita o link desce */
+  :root .caso-cab { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+  :root .caso-cab .caso-nome { flex: 1 0 100%; }
+  :root .caso-nome { grid-column: 1 / -1; }
+  :root .caso-nome h3 { font-size: 1.7rem; }
+  :root .caso-nome p { margin-top: 4px; font-size: .88rem; }
+  :root .caso-selo { justify-self: start; }
+  :root .caso-link { justify-self: end; }
+  /* as telas: largura que cabe na altura que sobra (o par mede ~0,78 × a largura) */
+  :root .caso-telas {
+    --resto: 272px;   /* nome, selo, recursos e respiros: o que fica fora das telas */
+    display: grid; grid-template-columns: repeat(100, minmax(0, 1fr)); align-items: center; gap: 0;
+    width: min(100%, calc((100cqh - var(--resto)) / .78)); max-width: none; margin: 0 auto;
+  }
+  :root .tela-desktop { grid-column: 1 / 88; grid-row: 1; align-self: center; border-radius: 10px; }
+  :root .tela-barra { height: 24px; padding: 0 10px; font-size: .62rem; }
+  :root .caso-telas .tela-celular { grid-column: 65 / 101; grid-row: 1; align-self: center; margin-top: 0; border-width: 5px; border-radius: 20px; box-sizing: content-box; aspect-ratio: 780 / 1688; }
+  :root .caso-feitos-bloco { margin-top: auto; padding-top: 10px; }
+  :root .caso-feitos { grid-template-columns: minmax(0, 1fr); margin-top: 0; }
+  :root .caso-feitos li, :root .caso-feitos li + li { padding: 7px 0; border-left: 0; border-bottom: 1px solid var(--c-fio); }
+  :root .caso-feitos li:last-child { border-bottom: 0; padding-bottom: 0; }
+  :root .caso-feitos b { font-size: 1rem; }
+  :root .caso-feitos span { display: none; }
 }
-
+@media (max-width: 800px) and (max-height: 720px) {
+  :root .caso-feitos-bloco { display: none; }
+  :root .caso-telas { --resto: 150px; }
+}
+/* o site rola de leve dentro das molduras quando o cartão aparece (uma vez) */
+@media (prefers-reduced-motion: no-preference) {
+  .caso-telas .tela-rola { transition: translate 9s cubic-bezier(.45, 0, .2, 1); }
+  .caso.a-vista .caso-telas .tela-rola { translate: 0 -30%; }
+}
 
 /* ------------------------------------------------------------- a pilha
    À direita da frase, três prévias reais empilhadas como janelas abertas

@@ -30,11 +30,11 @@ for (const [w, h] of [[320, 568], [390, 844], [430, 932]]) {
   });
 }
 
-test('390x844: a abertura de "O que fazemos" (texto, botões e visor) cabe numa tela', async () => {
+test('390x844: a abertura de "O que fazemos" (texto, botões e palco) cabe numa tela', async () => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.goto(site.origin + '/o-que-fazemos/', { waitUntil: 'load' });
-  const fundo = await page.evaluate(() => Math.max(...[...document.querySelectorAll('.foco-frentes li')].map((e) => e.getBoundingClientRect().bottom)));
+  const fundo = await page.evaluate(() => Math.max(...[...document.querySelectorAll('.elenco-escolha button')].map((e) => e.getBoundingClientRect().bottom)));
   await context.close();
-  assert.ok(fundo <= 844, `visor termina em ${fundo}px`);
+  assert.ok(fundo <= 844, `palco termina em ${fundo}px`);
 });

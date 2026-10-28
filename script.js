@@ -210,3 +210,38 @@ if ('IntersectionObserver' in window) {
     [...trilho.children].forEach(caso => olho.observe(caso));
   });
 }
+
+// 11. O palco dos agentes (O que fazemos): escolher um agente põe ele em foco,
+//     com o nome e o que ele faz; apontar o palco faz ele sorrir. Setas do
+//     teclado andam entre os seis. Sem este trecho fica o primeiro agente.
+document.querySelectorAll('[data-elenco]').forEach(elenco => {
+  const ator = elenco.querySelector('.elenco-ator');
+  const legenda = elenco.querySelector('.elenco-legenda');
+  const conta = elenco.querySelector('.elenco-conta');
+  const botoes = [...elenco.querySelectorAll('.elenco-escolha button')];
+  const palco = elenco.querySelector('.elenco-palco');
+  let atual = 0;
+  const escolhe = (k, foco) => {
+    if (k === atual && ator.getAttribute('src').includes(botoes[k].dataset.ator)) return;
+    atual = k;
+    const b = botoes[k];
+    botoes.forEach((o, i) => o.setAttribute('aria-pressed', String(i === k)));
+    ator.src = `/img/agentes/${b.dataset.ator}-aberto.webp`;
+    ator.dataset.sorri = `/img/agentes/${b.dataset.ator}-sorri.webp`;
+    legenda.querySelector('b').textContent = b.dataset.nome;
+    legenda.querySelector('span').textContent = b.dataset.legenda;
+    if (conta) conta.textContent = `0${k + 1} / 0${botoes.length}`;
+    ator.classList.remove('pousa'); void ator.offsetWidth; ator.classList.add('pousa');
+    if (foco) b.focus();
+  };
+  botoes.forEach((b, k) => {
+    b.addEventListener('click', () => escolhe(k));
+    b.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); escolhe((atual + (e.key === 'ArrowRight' ? 1 : -1) + botoes.length) % botoes.length, true); }
+    });
+    // as versões sorrindo chegam antes de alguém apontar
+    const pre = new Image(); pre.src = `/img/agentes/${b.dataset.ator}-sorri.webp`;
+  });
+  palco.addEventListener('pointerenter', () => { ator.src = ator.dataset.sorri; });
+  palco.addEventListener('pointerleave', () => { ator.src = `/img/agentes/${botoes[atual].dataset.ator}-aberto.webp`; });
+});

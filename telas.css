@@ -63,12 +63,12 @@
   :root main > section:first-child .ab-texto { flex: none; }
 
   /* a peça: altura = o que sobra (flex), largura = altura × proporção, nunca mais larga que a tela */
-  :root .mascote, :root .pilha, :root .foco {
+  :root .mascote, :root .pilha, :root .elenco {
     flex: 1 1 0; min-height: 0; width: auto; max-width: 100%; height: auto; margin: 20px auto 0; align-self: center;
   }
   :root .mascote { max-height: 260px; }
   :root .pilha { max-height: 300px; }
-  :root .foco { max-height: 383px; }
+  :root .elenco { max-height: 420px; aspect-ratio: 1 / 1; }
   :root .aparelho { flex: 1 1 0; min-height: 0; margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
   :root .pg-servico .aparelho-tela, :root .aparelho-tela { flex: 1 1 0; min-height: 0; width: auto; height: auto; max-height: 440px; aspect-ratio: 9 / 18.5; border-width: 6px; border-radius: 26px; }
   :root .aparelho figcaption { flex: none; }
@@ -90,7 +90,7 @@
   :root main > section:first-child .hero-actions { margin-top: 14px; gap: 4px; }
   :root main > section:first-child .hero-actions .text-link { min-height: 40px; }
   :root .ab-lead-2, :root .aparelho figcaption { display: none; }
-  :root .mascote, :root .pilha, :root .foco, :root .aparelho { margin-top: 10px; }
+  :root .mascote, :root .pilha, :root .elenco, :root .aparelho { margin-top: 10px; }
   /* o link de texto da abertura sai (o mesmo caminho está no menu): o botão principal fica */
   :root main > section:first-child .hero-actions .text-link { display: none; }
   /* ficha e calendário mostram o começo e somem num degradê, sem corte seco */
@@ -228,26 +228,14 @@
   /* o calendário dos agentes: blocos mais baixos para a legenda e o "Ver de novo" caberem */
   :root .semana { --bloco: clamp(20px, calc((100svh - 660px) / 5), 34px); }
 }
-/* O que fazemos no celular: o visor fica mais largo que alto (3:2), assim as
-   leituras dos cantos e o centro têm espaço mesmo num painel baixo */
-@media (max-width: 800px) {
-  :root .foco { aspect-ratio: 3 / 2; max-height: 300px; }
-  :root .foco-alvo { width: 46%; }
-  :root .foco-frentes li { width: 36%; }
-  :root .foco-frentes .frente-1, :root .foco-frentes .frente-2 { top: 13%; }
-  :root .foco-frentes .frente-3, :root .foco-frentes .frente-4 { bottom: 13%; }
-  :root .foco-frentes .frente-1, :root .foco-frentes .frente-3 { left: 9%; }
-  :root .foco-frentes .frente-2, :root .foco-frentes .frente-4 { right: 9%; }
-  :root .foco-selo { width: 13%; }
-  :root .pg-servico .ab-corpo { gap: 0; }
-}
+@media (max-width: 800px) { :root .pg-servico .ab-corpo { gap: 0; } }
 @media (min-width: 801px) and (max-height: 820px) {
   :root .semana { --bloco: clamp(22px, calc((100svh - 620px) / 5), 40px); }
 }
 /* telefone bem baixo (iPhone SE de 1ª geração, 568px): parágrafo um pouco menor */
 @media (max-width: 800px) and (max-height: 600px) {
   :root main > section:first-child .hero-lead, :root main > section:first-child .ab-lead { font-size: .84rem; line-height: 1.38; }
-  :root .mascote, :root .pilha, :root .foco, :root .aparelho { margin-top: 6px; }
+  :root .mascote, :root .pilha, :root .elenco, :root .aparelho { margin-top: 6px; }
 }
 /* calendário dos agentes no celular: quando a altura acaba, ele some num degradê (sem corte seco) */
 @media (max-width: 800px) {
@@ -255,3 +243,78 @@
 }
 /* o rótulo da seção (Sett Agenda) fica na própria linha, sem grudar por cima do título */
 :root #privacidade > .section-index { position: static; }
+
+/* ------------------------------------------------ celular: o texto começa no topo de toda seção */
+/* Pedido de 28/10/2026: no celular nenhuma seção centraliza o conteúdo na
+   altura. O título começa logo abaixo do menu, à mesma distância da abertura
+   (--abertura-titulo), e o espaço que sobra fica embaixo. */
+@media (max-width: 800px) {
+  :root main > section.section-grid, :root main > section.hero, :root main > section.ab, :root main > section.port-hero {
+    align-content: start; justify-content: flex-start; padding-top: var(--abertura-titulo);
+  }
+}
+/* O que fazemos · automação: um parágrafo só; no celular, agentes das etapas menores e a faixa de controle compacta */
+@media (min-width: 1024px) { :root .oque > div > .section-text { grid-column: 1 / -1; max-width: 46rem; } }
+@media (min-width: 801px) and (max-height: 820px) { :root .etapas-agentes img { width: clamp(56px, 9svh, 84px); } }
+@media (max-width: 800px) {
+  :root .etapas-agentes img { width: 56px; margin: 0 0 4px -4px; }
+  :root .etapas-agentes li > span { font-size: .78rem; }
+  :root .controle { gap: 8px; margin-top: 16px; padding-top: 12px; }
+  :root .controle-titulo { font-size: 1.15rem; flex-basis: 100%; }
+  :root .controle-lista { flex-direction: column; gap: 6px; }
+  :root .controle-lista li { font-size: .88rem; }
+  :root .elenco-fila { gap: 6px; margin-top: 24px; }
+  :root .elenco-fila img { width: 38px; }
+  :root .elenco-fila .fila-ponto { width: 52px; }
+}
+@media (max-width: 800px) and (max-height: 720px) {
+  :root .etapas-agentes img { width: 44px; }
+  :root .controle-lista { flex-direction: row; gap: 4px 14px; }
+  :root .controle-lista li { font-size: .8rem; }
+}
+/* O que fazemos · automação em telefone baixo e em notebook baixo */
+@media (max-width: 800px) and (max-height: 720px) {
+  :root .oque .section-text { font-size: .84rem; }
+  :root .etapas-agentes li { padding: 12px 14px; }
+  :root .etapas-agentes img { width: 38px; margin-bottom: 0; }
+  :root .caminho > li:not(:has(p)) h3 { font-size: 1rem; }
+  :root .controle { margin-top: 10px; padding-top: 10px; gap: 6px; }
+  :root .controle-titulo { font-size: 1.02rem; }
+  :root .controle-lista { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
+  :root .controle-lista li { font-size: .76rem; gap: 6px; }
+  :root .controle-lista li::before { width: 13px; height: 13px; }
+  :root .controle-ir { min-height: 36px; font-size: .88rem; }
+  :root .oque .nota-lateral { margin-top: 4px; font-size: .75rem; }
+  :root .etapas-agentes li > span { display: none; }
+}
+@media (min-width: 801px) and (max-height: 820px) {
+  :root .etapas-agentes img { width: clamp(48px, 7svh, 72px); }
+  :root .etapas-agentes li { padding-top: 12px; }
+  :root .oque .controle { margin-top: clamp(14px, 2.4svh, 24px); padding-top: 12px; }
+}
+/* "Um agente para cada tarefa." numa linha só no computador */
+@media (min-width: 801px) {
+  :root .oque .section-title .linha { display: inline; }
+  :root .oque .section-title .linha + .linha::before { content: " "; }
+}
+/* telefone baixo: o título da faixa e o link dividem a mesma linha */
+@media (max-width: 800px) and (max-height: 720px) {
+  :root .controle-titulo { flex: 1 1 auto; flex-basis: auto; }
+  :root .controle-ir { order: 2; }
+  :root .controle-lista { order: 3; flex-basis: 100%; width: 100%; }
+}
+/* telefone baixo: o link para Automação sai daqui (o mesmo caminho está no menu) */
+@media (max-width: 800px) and (max-height: 720px) { :root .controle-ir { display: none; } }
+@media (max-width: 800px) and (max-height: 720px) {
+  :root .controle-lista li::after { left: 4.5px; width: 3px; height: 7px; margin-top: -5px; }
+  /* palco do O que fazemos em telefone baixo: sem a linha de cima, escolha mais fina */
+  :root .elenco-topo { display: none; }
+  :root .elenco {
+    aspect-ratio: auto; width: 100%; max-height: 260px; padding: 12px; gap: 8px 12px;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-rows: minmax(0, 1fr) auto;
+  }
+  :root .elenco-palco { grid-row: 1; grid-column: 1; }
+  :root .elenco-legenda { grid-row: 1; grid-column: 2; align-self: center; text-align: left; }
+  :root .elenco-escolha { grid-column: 1 / -1; }
+  :root .elenco-escolha button { padding: 8%; border-radius: 8px; }
+}

@@ -16,6 +16,7 @@ for (const [w, h] of CELULARES) {
     const context = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(site.origin + '/', { waitUntil: 'load' });
+    await page.waitForTimeout(500);   // a página segura a primeira seção até assentar (ou até a pessoa mexer); a rolagem daqui é por código
     await page.evaluate(() => { const s = document.querySelector('#portfolio'); scrollTo(0, s.offsetTop - document.querySelector('.site-header').offsetHeight); });
     const r = await page.evaluate(async () => {
       const cartas = [...document.querySelectorAll('.leque-carta')];

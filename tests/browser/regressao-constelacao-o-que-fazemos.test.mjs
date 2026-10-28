@@ -29,6 +29,9 @@ for (const [w, h] of [[1902, 977], [1440, 900], [1280, 720], [1024, 768], [390, 
         fora: partes.filter((p) => p.top < caixa.top - 1 || p.bottom > caixa.bottom + 1 || p.left < caixa.left - 1 || p.right > caixa.right + 1).length + (caixa.right > innerWidth || caixa.left < 0 ? 1 : 0),
         ator: ator.complete && ator.naturalWidth > 0 && ator.getBoundingClientRect().height > 60,
         antigos: document.querySelectorAll('.ab .perfil, .constelacao, .foco').length,
+        // pedido de 28/10/2026: sem número em cima e fundo branco, como o resto do site
+        numero: /\d+\s*\/\s*\d+/.test(el.querySelector('.elenco-topo').textContent) || !!el.querySelector('.elenco-conta'),
+        fundo: getComputedStyle(el).backgroundColor,
       };
     });
     await context.close();
@@ -37,6 +40,8 @@ for (const [w, h] of [[1902, 977], [1440, 900], [1280, 720], [1024, 768], [390, 
     assert.equal(r.fora, 0, 'parte do palco fora da caixa ou da tela');
     assert.equal(r.ator, true, 'o agente em foco não aparece');
     assert.equal(r.antigos, 0, 'uma peça antiga voltou');
+    assert.equal(r.numero, false, 'o contador "01 / 06" voltou');
+    assert.equal(r.fundo, 'rgb(255, 255, 255)', 'o palco deixou de ser branco');
   });
 }
 
@@ -45,8 +50,8 @@ test('escolher um agente troca o agente em foco, o nome e o que ele faz (clique 
   const page = await context.newPage();
   await page.goto(site.origin + '/o-que-fazemos/', { waitUntil: 'load' });
   await page.click('.elenco-escolha button[data-ator="agenda"]');
-  let r = await page.evaluate(() => ({ src: document.querySelector('.elenco-ator').getAttribute('src'), nome: document.querySelector('.elenco-legenda b').textContent, legenda: document.querySelector('.elenco-legenda span').textContent, pressionado: document.querySelector('.elenco-escolha [aria-pressed="true"]').dataset.ator, conta: document.querySelector('.elenco-conta').textContent }));
-  assert.deepEqual(r, { src: '/img/agentes/agenda-aberto.webp', nome: 'Agenda', legenda: 'Confirma e remarca horários.', pressionado: 'agenda', conta: '02 / 06' });
+  let r = await page.evaluate(() => ({ src: document.querySelector('.elenco-ator').getAttribute('src'), nome: document.querySelector('.elenco-legenda b').textContent, legenda: document.querySelector('.elenco-legenda span').textContent, pressionado: document.querySelector('.elenco-escolha [aria-pressed="true"]').dataset.ator }));
+  assert.deepEqual(r, { src: '/img/agentes/agenda-aberto.webp', nome: 'Agenda', legenda: 'Confirma e remarca horários.', pressionado: 'agenda' });
   await page.keyboard.press('ArrowRight');
   r = await page.evaluate(() => ({ nome: document.querySelector('.elenco-legenda b').textContent, foco: document.activeElement.dataset.ator }));
   assert.deepEqual(r, { nome: 'Pedidos', foco: 'pedidos' });

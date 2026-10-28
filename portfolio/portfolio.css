@@ -25,9 +25,6 @@
    mesmas linhas do título da seção. */
 .previas { background: var(--campo-fundo); color: var(--campo-texto); --S: calc(100svh - var(--topo)); }
 .previas .section-text { color: var(--campo-texto-2); }
-/* aqui "o que vem no site" é preta: verde colado no verde da chamada final
-   fazia um vão de 200px da mesma cor, sem borda — lia como buraco */
-.services { --campo-fundo: var(--ink); --campo-texto-2: #aebbb7; --campo-fio: var(--line); }
 /* Aqui cada prévia tem o próprio número: o índice da seção não acompanha. */
 .previas > .section-index { position: static; }
 
@@ -37,6 +34,7 @@
 .c-casaviva { --c-fundo: #a8321a; --c-tinta: #f6eedf; --c-tinta2: #f3d9c6; --c-fio: rgba(246, 238, 223, .3);  --c-realce: #ffd86b; }   /* o terracota e o amarelo da Casa Viva */
 .c-carvalho { --c-fundo: #141814; --c-tinta: #efe9dd; --c-tinta2: #bdb6a8; --c-fio: rgba(239, 233, 221, .16); --c-realce: #d4a869; }   /* o preto, o osso e o latão da Carvalho */
 .c-cemevi   { --c-fundo: #dcefe9; --c-tinta: #103f39; --c-tinta2: #3f625d; --c-fio: rgba(16, 63, 57, .22);    --c-realce: #a8412f; }   /* o coral da marca escurecido: #d95f4d dava 3,08:1 no número */
+.c-pitangui { --c-fundo: #071b36; --c-tinta: #eef1f5; --c-tinta2: #b7bcc4; --c-fio: rgba(238, 241, 245, .18); --c-realce: #f0a59b; }   /* o azul-marinho e o vermelho dos detalhes da Pitangui, clareado para ler sobre o marinho */
 
 .caso {
   grid-column: 1 / -1; margin-top: clamp(56px, 6vw, 96px);
@@ -50,7 +48,7 @@
   border-radius: 22px; margin-inline: calc(-1 * var(--pad)); padding: var(--pad);
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); column-gap: var(--coluna-gap);
 }
-.caso-num { grid-column: 1; font: 500 .72rem var(--display); letter-spacing: .08em; color: var(--c-realce); padding-top: .9em; }
+.caso-num { grid-column: 1; font: 500 .75rem var(--display); letter-spacing: .08em; color: var(--c-realce); padding-top: .9em; }
 .caso-conteudo { grid-column: 2; min-width: 0; container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr); }
 /* no arranjo empilhado o bloco de texto não tem caixa: nome, telas e feitos
    são filhos diretos da coluna, em ordem */
@@ -112,7 +110,7 @@
 .tela-rola { position: absolute; top: 0; left: 0; display: block; width: 100%; height: auto; }
 
 .caso-feitos-bloco { order: 3; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--c-fio); }
-.caso-rotulo { margin: 0; font: 500 .72rem var(--display); letter-spacing: .08em; color: var(--c-tinta2); }
+.caso-rotulo { margin: 0; font: 500 .75rem var(--display); letter-spacing: .08em; color: var(--c-tinta2); }
 .caso-feitos { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .caso-feitos li { display: grid; align-content: start; gap: 6px; padding: 0 24px 0 0; }
 .caso-feitos li + li { padding-left: 24px; border-left: 1px solid var(--c-fio); }
@@ -218,7 +216,7 @@
   .caso-num { grid-column: 1; padding-top: 0; margin-bottom: 12px; }
   .caso-conteudo { grid-column: 1; }
   /* selo à esquerda e "Ver ao vivo" à direita, no mesmo centro */
-  .caso-cab { grid-template-columns: auto auto; justify-content: space-between; align-items: center; gap: 16px 12px; }
+  .caso-cab { grid-template-columns: minmax(0, 1fr) auto; justify-content: space-between; align-items: center; gap: 16px 12px; }
   .caso-nome { grid-column: 1 / -1; }
   /* sem isto a pílula estica até o fim da coluna (a coluna cresce com o nome que atravessa as duas) */
   .caso-selo { justify-self: start; }
@@ -238,3 +236,7 @@
   .caso-feitos li:last-child { border-bottom: 0; padding-bottom: 0; }
   .caso-feitos span { max-width: none; }
 }
+
+
+/* o par de telas ocupa a largura da coluna (antes parava em ~70% e deixava um vazio à direita) */
+:root .caso-telas { --telas-h: min(calc((100cqw - var(--vao) + 50px) / 2.0621), 44rem); }

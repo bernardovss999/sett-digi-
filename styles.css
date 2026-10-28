@@ -103,7 +103,7 @@ p { text-wrap: pretty; }
   .button-ink:hover { background: var(--campo-texto-2); }
   .button-light:hover { background: #ffffff; }
   .text-link:hover { border-color: var(--paper); }
-  .faq-list summary:hover { color: var(--cyan); }
+  .faq-list summary:hover { color: var(--campo-realce); }
   .desktop-nav:hover { background: rgba(240, 242, 237, .1); border-color: rgba(110, 244, 231, .32); }
   .desktop-nav a:hover, .site-footer a:hover { color: var(--cyan); }
 }
@@ -143,7 +143,7 @@ p { text-wrap: pretty; }
   padding: var(--secao-y) var(--margem);
   position: relative;
 }
-.eyebrow, .section-index { font: 500 .72rem var(--display); letter-spacing: .08em; color: var(--campo-indice); }
+.eyebrow, .section-index { font: 500 .75rem var(--display); letter-spacing: .08em; color: var(--campo-indice); }
 .section-index { padding-top: .35em; }
 .section-title { font: 600 clamp(2.8rem, 6.5vw, 6.5rem) var(--display); line-height: .94; letter-spacing: -.09em; margin: 0; text-wrap: balance; }
 .section-title span:not(.linha) { color: var(--campo-realce); }
@@ -295,7 +295,7 @@ p { text-wrap: pretty; }
   background: var(--cyan); color: var(--ink);
   transition: opacity var(--t-entrada) var(--curva-entrada), transform var(--t-entrada) var(--curva-entrada), translate var(--t-ui) var(--curva), box-shadow var(--t-ui) var(--curva);
 }
-.ia-selo { position: absolute; top: clamp(16px, 2vw, 22px); right: clamp(16px, 2vw, 22px); padding: 5px 10px; border-radius: 999px; background: var(--ink); color: var(--cyan); font: 600 .66rem var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.ia-selo { position: absolute; top: clamp(16px, 2vw, 22px); right: clamp(16px, 2vw, 22px); padding: 5px 10px; border-radius: 999px; background: var(--ink); color: var(--cyan); font: 600 .75rem var(--display); letter-spacing: .12em; text-transform: uppercase; }
 .ia-titulo { margin: 0; padding-right: 64px; font: 600 clamp(2rem, 4.4vw, 4.2rem)/.92 var(--display); letter-spacing: -.08em; text-wrap: balance; }
 .ia-texto { display: block; margin-top: 16px; max-width: 30rem; font-size: 1.02rem; line-height: 1.5; color: #1e3d39; }
 .ia-lado { display: grid; gap: 22px; justify-items: start; }
@@ -322,7 +322,7 @@ p { text-wrap: pretty; }
 
 /* a chamada do topo: o selo "novo" no menu e, no celular, um atalho ao lado do
    botão do menu. Só CSS, sem mudar a altura do topo. O selo acende uma vez. */
-.nav-novo { display: inline-block; margin-left: 7px; padding: 2px 7px; border-radius: 999px; background: var(--cyan); color: var(--ink); font: 600 .6rem/1.4 var(--display); letter-spacing: .08em; text-transform: uppercase; vertical-align: 2px; }
+.nav-novo { display: inline-block; margin-left: 7px; padding: 2px 7px; border-radius: 999px; background: var(--cyan); color: var(--ink); font: 600 .7rem/1.4 var(--display); letter-spacing: .08em; text-transform: uppercase; vertical-align: 2px; }
 .topo-ia { display: none; }
 @media (prefers-reduced-motion: no-preference) {
   .nav-novo { animation: novo-acende .7s var(--curva-entrada) 1.2s both; }
@@ -390,7 +390,7 @@ p { text-wrap: pretty; }
 .faq-list summary span { color: var(--campo-realce); font-size: 1.6rem; font-weight: 300; line-height: 1; transition: transform var(--t-ui) var(--curva); }
 .faq-list details[open] summary span { transform: rotate(45deg); }
 .faq-list p { max-width: 35rem; color: var(--campo-texto-2); margin: 16px 0 0; }
-.faq-list summary:active { color: var(--cyan); }
+.faq-list summary:active { color: var(--campo-realce); }
 /* A resposta abre e fecha deslizando (navegadores com ::details-content);
    nos demais, abre direto como antes. */
 @supports selector(::details-content) {
@@ -467,7 +467,7 @@ section[id], main[id] { scroll-margin-top: calc(var(--topo) + 18px); }
 .section-index::after { content: ""; display: block; width: 44px; height: 1px; margin-top: 14px; background: currentColor; opacity: .45; transform-origin: 0 50%; }
 .em-linhas .linha { display: block; }
 @keyframes entra { from { opacity: 0; translate: 0 22px; } }
-@keyframes entra-linha { from { opacity: 0; translate: 0 .4em; } }
+@keyframes entra-linha { from { translate: 0 .4em; } }   /* sem fade: o título aparece na hora (LCP) e só sobe */
 @keyframes aneis-entram { from { opacity: 0; scale: .78; } }
 @keyframes luz-assenta { from { opacity: 0; rotate: -40deg; } 35% { opacity: 1; } }
 @keyframes filete { from { transform: scaleX(0); } }
@@ -797,3 +797,282 @@ html.campos body:not([data-campo="ink"]) .hero-aneis { opacity: 0; }
 
 /* celulares muito estreitos (320px): o título cabe em duas linhas em vez de três */
 @media (max-width: 350px) { .hero-title { font-size: 2.6rem; } }
+
+/* -------------------------------------------- Sett Company: cabeçalho */
+/* Menu limpo: sem pílula em volta, sem contorno, traço ou sublinhado no item.
+   O item da página atual fica ciano; os outros clareiam ao passar o mouse.
+   Ao carregar, os itens entram em fila. */
+.desktop-nav, .desktop-nav:hover { gap: 2px; padding: 0; margin-right: 1.6rem; border-color: transparent; background: transparent; box-shadow: none; }
+.desktop-nav a { display: inline-flex; align-items: center; min-height: 44px; margin-block: 0; padding: 0 14px; border-radius: 8px; transition: color .35s var(--curva); }
+.desktop-nav a:hover, .desktop-nav a:focus-visible { color: var(--paper); }
+.desktop-nav a[aria-current="page"], .desktop-nav a[aria-current="page"]:hover { color: var(--cyan); }
+.desktop-nav a:focus-visible { outline-offset: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .desktop-nav a { animation: nav-entra .7s var(--curva-entrada) both; animation-delay: calc(var(--n, 0) * 55ms + 120ms); }
+  .js .site-header > .button { animation: nav-entra .7s var(--curva-entrada) .5s both; }
+}
+@keyframes nav-entra { from { opacity: 0; translate: 0 -8px; } to { opacity: 1; translate: 0 0; } }
+/* "Automatização de empresas" é o item mais longo: abaixo de 1240px o menu aperta */
+@media (min-width: 801px) and (max-width: 1240px) {
+  .desktop-nav { gap: 0; margin-right: 1rem; font-size: .84rem; }
+  .desktop-nav a { padding: 0 9px; }
+}
+@media (min-width: 801px) and (max-width: 1000px) {
+  .desktop-nav a[href="/o-que-fazemos/"], .desktop-nav a[href="/portfolio/"] { display: none; }
+}
+
+/* a frase da abertura da home é mais longa que a antiga: corpo menor e quebra livre */
+.hero-title-frase { font-size: clamp(3.1rem, 7.6vw, 7.4rem); line-height: .9; letter-spacing: -.085em; }
+.hero-title-frase em { white-space: normal; }
+
+/* serviços com link próprio: o link ocupa a linha de baixo, do nome até a borda,
+   em vez de se espremer na coluna do número */
+.service:has(.service-link) .service-link { grid-column: 2 / -1; justify-self: start; white-space: nowrap; }
+@media (max-width: 800px) { .service:has(.service-link) .service-link { grid-column: 2; } }
+
+/* o topo fica firme e escuro em qualquer campo: sobre o papel, o fundo de 62%
+   virava um cinza turvo e o texto da seção aparecia por baixo */
+.site-header { background: rgba(11, 13, 14, .94); border-bottom-color: rgba(240, 242, 237, .08); }
+.site-header.is-scrolled { background: rgba(11, 13, 14, .97); }
+
+/* ------------------------------------- botão de WhatsApp, canto inferior direito */
+/* fica abaixo do menu do celular (o topo é z-index 5) e acima do conteúdo */
+.wa-flutuante {
+  position: fixed; z-index: 4; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom));
+  display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%;
+  background: var(--cyan); color: var(--ink);
+  box-shadow: 0 10px 28px rgba(11, 13, 14, .32), 0 0 0 1px rgba(11, 13, 14, .12);
+  transition: transform var(--t-micro) var(--curva), box-shadow var(--t-micro);
+}
+.wa-flutuante svg { width: 30px; height: 30px; fill: currentColor; }
+.wa-flutuante:focus-visible { outline: 3px solid var(--paper); outline-offset: 3px; box-shadow: 0 0 0 6px var(--ink); }
+.wa-flutuante:active { transform: scale(.95); }
+@media (hover: hover) and (pointer: fine) {
+  .wa-flutuante:hover { background: #b4fff5; transform: translateY(-3px); box-shadow: 0 14px 34px rgba(11, 13, 14, .38), 0 0 0 1px rgba(11, 13, 14, .08); }
+}
+@media (max-width: 800px) { .wa-flutuante { width: 54px; height: 54px; } .wa-flutuante svg { width: 28px; height: 28px; } }
+@media (prefers-reduced-motion: reduce) { .wa-flutuante { transition: none; } }
+
+/* portfólio na home: o pé com o link para a página inteira, na coluna do conteúdo */
+.previas-pe { grid-column: -2 / -1; margin-top: clamp(48px, 6vw, 88px); }
+.servicos-pe { margin: 34px 0 0; }
+/* a ficha da página O que fazemos tem links: herdam a cor e ganham o fio ciano */
+.perfil li a { color: inherit; border-bottom: 1px solid var(--campo-realce); }
+@media (hover: hover) and (pointer: fine) { .perfil li a:hover { color: var(--campo-realce); } }
+
+
+/* sem rótulos de contexto nas seções: a coluna do índice fica, vazia */
+.section-index:empty::after { content: none; }
+@media (max-width: 800px), (min-width: 1800px) { .section-grid > .section-index:empty { display: none; } }
+/* o contexto da página mora na abertura, logo acima do título */
+.ab-etiqueta { display: block; margin: 0; color: var(--campo-indice); }
+
+
+/* serviços da home: a linha inteira é o link, só com nome e subtítulo */
+a.service-card { color: inherit; text-decoration: none; cursor: pointer; }
+a.service-card:focus-visible { outline: 2px solid var(--campo-realce); outline-offset: 6px; border-radius: 6px; }
+/* sem o número, o nome do serviço começa na borda da lista */
+a.service-card { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+@media (max-width: 800px) { a.service-card { grid-template-columns: minmax(0, 1fr); } a.service-card p { grid-column: 1; } }
+
+/* ------------------------------------------------ sem sublinhado em parte alguma */
+/* Nenhum link ou título leva traço embaixo. Links de texto ganham a cor de
+   destaque do campo e uma seta; o resto (linhas e cartões) é clicável inteiro.
+   ":root" dá o peso necessário sobre os CSS das páginas, carregados depois. */
+:root .text-link, :root .service-link, :root .perfil li a, :root .google-fonte a, :root .nota-servico a,
+:root .ag-link, :root .trilha a, :root .ia-ir, :root .aparelho figcaption a, :root .caso .text-link {
+  border-bottom: 0; padding-bottom: 0; text-decoration: none;
+}
+:root .proof-panel em, :root .proprio .section-title em, :root .selo span { text-decoration: none; }
+:root .marca, :root .js .reveal .marca, :root .js .reveal.is-visible .marca { background: none; padding: 0; color: var(--campo-realce); animation: none; }
+:root .nota-servico a, :root .google-fonte a, :root .aparelho figcaption a { color: var(--campo-realce); font-weight: 500; }
+.text-link::after, :root .nota-servico a::after { content: "→"; display: inline-block; margin-left: .45em; color: var(--campo-realce); transition: translate var(--t-micro) var(--curva); }
+.caso .text-link::after { color: var(--c-realce); }
+@media (hover: hover) and (pointer: fine) {
+  .text-link:hover::after, .nota-servico a:hover::after { translate: 4px 0; }
+  .text-link:hover { color: var(--campo-realce); }
+}
+
+/* listas de escolha (O que fazemos, Sites, Automatização): a linha inteira é o link */
+.ex.ex-link { display: block; padding: 0; }
+.ex-link .ex-alvo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 8px clamp(18px, 2.6vw, 36px); align-items: center; padding: 26px 0; color: inherit; text-decoration: none; }
+.ex-link .ex-alvo > p { margin: 0; }
+.ex-link .ex-alvo:focus-visible { outline: 2px solid var(--campo-realce); outline-offset: 4px; border-radius: 6px; }
+@media (max-width: 800px) { .ex-link .ex-alvo { grid-template-columns: minmax(0, 1fr); padding: 22px 0; } }
+
+/* o bloco "Explorar automação com IA": título, etapas e "Ver como funciona"
+   começam na mesma linha, no alto */
+:root .ia-chamada { align-items: start; }
+:root .ia-titulo { padding-right: 0; }
+:root .ia-lado { padding-top: .5em; }
+
+/* a abertura diz de quem é o site: o nome da Sett Company em destaque no texto de apoio */
+.hero-lead strong { color: var(--campo-texto); font-weight: 600; }
+/* os botões da abertura vão sem seta: o texto já diz para onde levam */
+.hero-actions .button::after, .hero-actions .text-link::after { content: none; }
+.hero-actions .button { gap: 0; }
+/* nas cartas do portfólio o selo e o link dividem uma linha curta: o link vai sem seta */
+:root .caso .text-link::after { content: none; }
+
+/* ------------------------------------------------ uma borda só, em todo o site */
+/* Sem os rótulos, a coluna do índice (1/4 da largura) ficava vazia e cada seção
+   começava deslocada da abertura. Agora abertura, títulos, listas, cartas e
+   rodapé começam na mesma margem; os textos longos têm largura própria. */
+:root .section-grid { grid-template-columns: minmax(0, 1fr); }
+:root .section-grid > .section-index:empty { display: none; }
+:root .caso-cartao { grid-template-columns: minmax(0, 1fr); }
+:root .caso-num:empty { display: none; }
+:root .caso-conteudo { grid-column: 1; }
+:root .previas-pe { grid-column: 1; }
+
+/* aberturas das páginas internas: título em cima; texto e figura lado a lado,
+   centrados na mesma altura (antes o texto descia para o pé da tela) */
+:root .ab { min-height: 0; padding-bottom: clamp(56px, 7vw, 104px); }
+:root .ab-corpo { align-items: center; }
+:root .aparelho-tela { width: clamp(190px, 16vw, 236px); }
+
+/* processo de quatro etapas: as quatro numa linha só */
+.process-track:has(> .process-step:nth-child(4)) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1000px) { :root .process-track:has(> .process-step:nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); } :root .process-track:has(> .process-step:nth-child(4)) .process-step:nth-child(3) { padding-left: 0; } }
+@media (max-width: 800px) { :root .process-track:has(> .process-step:nth-child(4)) { grid-template-columns: minmax(0, 1fr); } }
+
+/* rodapé na mesma borda: marca e frase à esquerda, links à direita, linha final embaixo */
+:root .site-footer { grid-template-columns: minmax(0, 1fr); }
+:root .rodape-corpo { grid-template-columns: minmax(0, 1fr) auto; }
+@media (max-width: 800px) { :root .rodape-corpo { grid-template-columns: minmax(0, 1fr); } }
+:root .site-footer { row-gap: 22px; }
+
+/* ------------------------------------------------ seções bem divididas, topo sólido, títulos legíveis */
+/* 1. Cada seção tem o próprio fundo (sem o body trocando de cor no meio da tela) e uma linha separa vizinhas. */
+:root main [data-campo] { background: var(--campo-fundo); }
+:root main > section + section { border-top: 1px solid var(--campo-fio); }
+:root { --secao-y: clamp(72px, 8vw, 120px); }
+:root .hero { padding-block: clamp(56px, 7vw, 100px) clamp(64px, 7vw, 104px); }
+:root .section-grid > .section-index { padding-top: .35em; }
+
+/* 2. Topo sólido: nada passa por trás do menu. */
+:root .site-header, :root .site-header.is-scrolled { background: var(--ink); backdrop-filter: none; z-index: 50; border-bottom-color: var(--line); }
+
+/* 3. Títulos: entrelinha e espaçamento que não encostam o "i" no "g" da linha de cima. */
+:root .hero-title, :root .section-title, :root .port-title, :root .ab-titulo, :root .hero-title-frase,
+:root .proof-panel h2, :root .cta-title, :root .fr-painel h3, :root .selo, :root .ia-titulo { line-height: 1.02; letter-spacing: -.05em; }
+:root .service h3, :root .caso-nome h3, :root .caminho h3, :root .regra h3, :root .termo h3, :root .lado h3,
+:root .process-step h3, :root .vitrine-titulo h2 { letter-spacing: -.04em; line-height: 1.08; }
+
+/* títulos de seção com palavra longa ("independentes.") cabem em 320px */
+@media (max-width: 420px) { :root .section-title { font-size: clamp(2.2rem, 10vw, 2.8rem); } }
+
+/* ------------------------------------------------ título perto do começo da seção; anéis atrás do texto */
+:root { --secao-topo: clamp(28px, 3vw, 44px); --secao-base: clamp(48px, 5vw, 80px); }
+:root main > section.section-grid:not(.hero):not(.ab):not(.port-hero) { padding-block: var(--secao-topo) var(--secao-base); }
+:root .hero, :root .ab, :root .port-hero { min-height: 0; padding-block: clamp(28px, 3.5vw, 52px) clamp(48px, 5vw, 80px); }
+:root .final-cta { padding-block: var(--secao-topo) var(--secao-base); min-height: 0; }
+:root .section-grid > .section-index { padding-top: .5em; }
+:root .hero-copy, :root .final-cta > div:not(.aneis) { position: relative; z-index: 2; }
+:root .hero-aneis, :root .final-cta .aneis, :root .aneis { z-index: 0; }
+@media (min-width: 1024px) {
+  :root .hero-aneis { width: min(44vw, 720px); right: -30vw; }
+  :root .final-cta .aneis { width: 48vw; right: -26vw; bottom: -24vw; }
+}
+@media (max-width: 800px) { :root { --secao-topo: 24px; --secao-base: 44px; } }
+
+/* ------------------------------------------------ padrão único de topo de seção (todos os desktops e celulares) */
+:root { --secao-topo: clamp(20px, 2.2vw, 32px); --secao-base: clamp(40px, 4vw, 64px); --abertura-topo: clamp(12px, 1.4vw, 22px); }
+:root main > section.section-grid:not(.hero):not(.ab):not(.port-hero), :root .final-cta { padding-block: var(--secao-topo) var(--secao-base); }
+:root .hero, :root .ab, :root .port-hero { padding-block: var(--abertura-topo) var(--secao-base); }
+:root .hero-title, :root .port-title { margin-top: clamp(12px, 1.6vw, 22px); }
+:root .ab-titulo { margin-top: clamp(12px, 1.6vw, 22px); }
+:root .section-grid > .section-index { padding-top: 0; }
+@media (max-width: 800px) { :root { --secao-topo: 20px; --secao-base: 40px; --abertura-topo: 12px; } }
+
+/* ------------------------------------------------ cada seção é uma página: altura de uma tela, conteúdo centralizado */
+:root main > section.section-grid, :root main > section.hero, :root main > section.ab, :root main > section.port-hero {
+  min-height: calc(100svh - var(--topo)); align-content: center;
+}
+:root main > section.hero, :root main > section.ab, :root main > section.port-hero { justify-content: center; }
+:root main > section.port-hero { display: flex; flex-direction: column; }
+:root .ab-corpo { align-items: center; }
+:root .perfil, :root .aparelho { justify-self: center; }
+:root .aparelho-tela { width: min(clamp(220px, 22vw, 290px), calc((100svh - var(--topo) - 150px) * .486)); }
+@media (max-width: 800px) {
+  :root .ab { text-align: center; }
+  :root .ab .trilha, :root .ab .hero-actions { justify-content: center; }
+  :root .ab-corpo { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  :root .ab-lead { margin-inline: auto; }
+  :root .aparelho-tela { width: min(clamp(190px, 54vw, 250px), calc(36svh * .486 + 40px)); border-width: 7px; border-radius: 32px; }
+  :root .perfil { width: 100%; }
+  :root .perfil li { text-align: left; }
+}
+
+/* títulos acompanham a altura da tela (cabem numa página) */
+@media (min-width: 801px) {
+  :root .section-title { font-size: clamp(2.4rem, min(6vw, 10.5svh), 6.5rem); }
+  :root .hero-title-frase { font-size: clamp(3rem, min(7.6vw, 13svh), 7.4rem); }
+  :root .ab-titulo, :root .ab-titulo-servico { font-size: clamp(2.4rem, min(5.2vw, 9.5svh), 5.9rem); }
+  :root .galeria .leque-lista { padding-top: 56px; }
+}
+/* páginas de serviço no computador: texto à esquerda, peça (celular ou ficha) à direita, tudo numa tela */
+@media (min-width: 1024px) {
+  :root .pg-servico main > section.ab { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); column-gap: var(--coluna-gap); align-content: center; }
+  :root .pg-servico .ab > * { grid-column: 1; }
+  :root .pg-servico .ab-corpo { display: contents; }
+  :root .pg-servico .ab-texto { grid-column: 1; }
+  :root .pg-servico .ab .aparelho, :root .pg-servico .ab .perfil { grid-column: 2; grid-row: 1 / span 4; align-self: center; justify-self: center; }
+  :root .pg-servico .ab-pe { grid-column: 1 / -1; }
+}
+/* celular: tudo centralizado e a peça do tamanho que sobra na tela */
+@media (max-width: 800px) {
+  :root .pg-servico .ab .hero-actions { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 20px; margin-top: 20px; }
+  :root .pg-servico .ab-titulo, :root .pg-servico .ab-titulo-servico { font-size: clamp(2.1rem, 9.4vw, 2.7rem); margin-block: 12px 14px; }
+  :root .pg-servico .ab-lead { font-size: 1rem; }
+  :root .pg-servico .aparelho-tela { width: clamp(140px, calc((100svh - var(--topo) - 450px) * .486), 230px); }
+  :root .pg-servico .aparelho { margin-top: 18px; gap: 10px; }
+}
+
+/* uma seção = uma tela, em qualquer monitor ou celular (o navegador recalcula sozinho ao girar ou redimensionar) */
+:root main > section.section-grid, :root main > section.hero, :root main > section.ab, :root main > section.port-hero { min-height: calc(100vh - var(--topo)); }
+@supports (height: 1svh) {
+  :root main > section.section-grid, :root main > section.hero, :root main > section.ab, :root main > section.port-hero { min-height: calc(100svh - var(--topo)); }
+}
+
+/* ------------------------------------------------ regra única de cabeçalho (modelo: página Sites) */
+/* o texto de cada seção lê a cor do próprio campo (sem isto o título herdava a cor do body e sumia em seção clara) */
+:root main [data-campo] { color: var(--campo-texto); }
+:root { --titulo-hero: clamp(2.4rem, min(5.2vw, 9.5svh), 5.9rem); --lead-hero: clamp(1.04rem, 1.3vw, 1.2rem); }
+:root .hero-title, :root .hero-title-frase, :root .port-title, :root .ab-titulo, :root .ab-titulo-servico {
+  font-size: var(--titulo-hero); line-height: 1.02; letter-spacing: -.05em; text-align: left;
+  margin: clamp(12px, 1.6vw, 22px) 0 clamp(18px, 2vw, 28px);
+}
+:root .hero-lead, :root .ab-lead { font-size: var(--lead-hero); line-height: 1.5; max-width: 31rem; margin-inline: 0; }
+:root .hero .hero-actions, :root .port-hero .hero-actions, :root .ab .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 28px; }
+@media (max-width: 800px) {
+  :root .hero, :root .port-hero, :root .ab { text-align: center; }
+  :root .hero-title, :root .hero-title-frase, :root .port-title, :root .ab-titulo, :root .ab-titulo-servico { font-size: clamp(2.1rem, 9.4vw, 2.7rem); text-align: center; margin-block: 12px 14px; }
+  :root .hero-lead, :root .ab-lead { font-size: 1rem; margin-inline: auto; }
+  :root .hero .hero-actions, :root .port-hero .hero-actions, :root .ab .hero-actions { justify-content: center; margin-top: 20px; }
+  :root .hero .eyebrow, :root .hero-novo { justify-self: center; margin-inline: auto; }
+}
+
+/* ------------------------------------------------ margem lateral padrão (a da página Sites em 1902px: ~9% de cada lado) */
+/* vale para o menu e para todas as seções de todas as páginas, em qualquer monitor; no celular segue o gutter */
+@media (min-width: 1024px) {
+  :root { --margem: max(var(--gutter), 9vw, calc((100% - 1800px) / 2)); }
+}
+
+/* ------------------------------------------------ abertura: o título começa à mesma distância do menu em todas as páginas (modelo: Sites) */
+/* a abertura não centraliza mais na vertical (isso fazia a distância variar com a altura do conteúdo) */
+:root { --abertura-titulo: clamp(40px, 6.4vw, 124px); }
+:root main > section:first-child { padding-top: var(--abertura-titulo); justify-content: flex-start; align-content: start; }
+:root main > section:first-child h1 { margin-top: 0; }
+:root main > section:first-child .hero-copy { margin-top: 0; padding-top: 0; }
+/* rótulo acima do título (Sett Agenda) fica dentro do respiro, sem empurrar o título */
+:root main > section:first-child .hero-copy > .eyebrow:first-child { display: block; line-height: 18px; margin: -28px 0 10px; }
+@media (min-width: 1024px) {
+  :root .pg-servico main > section.ab:first-child { grid-template-rows: auto auto auto 1fr; align-items: start; }
+}
+:root.js main > section:first-child h1, :root main > section:first-child h1.ab-titulo, :root main > section:first-child h1.ab-titulo-servico { margin-top: 0; }
+
+/* celular: nenhum texto abaixo de 12px (selos, rótulos de maquete e "novo") */
+:root .nav-novo { font-size: .75rem; }
+:root .caso-selo { font-size: .75rem; }
+:root .semana-cab > span:first-child, :root .semana-topo > span:first-child { font-size: .75rem; }

@@ -1,4 +1,5 @@
 /* SETT DIGITAL — comportamento do site (home e /portfolio/).
+   0. ao recarregar, volta ao topo
    1. menu do celular e topo que escurece ao rolar
    2. títulos em linhas (sobem uma de cada vez quando aparecem)
    3. karaokê: o parágrafo vira uma palavra por span
@@ -10,6 +11,18 @@
    Se este arquivo não carregar, o CSS mostra tudo parado e completo. */
 
 const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// 0. Recarregou a página: ela volta ao topo, com o cabeçalho inteiro à vista
+//    (o navegador não devolve a rolagem antiga, nem um #âncora puxa para baixo).
+//    Indo e voltando entre páginas, a posição continua como o navegador guarda.
+const navegacao = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+if (navegacao && navegacao.type === 'reload') {
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  window.scrollTo(0, 0);
+  window.addEventListener('load', () => window.scrollTo(0, 0));
+  window.addEventListener('pagehide', () => { if ('scrollRestoration' in history) history.scrollRestoration = 'auto'; });
+}
 
 // 1. menu e topo
 const menuButton = document.querySelector('.menu-toggle');
@@ -104,7 +117,7 @@ const telaGrande = window.matchMedia('(min-width: 1024px)');
 const campos = [...document.querySelectorAll('main [data-campo]')];
 let olhoCampo = null;
 const ligaCampos = () => {
-  const liga = telaGrande.matches && campos.length > 0 && 'IntersectionObserver' in window;
+  const liga = false && telaGrande.matches && campos.length > 0 && 'IntersectionObserver' in window;   // desligado: cada seção mantém o próprio fundo (divisão clara entre seções)
   document.documentElement.classList.toggle('campos', liga);
   if (liga && !olhoCampo) {
     olhoCampo = new IntersectionObserver(entradas => {
@@ -149,3 +162,4 @@ if (comMouse.matches) {
   };
   document.head.appendChild(lenisScript);
 }
+

@@ -46,7 +46,7 @@
   padding: clamp(26px, 3.4vw, 48px) var(--margem) clamp(28px, 3vw, 40px);
   background: var(--campo-fundo); color: var(--campo-texto);
 }
-.trilha { display: flex; flex-wrap: wrap; gap: 10px; font: 500 .74rem var(--display); letter-spacing: .04em; color: var(--campo-texto-2); }
+.trilha { display: flex; flex-wrap: wrap; gap: 10px; font: 500 .75rem var(--display); letter-spacing: .04em; color: var(--campo-texto-2); }
 .trilha a { border-bottom: 1px solid var(--campo-fio); }
 .trilha span[aria-current] { color: var(--campo-texto); }
 .ab-titulo { font: 600 clamp(2.55rem, 5.6vw, 6.4rem)/.9 var(--display); letter-spacing: -.085em; margin: clamp(22px, 3vw, 44px) 0 clamp(26px, 3vw, 48px); }
@@ -109,11 +109,11 @@
 .oque .section-text { margin-top: 22px; }
 .regua { margin-top: clamp(44px, 5vw, 72px); border-top: 1px solid var(--campo-texto); }
 .regua-linha { display: grid; grid-template-columns: minmax(0, .62fr) minmax(0, 1fr) minmax(0, 1.25fr); gap: clamp(16px, 3vw, 40px); padding: 20px 0; border-bottom: 1px solid var(--campo-fio); align-items: baseline; }
-.regua-linha > :first-child { font: 500 .74rem var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--campo-texto-2); }
+.regua-linha > :first-child { font: 500 .75rem var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--campo-texto-2); }
 .regua-linha > :nth-child(2) { color: var(--campo-texto-2); }
 .regua-linha > :nth-child(3) { font: 500 clamp(1.05rem, 1.6vw, 1.35rem)/1.3 var(--display); letter-spacing: -.03em; padding-left: 16px; border-left: 2px solid var(--campo-realce); }
 .regua-cab { padding-block: 14px; }
-.regua-cab > span { font: 500 .74rem var(--display) !important; letter-spacing: .08em !important; text-transform: uppercase; color: var(--campo-texto-2) !important; border: 0 !important; padding-left: 0 !important; }
+.regua-cab > span { font: 500 .75rem var(--display) !important; letter-spacing: .08em !important; text-transform: uppercase; color: var(--campo-texto-2) !important; border: 0 !important; padding-left: 0 !important; }
 .regua-cab > :nth-child(3) { color: var(--campo-realce) !important; }
 @media (prefers-reduced-motion: no-preference) {
   .js .oque-nao.reveal s { background-size: 0% 2px; transition: background-size .9s var(--curva-entrada) .5s; }
@@ -132,7 +132,7 @@
   min-height: 52px; padding: 14px 8px 14px 0; background: none; border: 0; text-align: left; cursor: pointer;
   font: 500 clamp(.86rem, 1.2vw, 1rem) var(--display); letter-spacing: -.02em; color: var(--campo-texto-2); transition: color var(--t-micro);
 }
-.fr-abas button span { margin-right: 10px; font-size: .72rem; color: var(--campo-indice); }
+.fr-abas button span { margin-right: 10px; font-size: .75rem; color: var(--campo-indice); }
 .fr-abas button[aria-selected="true"] { color: var(--campo-texto); }
 @media (hover: hover) and (pointer: fine) { .fr-abas button:hover { color: var(--campo-texto); } }
 .fr-barra { position: absolute; left: 0; bottom: -1px; width: 25%; height: 2px; background: var(--campo-realce); translate: calc(var(--fa) * 100%) 0; }
@@ -225,20 +225,20 @@
 .planta::after { left: 0; right: 0; bottom: 0; height: 1.5px; transform-origin: 100% 50%; scale: clamp(0, calc(var(--p) * 5 - 2), 1) 1; }
 .planta-muro::after { left: 0; top: 0; bottom: 0; width: 1.5px; transform-origin: 50% 100%; scale: 1 clamp(0, calc(var(--p) * 5 - 3), 1); }
 .planta-rotulo { position: absolute; left: clamp(16px, 2.6vw, 34px); top: clamp(18px, 2.2vw, 28px); display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; opacity: clamp(0, calc(var(--p) * 4), 1); }
-.planta-rotulo b { font: 600 .74rem var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--campo-realce); }
+.planta-rotulo b { font: 600 .75rem var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--campo-realce); }
 .planta-rotulo span { font-size: .86rem; color: var(--campo-texto-2); }
 .salas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .sala { --v: clamp(0, calc((var(--p) - .45 - var(--k) * .07) * 6), 1); position: relative; display: grid; gap: 6px; align-content: start; padding: 22px clamp(14px, 2vw, 26px) 18px; opacity: var(--v); translate: 0 calc((1 - var(--v)) * 12px); }
 .sala:nth-child(1) { --k: 0; } .sala:nth-child(2) { --k: 1; } .sala:nth-child(3) { --k: 2; } .sala:nth-child(4) { --k: 3; }
 .sala:not(:first-child) { border-left: 1px dashed var(--campo-fio); }
-.sala small { font: 500 .72rem ui-monospace, "Cascadia Mono", Consolas, monospace; color: var(--campo-indice); }
+.sala small { font: 500 .75rem ui-monospace, "Cascadia Mono", Consolas, monospace; color: var(--campo-indice); }
 .sala b { font: 600 clamp(1.3rem, 2vw, 1.8rem)/1 var(--display); letter-spacing: -.06em; }
 .sala span { font-size: .9rem; line-height: 1.4; color: var(--campo-texto-2); }
 .sala:first-child b { color: var(--campo-realce); }
 .planta-fora { position: absolute; right: clamp(16px, 2.6vw, 34px); bottom: 0; translate: 0 50%; margin: 0; padding: 0 12px; background: var(--campo-fundo); font: 500 .8rem ui-monospace, "Cascadia Mono", Consolas, monospace; color: var(--campo-texto-2); opacity: clamp(0, calc((var(--p) - .55) * 6), 1); }
 .planta-fora s { text-decoration: none; background: linear-gradient(currentColor, currentColor) no-repeat 0 55% / calc(clamp(0, (var(--p) - .7) * 5, 1) * 100%) 1.5px; }
 .conversa { margin-top: clamp(48px, 5vw, 72px); }
-.conversa h3 { margin: 0 0 16px; font: 600 .74rem var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--campo-realce); }
+.conversa h3 { margin: 0 0 16px; font: 600 .75rem var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--campo-realce); }
 .conversa ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; row-gap: 6px; font: 500 clamp(1.1rem, 1.9vw, 1.65rem)/1.3 var(--display); letter-spacing: -.045em; }
 .conversa li:not(:last-child)::after { content: "/"; margin: 0 .45em; color: var(--campo-texto-2); opacity: .55; }
 .nota-lateral { margin: 36px 0 0; max-width: 40rem; padding-left: 18px; border-left: 2px solid var(--campo-realce); font-size: 1rem; line-height: 1.6; color: var(--campo-texto-2); }
@@ -246,7 +246,7 @@
 /* ---------------------------------------------------- 06 · a folha de regras */
 
 .folha { position: relative; margin-top: clamp(44px, 5vw, 72px); padding: clamp(22px, 4vw, 56px); background: #fbfbf8; border: 1px solid var(--campo-fio); box-shadow: 0 1px 0 rgba(11, 13, 14, .04), 0 34px 56px -44px rgba(11, 13, 14, .5); }
-.folha-topo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); font: 600 .74rem var(--display); letter-spacing: .08em; text-transform: uppercase; }
+.folha-topo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); font: 600 .75rem var(--display); letter-spacing: .08em; text-transform: uppercase; }
 .folha-topo span + span { font-weight: 500; color: var(--campo-texto-2); }
 .regras { list-style: none; margin: 0; padding: 0; }
 .regra { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(18px, 3.4vw, 48px); align-items: center; padding: clamp(22px, 3vw, 34px) 0; border-bottom: 1px solid var(--campo-fio); }
@@ -274,7 +274,7 @@
 .proprio-corpo { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start; margin-top: clamp(44px, 5vw, 72px); }
 .ficha { margin: 0; border-top: 2px solid var(--campo-texto); }
 .ficha > div { display: grid; grid-template-columns: minmax(0, .32fr) minmax(0, 1fr); gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--campo-fio); }
-.ficha dt { padding-top: .25em; font: 600 .74rem var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--campo-texto-2); }
+.ficha dt { padding-top: .25em; font: 600 .75rem var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--campo-texto-2); }
 .ficha dd { margin: 0; font-size: 1.02rem; line-height: 1.5; }
 .ficha ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; }
 .selo { position: sticky; top: calc(var(--topo) + 32px); margin: 0; font: 600 clamp(2.6rem, 5vw, 5rem)/.92 var(--display); letter-spacing: -.08em; text-wrap: balance; }
@@ -349,14 +349,14 @@ html.revisao [data-confirmar]::after { content: "confirmar " attr(data-confirmar
   .semana-pe { flex-direction: column; align-items: flex-start; gap: 4px; }
   .regua-cab { display: none; }
   .regua-linha { grid-template-columns: minmax(0, 1fr); gap: 8px; }
-  .regua-linha > :nth-child(2)::before, .regua-linha > :nth-child(3)::before { display: block; margin-bottom: 2px; font: 500 .66rem var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--campo-texto-2); }
+  .regua-linha > :nth-child(2)::before, .regua-linha > :nth-child(3)::before { display: block; margin-bottom: 2px; font: 500 .75rem var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--campo-texto-2); }
   .regua-linha > :nth-child(2)::before { content: "Programa pronto"; }
   .regua-linha > :nth-child(3)::before { content: "Agente feito para você"; color: var(--campo-realce); }
   .ex { grid-template-columns: 32px minmax(0, 1fr); padding: 22px 0; }
   .ex > p { grid-column: 2; grid-row: auto; }
   .ex-quero { grid-column: 2; grid-row: auto; justify-self: start; margin-top: 8px; }
   .planta { padding-top: 84px; }
-  .planta-fora { font-size: .72rem; }
+  .planta-fora { font-size: .75rem; }
   .proprio-corpo { grid-template-columns: minmax(0, 1fr); }
   .selo { position: static; order: -1; font-size: clamp(2.3rem, 11vw, 3.2rem); }
   .ficha > div { grid-template-columns: minmax(0, 1fr); gap: 6px; }
@@ -377,4 +377,15 @@ html.revisao [data-confirmar]::after { content: "confirmar " attr(data-confirmar
 /* --------------------------------------------------------- movimento reduzido */
 @media (prefers-reduced-motion: reduce) {
   .ex, .ex::before, .ex-quero, .barra-wa { transition: none; }
+}
+
+/* toque: alvo do link da trilha com 44px sem mexer no layout */
+@media (pointer: coarse) {
+  .trilha a { position: relative; }
+  .trilha a::after { content: ""; position: absolute; inset: -14px -8px; }
+}
+
+/* "acompanhamento." (7,6em) estourava a coluna em 320-360px */
+@media (max-width: 560px) {
+  #possibilidades-title { font-size: clamp(2rem, 10vw, 2.8rem); }
 }

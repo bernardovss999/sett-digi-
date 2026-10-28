@@ -16,15 +16,16 @@ Site estático (HTML/CSS/JS) publicado na Vercel em https://www.sett.company. Se
 Python 3 é necessário só para `gate`. No Windows, `python` pode ser outro executável; use o Python 3 disponível.
 
 ## Estrutura
-- `index.html`, `portfolio/`, `agentes-de-ia-para-empresas/`, `sett-agenda.html`: páginas publicadas.
-- `styles.css`, `script.js`, `agentes-de-ia-para-empresas/agentes.{js,css}`, `portfolio/portfolio.css`: front-end.
+- `index.html`, `portfolio/`, `criacao-de-sites/`, `gestao-google-meu-negocio/`, `agentes-de-ia-para-empresas/` (Automação com IA), `sett-agenda.html`: páginas publicadas. Nome público: Sett Company.
+- `styles.css`, `script.js`, `servicos.css`, `agentes-de-ia-para-empresas/agentes.{js,css}`, `portfolio/portfolio.css`: front-end.
+- `tests/static/conteudo.test.mjs`: regras de texto (sem negativas, "negócio" em vez de "empresa"/"marca", Sett Company, sem 7× e sem levantamento interno, 70% com fonte, prévias independentes).
 - `vercel.json`: headers (HSTS, CSP, demais) e cache. A CSP tem hash do script inline de `classList.add('js')`.
 - `.vercelignore`: o que **não** é publicado. Entradas são caminhos exatos ou pastas, sem curingas.
 - `scripts/site-config.mjs`: lê `.vercelignore` e `vercel.json`; fonte única para os testes e o servidor local.
 - `scripts/serve.mjs`: servidor local que imita os headers e as exclusões da Vercel. Não é hospedagem de produção.
 - `tests/static/`: links, ids, arquivos, metadados, sitemap, robots, llms.txt, headers e CSP.
 - `tests/browser/`: overflow, console e headers servidos pelo servidor local.
-- `tests/regression/`: um arquivo por bug corrigido, nomeado pelo sintoma. Vazio até o primeiro bug confirmado.
+- `tests/regression/`: um arquivo por bug corrigido, nomeado pelo sintoma (sem navegador). Regressões que precisam de navegador ficam em `tests/browser/regressao-*.test.mjs`, para `npm run test:static` seguir sem Playwright.
 - `docs/sett/`: memória e handoffs (`memoria.py`, ver `C:\Users\berrr\OpenBot\Shared\Sett-Sites\MEMORIA-E-HANDOFF.md`).
 - `docs/seguranca/`: riscos, decisões de headers, `release.json` e evidências do gate.
 

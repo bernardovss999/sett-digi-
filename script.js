@@ -12,17 +12,41 @@
 
 const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// 0. Recarregou a página: ela volta ao topo, com o cabeçalho inteiro à vista
-//    (o navegador não devolve a rolagem antiga, nem um #âncora puxa para baixo).
-//    Indo e voltando entre páginas, a posição continua como o navegador guarda.
+// 0. Toda abertura começa na PRIMEIRA seção, no celular e no computador:
+//    recarregar, voltar no navegador, retomar a aba e endereço com #âncora
+//    vindo de fora (WhatsApp, busca). O navegador não devolve a rolagem antiga
+//    (scrollRestoration manual) e, até a primeira mexida da pessoa, o topo
+//    segura enquanto fontes e imagens mudam as alturas (no celular a rolagem
+//    de tela em tela podia "pular" para a seção seguinte).
+//    Exceção: um link INTERNO para um ponto do site (ex.: /portfolio/#caso-suud)
+//    leva até ele; se o ponto está num trilho que anda para o lado, o trilho
+//    também anda até ele.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 const navegacao = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
-if (navegacao && navegacao.type === 'reload') {
-  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-  window.scrollTo(0, 0);
-  window.addEventListener('load', () => window.scrollTo(0, 0));
-  window.addEventListener('pagehide', () => { if ('scrollRestoration' in history) history.scrollRestoration = 'auto'; });
-}
+const alvoInterno = (() => {
+  if (!location.hash || !navegacao || navegacao.type !== 'navigate') return null;
+  if (!document.referrer || new URL(document.referrer).origin !== location.origin) return null;
+  try { return document.querySelector(decodeURIComponent(location.hash)); } catch { return null; }
+})();
+let mexeu = false;
+['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(tipo => window.addEventListener(tipo, () => { mexeu = true; }, { once: true, passive: true, capture: true }));
+const vaiAoTopo = () => { if (!mexeu) window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); };
+const vaiAoAlvo = () => {
+  if (mexeu || !alvoInterno) return;
+  const secao = alvoInterno.closest('main > section') || alvoInterno;
+  const trilho = alvoInterno.closest('.caso-trilho, .politica');
+  const cartao = trilho ? [...trilho.children].find(c => c.contains(alvoInterno)) : null;
+  if (cartao) trilho.scrollLeft = cartao.offsetLeft - trilho.firstElementChild.offsetLeft;
+  const topo = document.querySelector('.site-header')?.getBoundingClientRect().height || 0;
+  window.scrollTo({ top: secao.getBoundingClientRect().top + window.scrollY - topo, left: 0, behavior: 'instant' });
+};
+const posiciona = () => (alvoInterno ? vaiAoAlvo() : vaiAoTopo());
+if (location.hash && !alvoInterno) history.replaceState(null, '', location.pathname + location.search);
+posiciona();
+document.addEventListener('DOMContentLoaded', posiciona);
+window.addEventListener('load', () => { posiciona(); requestAnimationFrame(posiciona); setTimeout(posiciona, 350); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(posiciona);
+window.addEventListener('pageshow', evento => { if (evento.persisted) { mexeu = false; vaiAoTopo(); } });   // volta pelo cache do navegador
 
 // 1. menu e topo
 const menuButton = document.querySelector('.menu-toggle');

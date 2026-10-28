@@ -165,15 +165,18 @@
 @keyframes rola-leve { to { translate: 0 -40%; } }
 
 /* ------------------------------------------------- tela larga E baixa
-   Notebook 16:9, 1080p e ultrawide: empilhando nome, telas e feitos a altura
-   acaba antes da largura, e as molduras ficavam soltas, sem encostar na borda
-   direita. Aqui o texto vai para a esquerda e as molduras para a direita,
-   encostadas na borda da coluna; os feitos ficam um embaixo do outro. Acima
-   de 1100px de altura (2560×1440, 3440×1440) sobra altura: volta o empilhado
+   Notebook 16:10 e 16:9, 1080p e ultrawide: empilhando nome, telas e feitos
+   a altura acaba antes da largura, e as molduras ficavam soltas, com um vazio
+   à direita. Aqui o texto vai para a esquerda e as molduras para a direita,
+   encostadas na borda da coluna; os feitos ficam um embaixo do outro. A
+   coluna de texto alarga com a tela (cada recurso quebra em menos linhas) e,
+   em telas baixas, os respiros encolhem para a carta caber inteira. Acima de
+   1100px de altura (2560×1440, 3440×1440) sobra altura: volta o empilhado
    com as molduras grandes. */
-@media (min-width: 801px) and (min-aspect-ratio: 17 / 10) and (max-height: 1100px) {
+@media (min-width: 801px) and (min-aspect-ratio: 3 / 2) and (max-height: 1100px) {
+  .caso { --texto-w: clamp(18rem, 24vw, 25rem); }
   .caso-conteudo { display: flex; align-items: center; gap: var(--coluna-gap); }
-  .caso-texto { display: flex; flex-direction: column; flex: 1 1 18rem; min-width: 0; }
+  .caso-texto { display: flex; flex-direction: column; flex: 1 1 var(--texto-w); min-width: 0; }
   .caso-cab { grid-template-columns: auto auto; justify-content: start; }
   .caso-nome { grid-column: 1 / -1; }
   .caso-feitos-bloco { margin-top: 26px; }
@@ -183,8 +186,27 @@
   .caso-feitos span { max-width: none; }
   .caso-telas {
     flex: none; margin-top: 0; margin-left: auto;
-    --telas-h: min(calc(var(--S) - 2 * var(--pad) - 48px), calc((100cqw - 18rem - var(--coluna-gap) - var(--vao) + 50px) / 2.0621), 44rem);
+    --telas-h: min(calc(var(--S) - 2 * var(--pad) - 48px), calc((100cqw - var(--texto-w) - var(--coluna-gap) - var(--vao) + 50px) / 2.0621), 44rem);
   }
+}
+/* notebook com a janela baixa (barra de favoritos, zoom, 1366×768 com abas):
+   a carta tem menos de ~620px de altura útil */
+@media (min-width: 801px) and (min-aspect-ratio: 3 / 2) and (max-height: 720px) {
+  .caso { --pad: 20px; }
+  .caso-nome h3 { font-size: clamp(1.7rem, 2.6vw, 2.4rem); }
+  .caso-nome p { margin-top: 6px; }
+  .caso-cab { gap: 10px 22px; }
+  .caso-feitos-bloco { margin-top: 18px; padding-top: 12px; }
+  .caso-feitos li, .caso-feitos li + li { padding-top: 9px; }
+  .caso-feitos li + li { margin-top: 9px; }
+  .caso-feitos b { font-size: 1.02rem; }
+  .caso-feitos span { font-size: .86rem; line-height: 1.4; }
+}
+
+/* empilhado (telas quase quadradas e as muito altas): quando a altura limita
+   o par de molduras, ele fica no centro da carta em vez de colado à esquerda */
+@media (min-width: 801px) and (max-aspect-ratio: 1499 / 1000), (min-width: 801px) and (min-height: 1101px) {
+  .caso-telas { margin-inline: auto; }
 }
 
 /* ----------------------------------------------------------------- ultrawide
@@ -238,5 +260,40 @@
 }
 
 
-/* o par de telas ocupa a largura da coluna (antes parava em ~70% e deixava um vazio à direita) */
-:root .caso-telas { --telas-h: min(calc((100cqw - var(--vao) + 50px) / 2.0621), 44rem); }
+/* ------------------------------------------------------------- a pilha
+   À direita da frase, três prévias reais empilhadas como janelas abertas
+   (a da frente é o Suud, a primeira da lista). No computador ocupa o lado
+   livre da abertura, sem encostar na frase, e cabe na altura da tela; abaixo
+   de 1100px vem depois dos botões, centrada, e completa a tela do celular. */
+.pilha { position: relative; margin: 44px auto 0; width: min(100%, 420px); aspect-ratio: 1.25; pointer-events: none; }
+.pilha-janela {
+  position: absolute; width: 72%; top: calc(var(--k) * 18%); right: calc(var(--k) * 14%);
+  border-radius: 12px; overflow: hidden; background: #fff;
+  outline: 1px solid rgba(240, 242, 237, .14);
+  box-shadow: 0 30px 60px -28px rgba(0, 0, 0, .8);
+}
+/* as de trás escurecem (sem transparência: uma não aparece através da outra) */
+.pilha-janela:nth-child(1) { filter: brightness(.5); }
+.pilha-janela:nth-child(2) { filter: brightness(.75); }
+.pilha-barra {
+  display: flex; align-items: center; gap: 10px; height: clamp(22px, 2vw, 28px); padding: 0 12px;
+  background: #e3e6e0; border-bottom: 1px solid rgba(11, 13, 14, .1);
+  font: 500 clamp(.62rem, .7vw, .72rem) var(--display); color: #6b7672; white-space: nowrap; overflow: hidden;
+}
+.pilha-barra::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: #c8cdc6; box-shadow: 10px 0 #c8cdc6, 20px 0 #c8cdc6; margin-right: 20px; }
+.pilha-janela img { display: block; width: 100%; height: auto; }
+@media (min-width: 1100px) {
+  .port-hero .hero-copy { position: relative; }
+  .pilha {
+    position: absolute; margin: 0; right: 0; top: 50%; translate: 0 -50%;
+    width: min(600px, calc((100svh - var(--topo)) * .82 * 1.25), calc(100% - var(--titulo-hero) * 8.4 - 48px));
+  }
+}
+@media (max-width: 800px) {
+  .pilha { margin-top: 36px; width: min(100%, 340px); }
+  .pilha-barra { font-size: .62rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pilha-janela { animation: pilha-entra 1s var(--curva-entrada) both; animation-delay: calc(.35s + var(--k) * 160ms); }
+}
+@keyframes pilha-entra { from { opacity: 0; translate: 0 32px; } }

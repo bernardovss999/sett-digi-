@@ -34,6 +34,7 @@ Python 3 é necessário só para `gate`. No Windows, `python` pode ser outro exe
 - Todo bug corrigido ganha teste de regressão em `tests/regression/` que falha antes e passa depois. Não enfraqueça assertions para ficar verde.
 - Mudou um `<script>` inline? Recalcule o hash e atualize a CSP em `vercel.json`. O teste `cada <script> inline publicado tem hash na script-src` avisa quando falta.
 - Mudou um arquivo que deve ficar fora do ar? Adicione em `.vercelignore` como caminho exato. Teste `entradas de .vercelignore não são servidas` confirma.
+- Padrões fixos em todas as páginas (cada um tem teste): `<meta name="color-scheme" content="only light">` e viewport com `viewport-fit=cover`; seção com `min-height: calc(100lvh - var(--topo))`; topo do celular só com marca e menu; botões da abertura empilhados e centrados no celular; portfólio da home como fila de cartões iguais (desliza abaixo de 1024px); peças das aberturas internas (ficha, celular, constelação) no mesmo eixo.
 - Não apagar `sett-digital-site/`, o `.zip` nem os PNGs de preview: estão apenas excluídos da publicação.
 - Não fazer push, merge, deploy ou alterar DNS/Vercel sem autorização explícita do usuário.
 

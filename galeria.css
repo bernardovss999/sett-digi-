@@ -1,75 +1,79 @@
-/* PORTFÓLIO DA HOME — o leque de prévias e a vitrine (a prévia em tamanho maior).
-   As quatro telas ficam inclinadas e sobrepostas, em degraus que sobem até o
-   meio. Ao apontar (mouse ou teclado) uma tela sobe e as outras assentam; no
-   toque, o leque mostra uma de cada vez sozinho. Clicar abre a vitrine.
-   Movimento lento e suave (0,8s), sem sobreposição escura. Sem JS o leque
-   aparece pronto e cada tela leva à página Portfólio. */
+/* PORTFÓLIO DA HOME — a fila de prévias e a vitrine (a prévia em tamanho maior).
+   UM padrão em toda tela: cada prévia é um cartão igual (barra de navegador,
+   o topo do site, nome e tipo do negócio), lado a lado. No computador as
+   cinco cabem na linha; quando não cabem (tablet e celular) a mesma fila
+   desliza para o lado, com a próxima aparecendo na borda para mostrar que
+   há mais. Tocar ou clicar abre a vitrine. Nada se mexe sozinho, nada fica
+   por cima de nada. Sem JS cada cartão fica parado e "Explorar portfólio"
+   leva à página Portfólio. */
 
 .galeria { background: var(--campo-fundo); color: var(--campo-texto); overflow: clip; }
 .galeria .section-text { color: var(--campo-texto-2); }
 
-.leque {
-  --w: clamp(220px, 21vw, 330px);          /* largura de cada tela */
-  --passo: calc(var(--w) * .76);           /* quanto cada tela anda para o lado: só um quarto fica por baixo da vizinha */
-  --giro: -16deg;
-  --curva-leque: cubic-bezier(.25, .8, .25, 1);
-  --tempo-leque: 1.1s;
-  grid-column: 1 / -1;
-  margin-top: clamp(28px, 4vw, 56px);
-}
+.leque { --vao: clamp(14px, 1.6vw, 24px); grid-column: 1 / -1; margin-top: clamp(28px, 4vw, 56px); min-width: 0; }
 .leque-lista {
-  list-style: none; margin: 0; padding: 150px 0 24px;
-  display: flex; justify-content: center; align-items: flex-end;
-  perspective: 2200px;
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--vao);
 }
-.leque-lista li { position: relative; z-index: var(--z); flex: none; width: var(--passo); }
-.leque-lista li:last-child { width: var(--w); }
+.leque-lista li { min-width: 0; }
 
 .leque-carta {
-  display: block; width: var(--w); padding: 0; border: 0; background: none; cursor: pointer;
-  border-radius: 14px;
-  transform: rotateY(var(--giro)) translateX(var(--desvio, 0px)) translateY(calc(-1 * var(--sobe)));
-  transform-origin: 50% 100%;
-  transition: transform var(--tempo-leque) var(--curva-leque), filter var(--tempo-leque) var(--curva-leque);
+  display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit; text-align: left; cursor: pointer;
+  font: inherit; border-radius: 14px;
 }
+.leque-barra {
+  display: block; height: 22px; border-radius: 12px 12px 0 0; position: relative;
+  background: #e3e6e0; border: 1px solid rgba(11, 13, 14, .1); border-bottom: 0;
+}
+.leque-barra::before { content: ""; position: absolute; left: 10px; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: #c8cdc6; box-shadow: 10px 0 #c8cdc6, 20px 0 #c8cdc6; }
 .leque-carta img {
-  /* só o topo do site (a primeira dobra), nunca a página inteira */
-  display: block; width: 100%; height: calc(var(--w) * .625); object-fit: cover; object-position: 50% 0;
-  border-radius: 14px; background: #fff;
-  box-shadow: 1px 0 1px rgba(11, 13, 14, .02), 3px 0 3px rgba(11, 13, 14, .04), 8px 0 8px rgba(11, 13, 14, .08), 24px 6px 28px rgba(11, 13, 14, .22);
-  outline: 1px solid rgba(11, 13, 14, .08); outline-offset: -1px;
+  /* só o topo do site (a primeira dobra) */
+  display: block; width: 100%; height: auto; aspect-ratio: 660 / 412; object-fit: cover; object-position: 50% 0;
+  border-radius: 0 0 12px 12px; background: #fff;
+  border: 1px solid rgba(11, 13, 14, .1); border-top: 0;
+  box-shadow: 0 22px 40px -26px rgba(11, 13, 14, .5);
+  transition: translate var(--t-ui) var(--curva), box-shadow var(--t-ui) var(--curva);
 }
+.leque-barra { transition: translate var(--t-ui) var(--curva); }
+.leque-sobre { display: grid; gap: 4px; margin-top: 14px; }
+.leque-sobre b { font: 600 clamp(1.05rem, 1.3vw, 1.25rem)/1.15 var(--display); letter-spacing: -.04em; }
+.leque-sobre small { font-size: .85rem; line-height: 1.35; color: var(--campo-texto-2); }
 .leque-carta:focus-visible { outline: 3px solid var(--campo-realce); outline-offset: 6px; }
+@media (hover: hover) and (pointer: fine) {
+  .leque-carta:hover .leque-barra, .leque-carta:hover img { translate: 0 -6px; }
+  .leque-carta:hover img { box-shadow: 0 30px 50px -26px rgba(11, 13, 14, .55); }
+}
 
-/* uma tela apontada sobe até a mesma altura; as outras descem para a base */
-/* as vizinhas abrem espaço para os lados (--desvio, escrito pelo JS) em vez de ficar por cima */
-.leque.com-ativa .leque-carta { transform: rotateY(var(--giro)) translateX(var(--desvio, 0px)) translateY(-12px); filter: saturate(.9); }
-.leque.com-ativa .leque-carta.ativa { transform: rotateY(calc(var(--giro) * .5)) translateY(-104px) scale(1.05); filter: none; }
-
-/* "Explorar portfólio" logo abaixo da legenda, no mesmo eixo do leque */
-.leque-pe { display: flex; justify-content: center; margin-top: 26px; }
-
-/* a legenda acompanha a tela apontada */
-.leque-legenda { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 6px 14px; margin: 18px 0 0; text-align: center; }
-.leque-nome { font: 600 clamp(1.3rem, 2vw, 1.7rem) var(--display); letter-spacing: -.05em; }
-.leque-tipo { font: 500 .75rem var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--campo-texto-2); }
-.leque-dica { flex-basis: 100%; font-size: .9rem; color: var(--campo-texto-2); }
+.leque-dica { margin: 22px 0 0; text-align: center; font-size: .9rem; color: var(--campo-texto-2); }
 .so-toque { display: none; }
 @media (hover: none) { .so-mouse { display: none; } .so-toque { display: inline; } }
+/* "Explorar portfólio" logo abaixo, no eixo da fila */
+.leque-pe { display: flex; justify-content: center; margin-top: 18px; }
 
-/* entrada: as telas sobem de baixo, uma depois da outra */
+/* entrada: os cartões sobem um depois do outro e param */
 @media (prefers-reduced-motion: no-preference) {
-  .js .leque:not(.entrou) .leque-carta { transform: rotateY(var(--giro)) translateY(200px); opacity: 0; }
-  .js .leque.entrou .leque-carta { opacity: 1; transition: transform var(--tempo-leque) var(--curva-leque), filter var(--tempo-leque) var(--curva-leque), opacity .9s ease; }
-  .js .leque.entrando .leque-carta { transition-delay: calc(var(--k) * 150ms); transition-duration: 1.4s; }
+  .js .leque:not(.entrou) .leque-carta { opacity: 0; translate: 0 28px; }
+  .js .leque .leque-carta { transition: opacity .7s var(--curva-entrada), translate .9s var(--curva-entrada); transition-delay: calc(var(--k) * 90ms); }
 }
 
-/* celular: o mesmo leque, menor; as telas passam a vez sozinhas */
+/* fila que desliza: abaixo de 1024px as cinco não cabem lado a lado com
+   o nome legível. A fila sangra até a borda da tela (a próxima prévia
+   aparece cortada na direita) e cada cartão para alinhado na margem. */
+@media (max-width: 1023px) {
+  .leque-lista {
+    display: flex; gap: var(--vao);
+    margin-inline: calc(-1 * var(--margem)); padding: 6px var(--margem) 18px;
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--margem);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .leque-lista::-webkit-scrollbar { display: none; }
+  .leque-lista li { flex: 0 0 min(42vw, 340px); scroll-snap-align: start; }
+  .leque-dica { margin-top: 8px; }
+}
 @media (max-width: 800px) {
-  .leque { --w: min(48vw, 230px); --passo: calc((min(100vw - 40px, 560px) - var(--w)) / 4); --giro: -14deg; }
-  .leque-lista { padding-top: 84px; }
-  .leque.com-ativa .leque-carta.ativa { transform: rotateY(calc(var(--giro) * .5)) translateY(-70px) scale(1.04); }
-  .leque-lista li:not(:last-child) { width: var(--passo); }
+  .leque { margin-top: 24px; }
+  .leque-lista li { flex-basis: min(76vw, 320px); }
+  .leque-sobre { margin-top: 12px; text-align: left; }
 }
 
 /* ------------------------------------------------------------ a vitrine */
@@ -147,31 +151,43 @@ html.vitrine-aberta { overflow: hidden; }
 @media (hover: hover) and (pointer: fine) { .vitrine-escolha button:not([aria-current="true"]):hover { color: var(--ink); border-color: rgba(11, 13, 14, .4); } }
 .vitrine-escolha button:focus-visible, .vitrine-vivo:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
-/* celular: a vitrine ocupa a tela e mostra o site no celular, inteiro na altura */
+/* celular: a vitrine é uma caixa no meio da tela, com o site escurecido em
+   volta (antes ocupava a tela inteira e parecia outra página). Mostra o site
+   no celular, a troca por setas e o botão do site. */
 @media (max-width: 800px) {
-  .vitrine { width: 100vw; height: 100dvh; border-radius: 0; }
-  .vitrine-topo { padding: calc(18px + env(safe-area-inset-top)) 18px 12px; }
-  .vitrine-titulo h2 { font-size: 1.7rem; }
-  .vitrine-telas { margin: 0 18px; padding: 0; }
-  .vitrine-telas > * { --h: calc(100cqh - 28px); }
+  .vitrine { width: calc(100vw - 32px); height: min(calc(100dvh - 48px - env(safe-area-inset-top) - env(safe-area-inset-bottom)), 720px); border-radius: 20px; }
+  .vitrine-topo { padding: 18px 18px 12px; }
+  .vitrine-titulo h2 { margin-top: 0; font-size: 1.5rem; }
+  .vitrine-tipo { font-size: .88rem; }
+  .vitrine-fecha { width: 44px; height: 44px; }
+  .vitrine-telas { margin: 0 14px; padding: 0; }
+  .vitrine-telas > * { --h: calc(100cqh - 24px); }
   .vitrine-janela { display: none; }
-  .vitrine-celular { height: min(var(--h), calc((100cqw - 28px) / .462)); border-width: 6px; border-radius: 24px; }
-  .vitrine-pe { padding: 14px 18px calc(18px + env(safe-area-inset-bottom)); }
-  .vitrine-escolha { width: 100%; justify-content: space-between; flex-wrap: nowrap; overflow-x: auto; }
-  .vitrine-escolha button { flex: none; padding: 0 12px; font-size: .82rem; }
+  .vitrine-celular { height: min(var(--h), calc((100cqw - 24px) / .462)); border-width: 6px; border-radius: 24px; }
+  .vitrine-pe { padding: 12px 14px 16px; gap: 10px; }
+  /* só as setas e o nome no título: a fila de cinco nomes não cabe */
+  .vitrine-escolha { width: 100%; justify-content: space-between; flex-wrap: nowrap; }
+  .vitrine-escolha button:not(.vitrine-passo) { display: none; }
+  .vitrine-escolha::before { content: attr(data-conta); order: 1; font: 500 .85rem var(--display); color: #45514d; }
+  .vitrine-escolha .vitrine-passo[data-passo="1"] { order: 2; }
   .vitrine-vivo { width: 100%; }
 }
-@media (prefers-reduced-motion: reduce) {
-  .leque-carta { transition: none; }
+
+
+/* celular baixo (iPhone SE, Androids de 640px): a seção inteira, com
+   "Explorar portfólio", cabe na tela — cartões um pouco menores e respiros
+   mais curtos; abaixo de 600px de altura sai o tipo do negócio e a dica */
+@media (max-width: 800px) and (max-height: 700px) {
+  .galeria.section-grid { row-gap: 0; }
+  .galeria .section-text { margin-top: 14px; }
+  .leque { margin-top: 16px; }
+  .leque-lista { padding-bottom: 10px; }
+  .leque-lista li { flex-basis: min(62vw, 280px); }
+  .leque-sobre { margin-top: 10px; }
+  .leque-dica { margin-top: 4px; }
+  .leque-pe { margin-top: 12px; }
 }
-
-/* a tela que sobe passa por cima das vizinhas: no toque, ela é a que recebe o dedo */
-.leque-lista li:has(.leque-carta.ativa) { z-index: 10; }
-
-/* leque: telas maiores, menos inclinadas e sem corte; mais respiro entre título, telas e legenda */
-@media (min-width: 1024px) {
-  :root .leque { --w: min(clamp(200px, 19vw, 300px), calc((100vw - 2 * var(--margem)) / 4.76)); --passo: calc(var(--w) * .94); --giro: -10deg; margin-top: clamp(40px, 5vw, 72px); }
-  :root .leque-lista { padding-top: 84px; padding-bottom: 20px; }
-  :root .leque-legenda { margin-top: 24px; }
+@media (max-width: 800px) and (max-height: 600px) {
+  .galeria .section-text { font-size: .95rem; }
+  .leque-sobre small, .leque-dica { display: none; }
 }
-

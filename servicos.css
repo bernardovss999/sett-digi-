@@ -107,59 +107,73 @@
 @media (max-width: 1000px) { .caminho-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .caminho-4 li:nth-child(3) { padding-left: 0; border-left: 0; } .caminho-4 li:nth-child(3)::before { content: none; } .caminho-4 li:nth-child(n+3) { border-top: 1px solid var(--campo-fio); } }
 @media (max-width: 800px) { .caminho-4 { grid-template-columns: minmax(0, 1fr); } .caminho-4 li:nth-child(3)::before { content: "↓"; } }
 /* ----------------------------------------------- O que fazemos · a constelação */
-/* o negócio no centro e as quatro frentes em volta, ligadas por fios; cada frente leva à sua seção */
+/* O negócio no centro, numa órbita, e as quatro frentes nos cantos, ligadas a
+   ele por fios que saem da borda do centro, marcam a órbita com um nó e
+   terminam na borda da frente. Mesma linguagem da ficha do Google: papel,
+   fio fino, número em mono, sem sombra pesada. Tudo mede em proporção da
+   figura (viewBox 115 × 100 = aspect-ratio da caixa), então os fios encostam
+   nas frentes em qualquer tamanho. Ocupa a coluna da direita como a ficha
+   (até 540px) e fica no mesmo centro que a ficha e o celular das outras
+   páginas. */
 .constelacao {
-  position: relative; margin: 0; justify-self: center;
-  width: min(100%, 480px, calc((100svh - var(--topo)) * .62)); aspect-ratio: 1;
+  position: relative; margin: 0; justify-self: center; container-type: inline-size;
+  width: min(100%, 540px, calc((100svh - var(--topo) - 150px) * 1.15)); aspect-ratio: 115 / 100;
 }
 .constelacao-fios { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.constelacao-fios circle { fill: none; stroke: var(--campo-fio); stroke-width: .35; stroke-dasharray: 1 1.6; vector-effect: non-scaling-stroke; }
-.constelacao-fios path { fill: none; stroke: var(--campo-realce); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.constelacao-fios .orbita { fill: none; stroke: var(--campo-fio); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.constelacao-fios .orbita-fora { fill: none; stroke: var(--campo-fio); stroke-width: 1; stroke-dasharray: 2 5; vector-effect: non-scaling-stroke; }
+/* fio em unidades da figura (sem non-scaling-stroke: com ele o traço animado por pathLength sai pontilhado) */
+.constelacao-fios path { fill: none; stroke: var(--campo-texto); stroke-width: .24; stroke-linecap: round; }
+.constelacao-fios .no { fill: var(--campo-realce); stroke: var(--campo-fundo); stroke-width: 2; vector-effect: non-scaling-stroke; }
 .constelacao-centro {
   position: absolute; left: 50%; top: 50%; translate: -50% -50%; margin: 0;
-  width: 34%; aspect-ratio: 1; border-radius: 50%; display: grid; place-content: center; text-align: center;
-  background: var(--ink); color: var(--paper); box-shadow: 0 0 0 8px color-mix(in srgb, var(--cyan) 22%, transparent);
-  font: 600 clamp(1rem, 2vw, 1.45rem)/1.05 var(--display); letter-spacing: -.04em;
+  width: calc(30 / 115 * 100%); aspect-ratio: 1; border-radius: 50%; display: grid; place-content: center; text-align: center;
+  background: var(--ink); color: var(--paper);
+  box-shadow: 0 0 0 5px var(--campo-fundo), 0 0 0 6px var(--campo-realce);
+  font: 600 clamp(.95rem, 4.4cqi, 1.5rem)/1.02 var(--display); letter-spacing: -.04em;
 }
 .constelacao-centro span { display: block; color: var(--cyan); }
 .constelacao ol { list-style: none; margin: 0; padding: 0; }
+/* cada frente: 42 × 26 do viewBox, num canto */
 .constelacao li {
-  position: absolute; left: var(--x); top: var(--y); translate: -50% -50%;
-  width: 44%; display: grid; gap: 2px; justify-items: center; text-align: center;
-  padding: 12px 10px; border: 1px solid var(--campo-fio); border-radius: 14px;
-  background: var(--campo-fundo); box-shadow: 0 14px 30px -18px rgba(11, 13, 14, .35);
+  position: absolute; width: calc(42 / 115 * 100%); height: 26%;
+  display: flex; flex-direction: column; justify-content: center; gap: 3px; text-align: left;
+  padding: 0 clamp(10px, 2.8cqi, 16px); border: 1px solid var(--campo-fio); border-radius: 10px;
+  background: color-mix(in srgb, var(--campo-fundo) 94%, var(--campo-texto));
 }
-.constelacao li a { font: 600 clamp(.95rem, 1.3vw, 1.1rem)/1.15 var(--display); letter-spacing: -.02em; color: var(--campo-texto); }
+.constelacao .frente-1 { left: 0; top: 0; }
+.constelacao .frente-2 { right: 0; top: 0; }
+.constelacao .frente-3 { left: 0; bottom: 0; }
+.constelacao .frente-4 { right: 0; bottom: 0; }
+.constelacao li a { font: 600 clamp(.92rem, 3.1cqi, 1.08rem)/1.15 var(--display); letter-spacing: -.03em; color: var(--campo-texto); }
 .constelacao li a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
-.constelacao li small { font-size: .75rem; line-height: 1.3; color: var(--campo-texto-2); }
+.constelacao li small { font-size: clamp(.75rem, 2.5cqi, .85rem); line-height: 1.3; color: var(--campo-texto-2); }
+.constelacao li .frente-num { font: 500 .75rem ui-monospace, "Cascadia Mono", Consolas, monospace; color: var(--campo-indice); letter-spacing: .04em; }
 @media (hover: hover) and (pointer: fine) {
-  .constelacao li { transition: border-color var(--t-micro) var(--curva), translate var(--t-ui) var(--curva); }
-  .constelacao li:hover { border-color: var(--campo-realce); translate: -50% calc(-50% - 4px); }
+  .constelacao li { transition: border-color var(--t-micro) var(--curva), background-color var(--t-micro) var(--curva); }
+  .constelacao li:hover { border-color: var(--campo-realce); background: var(--campo-fundo); }
 }
 .constelacao li:focus-within { outline: 2px solid var(--campo-realce); outline-offset: 3px; }
 @media (prefers-reduced-motion: no-preference) {
   .js .constelacao-fios path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: confere .7s var(--curva-entrada) both; animation-delay: calc(500ms + var(--d, 0) * 1ms); }
   .js .constelacao-fios path:nth-of-type(2) { --d: 140; } .js .constelacao-fios path:nth-of-type(3) { --d: 280; } .js .constelacao-fios path:nth-of-type(4) { --d: 420; }
-  .js .constelacao li { animation: perfil-linha .6s var(--curva-entrada) both; animation-delay: calc(700ms + var(--k) * 140ms); }
+  .js .constelacao li { animation: perfil-linha .6s var(--curva-entrada) both; }
+  .js .constelacao .frente-2 { animation-delay: 140ms; } .js .constelacao .frente-3 { animation-delay: 280ms; } .js .constelacao .frente-4 { animation-delay: 420ms; }
 }
-@media (max-width: 800px) {
-  .constelacao { width: min(100%, 360px, calc((100svh - var(--topo)) * .5)); margin-top: 22px; }
-  .constelacao li { width: 46%; padding: 10px 6px; }
+/* figura estreita (celular): sem o número, para o nome e a linha caberem */
+@container (max-width: 420px) {
+  .constelacao li .frente-num { display: none; }
+  .constelacao li { padding: 0 10px; gap: 2px; }
 }
 @media (min-width: 1024px) {
   :root .pg-servico .ab .constelacao { grid-column: 2; grid-row: 1 / span 4; align-self: center; justify-self: center; }
 }
+/* celular: a constelação usa a altura que sobra depois do texto e dos botões
+   (~500px), para a abertura inteira caber numa tela; nunca menos de 280px */
 @media (max-width: 800px) {
-  .constelacao { margin-top: 0; }
-  .constelacao-centro { width: 30%; box-shadow: 0 0 0 6px color-mix(in srgb, var(--cyan) 22%, transparent); }
-  .constelacao li:nth-child(-n+2) { top: 15%; }
-  .constelacao li:nth-child(n+3) { top: 85%; }
-  .constelacao li small { font-size: .75rem; }
+  .constelacao { width: min(100%, clamp(280px, calc((100svh - var(--topo) - 500px) * 1.15), 440px)); margin-top: 24px; }
 }
-/* constelação pequena (celular ou coluna estreita no computador): frentes mais para as pontas e centro menor */
-.constelacao { container-type: inline-size; }
-@container (max-width: 430px) {
-  .constelacao-centro { width: 30%; }
-  .constelacao li:nth-child(-n+2) { top: 15%; }
-  .constelacao li:nth-child(n+3) { top: 85%; }
+/* figura muito estreita (celular de 320px): só o nome de cada frente */
+@container (max-width: 300px) {
+  .constelacao li > small:not(.frente-num) { display: none; }
 }

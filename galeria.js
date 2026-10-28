@@ -1,9 +1,9 @@
-/* PORTFÓLIO DA HOME — o leque e a vitrine.
-   1. apontar uma tela (mouse ou teclado) faz ela subir e troca a legenda
-   2. no toque, quando o leque está na tela, ele passa a vez sozinho a cada 3,2s
-   3. clicar abre a vitrine (<dialog>): fecha no X, no Esc ou clicando fora;
-      as setas do teclado e os botões trocam de prévia; o foco volta para a tela
-   Sem este arquivo o leque fica parado e cada tela não abre nada (o link
+/* PORTFÓLIO DA HOME — a fila de prévias e a vitrine.
+   1. os cartões entram em fila quando a seção chega na tela (uma vez só)
+   2. clicar ou tocar abre a vitrine (<dialog>): fecha no X, no Esc ou
+      clicando fora; as setas do teclado e os botões trocam de prévia; ao
+      fechar, a fila mostra o cartão da última prévia vista
+   Sem este arquivo os cartões ficam parados e não abrem nada (o link
    "Explorar portfólio" continua logo abaixo). */
 
 (() => {
@@ -13,46 +13,15 @@ if (!leque || !vitrine || typeof vitrine.showModal !== 'function') return;
 
 const raiz = document.documentElement;
 const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const toque = window.matchMedia('(hover: none)');
 const cartas = [...leque.querySelectorAll('.leque-carta')];
-const nome = leque.querySelector('.leque-nome');
-let ativa = null;
+cartas.forEach((c, k) => c.addEventListener('click', () => abre(k)));
 
-// 1. a tela apontada
-const marca = i => {
-  ativa = i;
-  leque.classList.toggle('com-ativa', i !== null);
-  cartas.forEach((c, k) => {
-    c.classList.toggle('ativa', k === i);
-    // as vizinhas se afastam um pouco, para a tela apontada aparecer inteira
-    c.style.setProperty('--desvio', i === null || k === i ? '0px' : (k < i ? '-26px' : '26px'));
-  });
-  if (nome) nome.textContent = cartas[i ?? 0].dataset.nome;
-};
-cartas.forEach((c, k) => {
-  c.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') marca(k); });
-  c.addEventListener('focus', () => marca(k));
-  c.addEventListener('click', () => abre(k));
-});
-leque.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') marca(null); });
-leque.addEventListener('focusout', e => { if (!leque.contains(e.relatedTarget)) marca(null); });
-
-// 2. entrada em fila e, no toque, a vez passando sozinha
-let ciclo = null;
-const roda = liga => {
-  clearInterval(ciclo); ciclo = null;
-  if (!liga || quieto || !toque.matches) return;
-  let k = ativa ?? -1;
-  ciclo = setInterval(() => { if (!vitrine.open) marca(k = (k + 1) % cartas.length); }, 3200);
-};
+// 1. entrada em fila
 if ('IntersectionObserver' in window && !quieto) {
-  new IntersectionObserver(entradas => entradas.forEach(e => {
-    if (e.isIntersecting && !leque.classList.contains('entrou')) {
-      leque.classList.add('entrou', 'entrando');
-      setTimeout(() => leque.classList.remove('entrando'), 1700);   // depois da fila, o movimento volta ao ritmo normal
-    }
-    roda(e.isIntersecting);
-  }), { threshold: .3 }).observe(leque);
+  const olho = new IntersectionObserver(entradas => {
+    if (entradas.some(e => e.isIntersecting)) { leque.classList.add('entrou'); olho.disconnect(); }
+  }, { threshold: .2 });
+  olho.observe(leque);
 } else leque.classList.add('entrou');
 
 // 3. a vitrine
@@ -63,6 +32,7 @@ const v = {
   cel: vitrine.querySelector('.vitrine-cel'),
   vivo: vitrine.querySelector('.vitrine-vivo'),
   escolhas: [...vitrine.querySelectorAll('[data-escolhe]')],
+  escolha: vitrine.querySelector('.vitrine-escolha'),
 };
 let atual = 0;
 const mostra = i => {
@@ -75,6 +45,7 @@ const mostra = i => {
   v.vivo.href = d.vivo;
   vitrine.querySelectorAll('.vitrine-janela, .vitrine-celular').forEach(el => { el.scrollTop = 0; });   // cada prévia começa do topo
   v.escolhas.forEach((b, k) => b.setAttribute('aria-current', String(k === atual)));
+  v.escolha.dataset.conta = `${atual + 1} de ${cartas.length}`;
 };
 const abre = i => {
   mostra(i);
@@ -82,7 +53,12 @@ const abre = i => {
   raiz.classList.add('vitrine-aberta');
   vitrine.querySelector('.vitrine-fecha').focus();
 };
-vitrine.addEventListener('close', () => raiz.classList.remove('vitrine-aberta'));
+vitrine.addEventListener('close', () => {
+  raiz.classList.remove('vitrine-aberta');
+  // a fila (quando desliza) para no cartão da última prévia vista
+  const li = cartas[atual].parentElement, lista = li.parentElement;
+  if (lista.scrollWidth > lista.clientWidth) lista.scrollTo({ left: li.offsetLeft - lista.firstElementChild.offsetLeft, behavior: quieto ? 'auto' : 'smooth' });
+});
 vitrine.querySelector('.vitrine-fecha').addEventListener('click', () => vitrine.close());
 vitrine.addEventListener('click', e => { if (e.target === vitrine) vitrine.close(); });   // clique no fundo, fora da caixa
 v.escolhas.forEach(b => b.addEventListener('click', () => mostra(Number(b.dataset.escolhe))));

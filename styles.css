@@ -323,7 +323,6 @@ p { text-wrap: pretty; }
 /* a chamada do topo: o selo "novo" no menu e, no celular, um atalho ao lado do
    botão do menu. Só CSS, sem mudar a altura do topo. O selo acende uma vez. */
 .nav-novo { display: inline-block; margin-left: 7px; padding: 2px 7px; border-radius: 999px; background: var(--cyan); color: var(--ink); font: 600 .7rem/1.4 var(--display); letter-spacing: .08em; text-transform: uppercase; vertical-align: 2px; }
-.topo-ia { display: none; }
 @media (prefers-reduced-motion: no-preference) {
   .nav-novo { animation: novo-acende .7s var(--curva-entrada) 1.2s both; }
 }
@@ -603,12 +602,11 @@ html.lenis, html.lenis body { height: auto; }
      quase opaco a diferença não se vê */
   .site-header, .site-header.is-scrolled { backdrop-filter: none; background: var(--ink); }   /* opaco: sem o desfoque, 4% de transparência já deixava ver o texto passando por baixo */
   .desktop-nav, .site-header > .button { display: none; }
-  .topo-ia { display: inline-flex; align-items: center; min-height: 44px; margin-left: auto; margin-right: 6px; padding: 0 4px; font: 500 .82rem var(--display); color: var(--paper); }
-  .topo-ia .nav-novo { margin-left: 6px; }
+  /* no topo do celular, só a marca e o menu (o atalho "Automatização" saiu: o item está no menu) */
   /* Botão do menu: as três linhas viram um X (as de fora giram, a do meio some). */
   .menu-toggle {
     position: relative; display: grid; place-content: center; gap: 5px;
-    width: 44px; height: 44px; margin-right: -10px; padding: 0;
+    width: 44px; height: 44px; margin-left: auto; margin-right: -10px; padding: 0;
     background: none; border: 0; border-radius: 12px; cursor: pointer;
   }
   .menu-toggle span:not(.sr-only) {
@@ -993,7 +991,7 @@ a.service-card { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
 :root main > section.port-hero { display: flex; flex-direction: column; }
 :root .ab-corpo { align-items: center; }
 :root .perfil, :root .aparelho { justify-self: center; }
-:root .aparelho-tela { width: min(clamp(220px, 22vw, 290px), calc((100svh - var(--topo) - 150px) * .486)); }
+:root .aparelho-tela { width: min(clamp(220px, 22vw, 290px), calc((100svh - var(--topo) - 220px) * .486)); }   /* 220px = respiros da abertura + legenda: o celular e a legenda cabem na tela e ficam no mesmo eixo das outras peças */
 @media (max-width: 800px) {
   :root .ab { text-align: center; }
   :root .ab .trilha, :root .ab .hero-actions { justify-content: center; }
@@ -1009,7 +1007,6 @@ a.service-card { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
   :root .section-title { font-size: clamp(2.4rem, min(6vw, 10.5svh), 6.5rem); }
   :root .hero-title-frase { font-size: clamp(3rem, min(7.6vw, 13svh), 7.4rem); }
   :root .ab-titulo, :root .ab-titulo-servico { font-size: clamp(2.4rem, min(5.2vw, 9.5svh), 5.9rem); }
-  :root .galeria .leque-lista { padding-top: 56px; }
 }
 /* páginas de serviço no computador: texto à esquerda, peça (celular ou ficha) à direita, tudo numa tela */
 @media (min-width: 1024px) {
@@ -1076,3 +1073,83 @@ a.service-card { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
 :root .nav-novo { font-size: .75rem; }
 :root .caso-selo { font-size: .75rem; }
 :root .semana-cab > span:first-child, :root .semana-topo > span:first-child { font-size: .75rem; }
+
+/* ------------------------------------------------ home · a órbita da abertura */
+/* Ocupa o espaço à direita da frase: o negócio no centro, a presença (site,
+   Google, redes) na órbita de fora e a rotina (automação com IA) na de dentro.
+   O anel de fora é o mesmo anel da marca, com o arco de luz. Mede pela coluna
+   do texto: nunca encosta na frase (que tem ~9,7em na linha mais longa) e
+   cabe na altura da tela. Abaixo de 1200px não há lado livre: volta o anel
+   cortado pela borda, como antes. */
+.orbita { display: none; }
+@media (min-width: 1200px) {
+  .hero-copy { position: relative; }
+  .orbita {
+    display: block; position: absolute; z-index: -1; margin: 0; right: 0; top: 50%; translate: 0 -50%;
+    width: min(600px, calc((100svh - var(--topo)) * .74), calc(100% - var(--titulo-hero) * 10 - 40px)); aspect-ratio: 1;
+    container-type: inline-size; pointer-events: none;
+  }
+  :root .hero-aneis { display: none; }
+}
+.orbita > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.orbita .aneis { inset: 4%; border-color: rgba(110, 244, 231, .34); }
+.orbita .aneis::before {
+  content: ""; position: absolute; inset: -1px; border-radius: 50%; pointer-events: none;
+  background: conic-gradient(from 0deg, #0000 0 250deg, rgba(110, 244, 231, .38) 283deg, #dffffb 299deg, rgba(110, 244, 231, .3) 326deg, #0000 344deg);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 calc(100% - 2.5px) calc(100% - .5px), #0000);
+          mask: radial-gradient(farthest-side, #0000 calc(100% - 4px), #000 calc(100% - 2.5px) calc(100% - .5px), #0000);
+}
+.orbita-anel { fill: none; stroke: var(--line); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.orbita-anel-centro { stroke: rgba(110, 244, 231, .5); }
+.orbita-fios path { fill: none; stroke: rgba(240, 242, 237, .22); stroke-width: .22; stroke-dasharray: .8 1.2; }
+.orbita-rotulo { font: 500 2.3px ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: .55px; fill: #aebbb7; }
+.orbita-centro {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 25%; aspect-ratio: 1; border-radius: 50%;
+  display: grid; place-content: center; text-align: center;
+  background: var(--ink); border: 1px solid rgba(110, 244, 231, .5);
+  font: 600 clamp(.9rem, 4.6cqi, 1.5rem)/1.02 var(--display); letter-spacing: -.04em; color: var(--paper);
+}
+.orbita-centro em { font-style: normal; color: var(--cyan); }
+.orbita-no {
+  position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px 7px 10px;
+  border: 1px solid rgba(240, 242, 237, .18); border-radius: 999px; background: var(--ink);
+  font: 500 clamp(.75rem, 2.6cqi, .9rem) var(--display); letter-spacing: -.01em; color: var(--paper);
+}
+.orbita-no::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 3px rgba(110, 244, 231, .18); }
+.orbita-no-dentro { border-color: rgba(110, 244, 231, .4); }
+@media (prefers-reduced-motion: no-preference) {
+  .orbita .aneis { animation: aneis-entram calc(var(--t-cena) * 1.5) var(--curva-entrada) .15s both; }
+  .orbita .aneis::before { animation: luz-assenta var(--t-cena) var(--curva-entrada) 1s both; }
+  .orbita svg, .orbita-centro { animation: entra var(--t-cena) var(--curva-entrada) .3s both; }
+  .orbita-no { animation: no-entra .7s var(--curva-entrada) both; animation-delay: calc(.8s + var(--k) * 140ms); }
+}
+@keyframes no-entra { from { opacity: 0; scale: .8; } }
+
+/* ------------------------------------------------ o mesmo site em qualquer celular */
+/* 1. Modo claro ou escuro do aparelho não muda nada: o site declara as
+      próprias cores (com a meta color-scheme "only light" em cada página),
+      então o navegador não escurece nem inverte nada sozinho (Chrome, Samsung
+      Internet), e controles e barras de rolagem ficam sempre iguais.
+   2. Sem o iOS aumentar letras sozinho quando o celular deita.
+   3. Cada seção ocupa a tela INTEIRA do telefone: lvh é a altura com as
+      barras do navegador recolhidas, então a próxima seção não aparece por
+      baixo da barra de endereço (Safari do iPhone, Chrome do Android). */
+:root { color-scheme: only light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+@supports (height: 1lvh) {
+  :root main > section.section-grid, :root main > section.hero, :root main > section.ab, :root main > section.port-hero { min-height: calc(100lvh - var(--topo)); }
+}
+/* no celular o conteúdo da seção centraliza na parte VISÍVEL (sem a área da
+   barra do navegador): o último botão de cada seção ("Explorar portfólio")
+   não fica escondido atrás da barra de endereço */
+@supports (height: 1lvh) {
+  @media (max-width: 800px) {
+    :root main > section.section-grid, :root main > section.ab, :root main > section.port-hero { padding-bottom: calc(var(--secao-base) + 100lvh - 100svh); }
+  }
+}
+/* celular: os botões da abertura seguem um padrão só em todas as páginas —
+   o botão principal em cima e o link embaixo, centrados (as páginas de
+   serviço tinham os dois lado a lado) */
+@media (max-width: 800px) {
+  :root .pg-servico .ab .hero-actions, :root main > section:first-child .hero-actions { flex-direction: column; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 14px; }
+}

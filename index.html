@@ -96,8 +96,8 @@
   <!-- fontes hospedadas e pré-carregadas: o título nasce na fonte certa, sem trocar no meio da carga -->
   <link rel="preload" href="/fonts/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/dm-sans.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.css?v=1793100000">
-  <link rel="stylesheet" href="/galeria.css?v=1793100000">
+  <link rel="stylesheet" href="/styles.css?v=1793200000">
+  <link rel="stylesheet" href="/galeria.css?v=1793200000">
   <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -113,28 +113,22 @@
   <main id="top">
     <section class="hero section-grid" data-campo="ink" aria-labelledby="hero-title">
       <div class="hero-copy"><h1 id="hero-title" class="hero-title hero-title-frase"><span class="linha" style="--ordem:1">Seu negócio presente.</span><span class="linha" style="--ordem:2"><em>Sua rotina conectada.</em></span></h1><p class="hero-lead entra" style="--ordem:3"><strong>A Sett Company</strong> é uma agência digital que atua no Rio de Janeiro. Criamos sites, cuidamos da sua presença no Google e nas redes sociais e desenvolvemos automações com IA para conectar seu negócio às pessoas e às próximas etapas.</p><div class="hero-actions entra" style="--ordem:4"><a class="button" href="https://wa.me/5521936181695">Conversar sobre meu negócio</a><a class="text-link" href="#portfolio">Ver portfólio</a></div>
-        <!-- A órbita: o negócio no centro; na órbita de fora, a presença (site,
-             Google, redes sociais); na de dentro, a rotina (automação com IA).
-             É a frase do título desenhada. O anel de fora carrega a assinatura
-             (o arco de luz entre 10 e 11 horas). -->
-        <figure class="orbita" aria-hidden="true">
-          <div class="aneis"></div>
-          <svg viewBox="0 0 100 100">
-            <defs><path id="trilha-fora" d="M50 50 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0" /><path id="trilha-dentro" d="M50 50 m-29 0 a29 29 0 1 1 58 0 a29 29 0 1 1 -58 0" /></defs>
-            <circle class="orbita-anel orbita-anel-dentro" cx="50" cy="50" r="29" />
-            <circle class="orbita-anel orbita-anel-centro" cx="50" cy="50" r="14" />
-            <text class="orbita-rotulo" text-anchor="middle"><textPath href="#trilha-fora" startOffset="25%">PRESENÇA</textPath></text>
-            <text class="orbita-rotulo" text-anchor="middle"><textPath href="#trilha-dentro" startOffset="25%">ROTINA</textPath></text>
-            <g class="orbita-fios"><path d="M50 50 L82.5 17.5" /><path d="M50 50 L4.4 56.4" /><path d="M50 50 L68.3 92.2" /><path d="M50 50 L75.1 64.5" /></g>
-          </svg>
-          <span class="orbita-centro"><span><em>seu</em><br>negócio</span></span>
-          <span class="orbita-no" style="--x:82.5%;--y:17.5%;--k:0">Site</span>
-          <span class="orbita-no" style="--x:4.4%;--y:56.4%;--k:1">Google</span>
-          <span class="orbita-no" style="--x:68.3%;--y:92.2%;--k:2">Redes sociais</span>
-          <span class="orbita-no orbita-no-dentro" style="--x:75.1%;--y:64.5%;--k:3">Automação com IA</span>
+        <!-- O mascote: o ponto da Sett (o mesmo do vídeo dos agentes), sozinho
+             na abertura e enquadrado como por uma câmera. Cai, amassa, o
+             enquadramento foca, pisca, olha para a frase e sorri; depois para.
+             Ao apontar com o mouse, sorri e dá um pulinho. -->
+        <figure class="mascote" aria-hidden="true">
+          <span class="mascote-luz"></span>
+          <span class="mascote-quadro"><i></i><i></i><i></i><i></i></span>
+          <span class="mascote-pulo"><span class="mascote-corpo">
+            <img class="mascote-base" src="/img/mascote/mascote.webp" srcset="/img/mascote/mascote-400.webp 400w, /img/mascote/mascote.webp 800w" sizes="(max-width: 800px) 60vw, 460px" width="800" height="770" decoding="async" fetchpriority="high" alt="">
+            <img class="mascote-olhos olhos-pisca" src="/img/mascote/olhos-pisca.webp" width="378" height="138" decoding="async" alt="">
+            <img class="mascote-olhos olhos-olha" src="/img/mascote/olhos-olha.webp" width="378" height="138" decoding="async" alt="">
+            <img class="mascote-olhos olhos-sorri" src="/img/mascote/olhos-sorri.webp" width="378" height="138" decoding="async" alt="">
+          </span></span>
+          <span class="mascote-chao"></span>
         </figure>
       </div>
-      <div class="hero-aneis" aria-hidden="true"><div class="aneis"></div></div>
 
     </section>
 

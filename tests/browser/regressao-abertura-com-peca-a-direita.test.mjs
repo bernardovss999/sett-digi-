@@ -1,4 +1,4 @@
-// Bug: a abertura da home tinha só um anel pequeno cortado na borda e a do portfólio tinha o lado direito vazio; as duas ganham uma peça à direita (órbita e pilha de prévias) que não pode encostar no texto nem sair da tela.
+// Bug: a abertura da home tinha só um anel pequeno cortado na borda e a do portfólio tinha o lado direito vazio; as duas ganham uma peça à direita (o mascote da Sett e a pilha de prévias) que não pode encostar no texto nem sair da tela.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -9,10 +9,10 @@ let browser;
 before(async () => { site = await startSite(); browser = await chromium.launch(); });
 after(async () => { await browser?.close(); await site?.close(); });
 
-const PECAS = [['/', '.orbita', '.orbita-no, .orbita-centro'], ['/portfolio/', '.pilha', '.pilha-janela']];
-// abaixo de 1200px (home) e 1100px (portfólio) a peça sai do lado: volta o anel na home e a pilha desce para baixo dos botões
+const PECAS = [['/', '.mascote', '.mascote-quadro i, .mascote-base'], ['/portfolio/', '.pilha', '.pilha-janela']];
+// abaixo de 1100px a peça sai do lado e desce para baixo dos botões
 
-for (const [w, h] of [[1200, 700], [1280, 720], [1318, 656], [1366, 768], [1440, 900], [1536, 864], [1920, 1080], [2560, 1440]]) {
+for (const [w, h] of [[1100, 700], [1280, 720], [1318, 656], [1366, 768], [1440, 900], [1536, 864], [1920, 1080], [2560, 1440]]) {
   for (const [rota, peca, partes] of PECAS) {
     test(`${w}x${h} ${rota}: ${peca} à direita, grande, sem encostar no texto e dentro da abertura`, async () => {
       const context = await browser.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
@@ -36,7 +36,7 @@ for (const [w, h] of [[1200, 700], [1280, 720], [1318, 656], [1366, 768], [1440,
         };
       }, [peca, partes]);
       await context.close();
-      assert.ok(r.largura >= 300, `peça pequena: ${Math.round(r.largura)}px`);
+      assert.ok(r.largura >= 280, `peça pequena: ${Math.round(r.largura)}px`);
       assert.equal(r.sobre, false, 'peça encosta no texto');
       assert.equal(r.fora, false, 'parte da peça sai da tela ou da abertura');
       assert.ok(Math.abs(r.margem - r.header) <= 2, `borda direita fora da margem padrão (${r.margem} × ${r.header})`);

@@ -308,7 +308,6 @@
 @media (max-width: 800px) and (max-height: 720px) {
   :root .controle-lista li::after { left: 4.5px; width: 3px; height: 7px; margin-top: -5px; }
   /* palco do O que fazemos em telefone baixo: sem a linha de cima, escolha mais fina */
-  :root .elenco-topo { display: none; }
   :root .elenco {
     aspect-ratio: auto; width: 100%; max-height: 260px; padding: 12px; gap: 8px 12px;
     grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-rows: minmax(0, 1fr) auto;

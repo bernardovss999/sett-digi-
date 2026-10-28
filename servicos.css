@@ -108,18 +108,17 @@
 @media (max-width: 800px) { .caminho-4 { grid-template-columns: minmax(0, 1fr); } .caminho-4 li:nth-child(3)::before { content: "↓"; } }
 /* ----------------------------------------------- O que fazemos · o palco dos agentes */
 /* Os personagens do vídeo "Agentes de IA sob medida" (o mesmo render 3D, a
-   mesma luz): cada agente é especializado numa tarefa. Um painel BRANCO,
-   como o resto do site (pedido de 28/10/2026); um agente em foco, grande, com
-   o reflexo no chão; o
+   mesma luz): cada agente é especializado numa tarefa. Sem painel: o palco
+   é TRANSPARENTE e faz parte da página (pedido de 28/10/2026); um agente em
+   foco, grande, com a sombra no chão; o
    nome e o que ele faz; os seis embaixo para escolher. Ocupa a coluna da
    direita como a ficha do Google (até 540px) e fica no mesmo eixo dela. */
 .elenco {
   position: relative; margin: 0; justify-self: center; container-type: inline-size;
   width: min(100%, 540px, calc((100svh - var(--topo) - 150px) * 1.15)); aspect-ratio: 115 / 100;
-  display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: clamp(8px, 2.4cqi, 14px);
+  display: grid; grid-template-rows: minmax(0, 1fr) auto auto; gap: clamp(8px, 2.4cqi, 14px);
   padding: clamp(14px, 4cqi, 24px); box-sizing: border-box;
-  background: #fff; color: var(--ink); border: 1px solid rgba(11, 13, 14, .08); border-radius: 6px; text-align: left;
-  box-shadow: 0 40px 80px -52px rgba(11, 13, 14, .35);
+  background: transparent; color: var(--campo-texto); text-align: left;
 }
 .elenco-topo { display: flex; justify-content: flex-start; margin: 0; font: 500 max(.75rem, 2.1cqi) ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: .14em; text-transform: uppercase; color: #166f68; }
 .elenco-palco { position: relative; min-height: 0; }
@@ -133,10 +132,10 @@
 .elenco-legenda { margin: 0; text-align: center; display: grid; gap: 2px; }
 .elenco-legenda small { font: 500 max(.75rem, 2cqi) ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: .2em; text-transform: uppercase; color: #166f68; }
 .elenco-legenda b { font: 600 clamp(1.2rem, 5.4cqi, 1.9rem)/1.05 var(--display); letter-spacing: -.05em; }
-.elenco-legenda span { font-size: max(.8rem, 2.7cqi); line-height: 1.35; color: #45514d; }
+.elenco-legenda span { font-size: max(.8rem, 2.7cqi); line-height: 1.35; color: var(--campo-texto-2); }
 .elenco-escolha { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(6px, 1.6cqi, 10px); }
 .elenco-escolha button {
-  aspect-ratio: 1; padding: 12%; border: 1px solid rgba(11, 13, 14, .12); border-radius: 10px; background: #f0f2ed; cursor: pointer;
+  aspect-ratio: 1; padding: 12%; border: 1px solid var(--campo-fio); border-radius: 10px; background: transparent; cursor: pointer;
   transition: border-color var(--t-micro) var(--curva), background-color var(--t-micro) var(--curva), translate var(--t-ui) var(--curva);
 }
 .elenco-escolha button img { display: block; width: 100%; height: 100%; object-fit: contain; }

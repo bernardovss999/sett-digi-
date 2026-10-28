@@ -18,7 +18,7 @@ for (const [w, h] of [[1902, 977], [1440, 900], [1280, 720], [1024, 768], [390, 
     const r = await page.evaluate(() => {
       const el = document.querySelector('.elenco');
       const caixa = el.getBoundingClientRect();
-      const partes = ['.elenco-topo', '.elenco-palco', '.elenco-legenda', '.elenco-escolha'].map((s) => el.querySelector(s)).filter((e) => e.getClientRects().length).map((e) => e.getBoundingClientRect());   // em telefone baixo a linha de cima sai
+      const partes = ['.elenco-palco', '.elenco-legenda', '.elenco-escolha'].map((s) => el.querySelector(s).getBoundingClientRect());
       const cruza = (a, b) => a.bottom > b.top + 1 && b.bottom > a.top + 1 && a.right > b.left + 1 && b.right > a.left + 1;   // em telefone baixo o agente e a legenda ficam lado a lado
       let sobre = 0;
       partes.forEach((a, i) => partes.forEach((b, j) => { if (j > i && cruza(a, b)) sobre += 1; }));
@@ -29,9 +29,10 @@ for (const [w, h] of [[1902, 977], [1440, 900], [1280, 720], [1024, 768], [390, 
         fora: partes.filter((p) => p.top < caixa.top - 1 || p.bottom > caixa.bottom + 1 || p.left < caixa.left - 1 || p.right > caixa.right + 1).length + (caixa.right > innerWidth || caixa.left < 0 ? 1 : 0),
         ator: ator.complete && ator.naturalWidth > 0 && ator.getBoundingClientRect().height > 60,
         antigos: document.querySelectorAll('.ab .perfil, .constelacao, .foco').length,
-        // pedido de 28/10/2026: sem número em cima e fundo branco, como o resto do site
-        numero: /\d+\s*\/\s*\d+/.test(el.querySelector('.elenco-topo').textContent) || !!el.querySelector('.elenco-conta'),
+        // pedidos de 28/10/2026: sem número nem rótulo em cima; o palco é transparente (faz parte da página)
+        rotulo: !!el.querySelector('.elenco-topo, .elenco-conta') || /especializados|\d+\s*\/\s*\d+/i.test(el.textContent),
         fundo: getComputedStyle(el).backgroundColor,
+        borda: getComputedStyle(el).borderTopWidth,
       };
     });
     await context.close();
@@ -40,8 +41,9 @@ for (const [w, h] of [[1902, 977], [1440, 900], [1280, 720], [1024, 768], [390, 
     assert.equal(r.fora, 0, 'parte do palco fora da caixa ou da tela');
     assert.equal(r.ator, true, 'o agente em foco não aparece');
     assert.equal(r.antigos, 0, 'uma peça antiga voltou');
-    assert.equal(r.numero, false, 'o contador "01 / 06" voltou');
-    assert.equal(r.fundo, 'rgb(255, 255, 255)', 'o palco deixou de ser branco');
+    assert.equal(r.rotulo, false, 'o rótulo "Agentes especializados" ou o contador voltou');
+    assert.equal(r.fundo, 'rgba(0, 0, 0, 0)', 'o palco ganhou fundo');
+    assert.equal(r.borda, '0px', 'o palco ganhou borda');
   });
 }
 

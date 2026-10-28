@@ -235,37 +235,69 @@ if ('IntersectionObserver' in window) {
   });
 }
 
-// 11. O palco dos agentes (O que fazemos): escolher um agente põe ele em foco,
-//     com o nome e o que ele faz; apontar o palco faz ele sorrir. Setas do
-//     teclado andam entre os seis. Sem este trecho fica o primeiro agente.
+// 11. O palco dos agentes (O que fazemos), animado como no vídeo dos agentes:
+//     escolher um agente põe ele em foco com o GESTO dele (Atendimento e
+//     Estoque pulam girando, Agenda dá dois pulos, Pedidos balança, Prospecção
+//     treme, Relatórios salta), depois ele pisca e sorri. Ao abrir, se a pessoa
+//     ainda não mexeu, o palco dá UMA volta pelos seis e para no primeiro.
+//     Tudo termina e para; com "reduzir movimento" só troca, sem gesto nem volta.
+//     Setas do teclado andam entre os seis. Sem este trecho fica o primeiro agente.
 document.querySelectorAll('[data-elenco]').forEach(elenco => {
   const ator = elenco.querySelector('.elenco-ator');
   const legenda = elenco.querySelector('.elenco-legenda');
-  const conta = elenco.querySelector('.elenco-conta');
   const botoes = [...elenco.querySelectorAll('.elenco-escolha button')];
   const palco = elenco.querySelector('.elenco-palco');
+  const img = (k, estado) => `/img/agentes/${botoes[k].dataset.ator}-${estado}.webp`;
   let atual = 0;
+  let relogios = [];
+  let apontado = false;
+  const limpa = () => { relogios.forEach(clearTimeout); relogios = []; };
+  const depois = (ms, fn) => relogios.push(setTimeout(fn, ms));
+  // pisca e sorri: as três versões do mesmo agente (olhos abertos, fechados, sorrindo)
+  const expressao = k => {
+    depois(720, () => { ator.src = img(k, 'pisca'); });
+    depois(840, () => { ator.src = img(k, 'aberto'); });
+    depois(1000, () => { ator.src = img(k, 'sorri'); });
+    depois(1900, () => { if (!apontado) ator.src = img(k, 'aberto'); });
+  };
   const escolhe = (k, foco) => {
-    if (k === atual && ator.getAttribute('src').includes(botoes[k].dataset.ator)) return;
+    limpa();
     atual = k;
     const b = botoes[k];
     botoes.forEach((o, i) => o.setAttribute('aria-pressed', String(i === k)));
-    ator.src = `/img/agentes/${b.dataset.ator}-aberto.webp`;
-    ator.dataset.sorri = `/img/agentes/${b.dataset.ator}-sorri.webp`;
+    ator.src = img(k, 'aberto');
     legenda.querySelector('b').textContent = b.dataset.nome;
     legenda.querySelector('span').textContent = b.dataset.legenda;
-    if (conta) conta.textContent = `0${k + 1} / 0${botoes.length}`;
-    ator.classList.remove('pousa'); void ator.offsetWidth; ator.classList.add('pousa');
+    ator.className = 'elenco-ator';
+    if (!quieto) { void ator.offsetWidth; ator.classList.add('gesto-' + (b.dataset.gesto || 'pula')); expressao(k); }
     if (foco) b.focus();
   };
+  // a volta inicial: uma vez, só com o palco à vista e só até a pessoa mexer nele
+  let volta = null;
+  const paraVolta = () => { clearInterval(volta); volta = null; };
+  ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach(t => elenco.addEventListener(t, paraVolta, { passive: true }));
+  if (!quieto && 'IntersectionObserver' in window) {
+    const olho = new IntersectionObserver(entradas => {
+      if (!entradas.some(e => e.isIntersecting)) return;
+      olho.disconnect();
+      let k = 0;
+      expressao(0);
+      setTimeout(() => {
+        if (!elenco.matches(':hover') && document.activeElement?.closest?.('[data-elenco]') !== elenco) {
+          volta = setInterval(() => { k += 1; if (k > botoes.length) { paraVolta(); return; } escolhe(k % botoes.length); }, 1900);
+        }
+      }, 1600);
+    }, { threshold: .5 });
+    olho.observe(elenco);
+  }
   botoes.forEach((b, k) => {
-    b.addEventListener('click', () => escolhe(k));
+    b.addEventListener('click', () => { paraVolta(); escolhe(k); });
     b.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); escolhe((atual + (e.key === 'ArrowRight' ? 1 : -1) + botoes.length) % botoes.length, true); }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); paraVolta(); escolhe((atual + (e.key === 'ArrowRight' ? 1 : -1) + botoes.length) % botoes.length, true); }
     });
-    // as versões sorrindo chegam antes de alguém apontar
-    const pre = new Image(); pre.src = `/img/agentes/${b.dataset.ator}-sorri.webp`;
+    // as outras expressões chegam antes de alguém escolher
+    ['sorri', 'pisca'].forEach(estado => { const pre = new Image(); pre.src = img(k, estado); });
   });
-  palco.addEventListener('pointerenter', () => { ator.src = ator.dataset.sorri; });
-  palco.addEventListener('pointerleave', () => { ator.src = `/img/agentes/${botoes[atual].dataset.ator}-aberto.webp`; });
+  palco.addEventListener('pointerenter', () => { apontado = true; ator.src = img(atual, 'sorri'); });
+  palco.addEventListener('pointerleave', () => { apontado = false; ator.src = img(atual, 'aberto'); });
 });

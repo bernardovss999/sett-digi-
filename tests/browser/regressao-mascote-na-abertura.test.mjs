@@ -10,9 +10,6 @@
 // Reel da vez acende junto com a área dele no texto, e o cabeçalho emenda com a abertura.
 // 30/10/2026, de novo: a navegação passou a ser a dos Stories (tocar no mini celular passa) e a tela diz isso ao
 // visitante, embaixo do celular; a pílula de botões saiu.
-// 30/10/2026, no celular (pedido do dono: "a abertura do celular está crua; os Reels não funcionam bem ali"): abaixo de
-// 800px os Reels saem e entra a vitrine (o selo com o Ponto, as quatro frentes e a faixa de garantias). O Ponto e as
-// peças seguem inteiras dentro da abertura, abaixo do texto e sem se encostar.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -23,7 +20,7 @@ let browser;
 before(async () => { site = await startSite(); browser = await chromium.launch(); });
 after(async () => { await browser?.close(); await site?.close(); });
 
-for (const [w, h, celular] of [[1440, 900], [1318, 656], [1920, 1080], [1024, 768, true]]) {
+for (const [w, h, celular] of [[1440, 900], [1318, 656], [1920, 1080], [1024, 768, true], [390, 844, true], [375, 667, true], [360, 640, true]]) {
   test(`${w}x${h}: o Reel da vez e o Ponto aparecem inteiros na abertura, ao lado do texto`, async () => {
     const context = await browser.newContext({ viewport: { width: w, height: h }, isMobile: !!celular && w < 800, hasTouch: !!celular && w < 800, reducedMotion: 'reduce' });
     const page = await context.newPage();
@@ -92,29 +89,24 @@ test('1440x900: os Reels tocam um de cada vez, sem laço, e a pausa para de verd
   assert.equal(segundo, 1, 'clicar no lado direito do celular não passou o Story');
 });
 
-for (const [w, h] of [[390, 844], [375, 667], [360, 640]]) {
-  test(`${w}x${h}: no celular, a vitrine (Ponto, quatro frentes e garantias) aparece inteira, abaixo do texto`, async () => {
-    const context = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
-    const page = await context.newPage();
-    await page.goto(site.origin + '/', { waitUntil: 'load' });
-    const r = await page.evaluate(() => {
-      const sec = document.querySelector('main > section:first-child').getBoundingClientRect();
-      const acoes = document.querySelector('.hero-actions').getBoundingClientRect();
-      const caixa = (el) => el.getBoundingClientRect();
-      const pecas = [document.querySelector('.selo-ponto'), document.querySelector('.vitrine-faixa'), ...document.querySelectorAll('.selo-frente')];
-      const fora = pecas.map((el) => [el.className, caixa(el)]).filter(([, b]) => !b.width || b.top < acoes.bottom - 1 || b.bottom > sec.bottom + 1 || b.left < -1 || b.right > innerWidth + 1).map(([n]) => n);
-      const fr = [...document.querySelectorAll('.selo-frente')].map(caixa);
-      let encostam = 0;
-      fr.forEach((a, i) => fr.slice(i + 1).forEach((b) => { if (a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) encostam++; }));
-      return { reels: getComputedStyle(document.querySelector('.reels')).display, fora, encostam, frentes: fr.length };
-    });
-    await context.close();
-    assert.equal(r.reels, 'none', 'os Reels voltaram ao celular');
-    assert.equal(r.frentes, 4);
-    assert.deepEqual(r.fora, [], 'peça da vitrine cortada ou fora da abertura');
-    assert.equal(r.encostam, 0, 'frentes se encostam');
-  });
-}
+test('390x844: no celular, tocar na direita do Reel segue e na esquerda volta, como nos Stories', async () => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.goto(site.origin + '/', { waitUntil: 'load' });
+  const atual = () => page.evaluate(() => [...document.querySelectorAll('.reel')].findIndex((c) => c.classList.contains('atual')));
+  const toque = async (fracao) => {
+    const b = await page.locator('.reel.atual').boundingBox();
+    await page.mouse.click(b.x + b.width * fracao, b.y + b.height / 2);
+    await page.waitForTimeout(150);
+  };
+  await toque(.85);
+  const depois = await atual();
+  await toque(.1);
+  const volta = await atual();
+  await context.close();
+  assert.equal(depois, 1, 'tocar na direita não seguiu');
+  assert.equal(volta, 0, 'tocar na esquerda não voltou');
+});
 
 test('1440x900: a cena fica ligada ao texto: o cartão do Reel da vez acende com a área dele, e tocar no cartão leva ao Reel', async () => {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });

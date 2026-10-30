@@ -222,7 +222,7 @@ describe('roteiro de 29/10/2026', () => {
       const html = readSite(rel);
       assert.equal([...html.matchAll(/<a class="brand" href="\/" aria-label="Sett Company, início"><span class="brand-nome">Sett<\/span><img class="brand-ponto" src="\/img\/ponto\.svg"[^>]*alt=""><\/a>/g)].length, 2);
       assert.ok(html.indexOf('/kit.css') > 0 && html.indexOf('/kit.css') < html.indexOf('/telas.css'), 'kit.css fora do lugar');
-      assert.match(html, /<div class="trilha-transicao" aria-hidden="true">/, 'falta a linha que liga as páginas');
+      assert.match(html, /<div class="trilha-transicao" aria-hidden="true">/, 'falta o Ponto que puxa a página nova');
     });
     test(`${rel}: toda cena gravada é do próprio domínio, muda e sem laço (toca uma vez e para no último quadro)`, () => {
       for (const [video] of readSite(rel).matchAll(/<video[\s\S]*?<\/video>/g)) {

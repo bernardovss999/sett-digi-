@@ -760,22 +760,47 @@ html:not(.js) .sc-rascunho { opacity: 0; }
 .posts-volta[hidden] { display: none !important; }
 
 
-/* ================================================ ENTRE PÁGINAS: a linha que liga as páginas ================================================ */
-/* Uma linha fina menta, de ponta redonda, atravessa a tela com o Ponto na ponta, e a página nova
-   entra atrás dela. O cabeçalho fica parado (cabecalho). Com "reduzir movimento", troca direto. */
-.trilha-transicao { position: fixed; left: 0; top: 50%; z-index: 100; width: 100vw; height: 44px; translate: 0 -50%; opacity: 0; pointer-events: none; view-transition-name: trilha; }
-.trilha-transicao::before { content: ""; position: absolute; left: 0; right: 30px; top: 50%; height: 3px; translate: 0 -50%; border-radius: 3px; background: var(--cyan); box-shadow: 0 0 0 1px rgba(26, 44, 53, .15); }
-.trilha-transicao img { position: absolute; right: 0; top: 50%; width: 44px; height: 44px; translate: 0 -50%; filter: drop-shadow(0 6px 6px rgba(26, 44, 53, .3)); }
+/* ================================================ ENTRE PÁGINAS: o Ponto puxa a página nova ================================================ */
+/* O Ponto entra pela esquerda, agarra a borda da página nova e a arrasta pela tela: dá um tranco (se espreme e inclina
+   para trás), depois anda inclinado para a frente, pulando a cada passo, com a página vindo atrás dele (sombra na borda).
+   A antiga recua e escurece por baixo. No fim ele solta a borda, a página assenta e ele sai pela direita. Sem linha.
+   Página e Ponto usam a mesma duração e as mesmas marcas de tempo (8%, 16%, 24%, 84%), então o Ponto fica sempre na borda.
+   O cabeçalho fica parado (cabecalho). Com "reduzir movimento", troca direto (styles.css). */
+:root { --ponto-puxa: 64px; --troca: 1.15s; }
+@media (max-width: 800px) { :root { --ponto-puxa: 52px; --troca: 1s; } }
+.trilha-transicao { position: fixed; left: 0; top: 50%; z-index: 100; width: var(--ponto-puxa); height: var(--ponto-puxa); margin: calc(var(--ponto-puxa) / -2) 0 0 calc(var(--ponto-puxa) / -2); opacity: 0; pointer-events: none; view-transition-name: trilha; }
+.trilha-transicao img { display: block; width: 100%; height: 100%; filter: drop-shadow(0 8px 8px rgba(26, 44, 53, .3)); }
 html:active-view-transition .trilha-transicao { opacity: 1; }
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(trilha) { display: none; }
   ::view-transition-group(trilha) { animation: none; }
-  ::view-transition-new(trilha) { animation: trilha-cruza .9s var(--curva-entrada) both; }
-  ::view-transition-old(root) { animation: none; }
-  ::view-transition-new(root) { animation: pagina-entra .9s var(--curva-entrada) both; }
+  ::view-transition-new(trilha) { animation: ponto-puxa var(--troca) linear both; }
+  /* os passos: quatro pulinhos enquanto arrasta (de 24% a 84% do tempo) */
+  ::view-transition-image-pair(trilha) { animation: ponto-passo calc(var(--troca) * .15) ease-in-out calc(var(--troca) * .24) 4 alternate both; }
+  ::view-transition-old(root) { animation: pagina-recua var(--troca) linear both; }
+  ::view-transition-new(root) { animation: pagina-puxada var(--troca) linear both; box-shadow: 14px 0 34px rgba(26, 44, 53, .28); }
 }
-@keyframes trilha-cruza { 0% { translate: -100% 0; } 82% { translate: 0 0; opacity: 1; } 100% { translate: 8% 0; opacity: 0; } }
-@keyframes pagina-entra { 0% { clip-path: inset(0 100% 0 0); } 82% { clip-path: inset(0 0 0 0); } 100% { clip-path: inset(0 0 0 0); } }
+/* a borda da página nova (direita) está em 100vw + x; o Ponto morde a borda, com um quarto do corpo sobre a página */
+@keyframes pagina-puxada {
+  0%, 8% { translate: -100vw 0; animation-timing-function: cubic-bezier(.3, 0, .2, 1); }
+  16% { translate: -96vw 0; animation-timing-function: ease-in-out; }
+  24% { translate: -97.5vw 0; animation-timing-function: cubic-bezier(.45, 0, .3, 1); }
+  84% { translate: .8vw 0; animation-timing-function: ease-out; }
+  100% { translate: 0 0; }
+}
+@keyframes ponto-puxa {
+  0% { translate: calc(var(--ponto-puxa) * -1) 0; rotate: 0deg; scale: 1; animation-timing-function: ease-out; }
+  8% { translate: calc(var(--ponto-puxa) * .25) 0; rotate: -6deg; scale: 1; animation-timing-function: cubic-bezier(.3, 0, .2, 1); }
+  16% { translate: calc(4vw + var(--ponto-puxa) * .25) 0; rotate: -14deg; scale: 1.12 .88; animation-timing-function: ease-in-out; }
+  24% { translate: calc(2.5vw + var(--ponto-puxa) * .25) 0; rotate: 12deg; scale: .94 1.06; animation-timing-function: cubic-bezier(.45, 0, .3, 1); }
+  84% { translate: calc(100.8vw + var(--ponto-puxa) * .25) 0; rotate: 16deg; scale: 1.06 .94; animation-timing-function: ease-in; }
+  100% { translate: calc(100vw + var(--ponto-puxa) * 1.4) 0; rotate: 0deg; scale: 1; }
+}
+@keyframes ponto-passo { from { translate: 0 0; } to { translate: 0 calc(var(--ponto-puxa) * -.18); } }
+@keyframes pagina-recua {
+  0%, 16% { translate: 0 0; filter: none; }
+  84%, 100% { translate: 6vw 0; filter: brightness(.7); }
+}
 
 /* a pilha de posts e a pilha da abertura giram um pouco: nada passa da largura da tela */
 :root .posts-kit, :root .ab:has(.pilha-kit) { overflow-x: clip; }

@@ -2,16 +2,11 @@
    Regra do site: cada seção ocupa exatamente a tela, no celular e no
    computador. Onde o conteúdo não cabe na altura, ele passa a andar para o
    LADO, dentro da mesma tela (trilhos que deslizam, com pontos que mostram
-   onde você está), nunca para baixo. No celular, a rolagem vai de tela em
-   tela, como páginas.
+   onde você está), nunca para baixo. A rolagem para baixo é livre.
    Carregada depois de todas as outras folhas, em todas as páginas. */
 
-/* ------------------------------------------------ celular: de tela em tela */
-@media (max-width: 800px) {
-  html { scroll-snap-type: y mandatory; }
-  :root main > section { scroll-snap-align: start; scroll-snap-stop: always; scroll-margin-top: var(--topo); }
-  :root .site-footer { scroll-snap-align: end; }
-}
+/* A rolagem vertical é livre (sem scroll-snap): a trava de tela em tela
+   parecia travada para quem visitava (30/10/2026). */
 
 /* ------------------------------------------------ celular: listas viram trilhos */
 /* Serviços, etapas, possibilidades, prévias e itens: cada um vira um cartão,

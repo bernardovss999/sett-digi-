@@ -58,17 +58,17 @@ for (const [w, h] of TELAS) {
   });
 }
 
-test('celular: a rolagem vai de tela em tela (cada seção é um ponto de parada)', async () => {
+test('celular: a rolagem vertical é livre (sem trava de tela em tela)', async () => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
   await page.goto(site.origin + '/', { waitUntil: 'load' });
   const r = await page.evaluate(() => ({
     html: getComputedStyle(document.documentElement).scrollSnapType,
-    secoes: [...document.querySelectorAll('main > section')].every((s) => getComputedStyle(s).scrollSnapAlign.includes('start')),
+    presas: [...document.querySelectorAll('main > section')].filter((s) => getComputedStyle(s).scrollSnapStop === 'always').length,
   }));
   await context.close();
-  assert.match(r.html, /y mandatory/);
-  assert.equal(r.secoes, true);
+  assert.doesNotMatch(r.html, /\by\b|block|both/);
+  assert.equal(r.presas, 0);
 });
 
 test('listas que andam para o lado têm um ponto por cartão e chegam ao último cartão', async () => {

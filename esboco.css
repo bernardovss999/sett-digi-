@@ -1,0 +1,85 @@
+/* ESBOÇO FINAL (ramo esboco/fundo-motion) — logo maior, o feed de Reels na
+   abertura da home e a turma de agentes com o líder. Ver esboco.js. */
+
+/* ---------------------------------------------------------------- logo maior */
+:root .site-header .brand { font-size: clamp(1.7rem, 2.2vw, 2.05rem); }
+@media (max-width: 800px) { :root .site-header .brand { font-size: 1.75rem; } }
+
+/* ---------------------------------------------------------------- o feed de Reels */
+/* Atrás da abertura inteira, colunas de Reels subindo sem parar, como um feed
+   rolando. As desfocadas ficam no fundo, sob um véu escuro (o texto lê por
+   cima); a coluna nítida (o "Para você") é só mais uma coluna do mesmo fundo,
+   sem desfoque e por cima do véu, na ponta direita. Sempre num sentido só. */
+.com-turma .hero { position: relative; isolation: isolate; }
+.com-turma .hero .mascote { display: none; }
+.feed-fundo {
+  position: absolute; inset: 0; z-index: -1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(10px, 1vw, 16px); padding-inline: clamp(10px, 1vw, 16px); overflow: hidden; pointer-events: none;
+}
+.feed-col { position: relative; min-width: 0; overflow: hidden; }
+.feed-col:not(.nitida) { filter: blur(10px) saturate(.9); opacity: .55; }
+.feed-col.nitida { z-index: 2; -webkit-mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent); }
+.feed-trilho { display: flex; flex-direction: column; gap: clamp(10px, 1vw, 16px); animation: feed-sobe var(--dur, 60s) linear infinite; will-change: translate; }
+.feed-trilho video { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 14px; background: #15191a; }
+.feed-col.nitida video { outline: 1px solid rgba(240, 242, 237, .1); }
+@keyframes feed-sobe { from { translate: 0 0; } to { translate: 0 -50%; } }
+.feed-veu { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(11, 13, 14, .94) 0%, rgba(11, 13, 14, .82) 45%, rgba(11, 13, 14, .55) 100%); }
+@media (max-width: 800px) {
+  .feed-fundo { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .feed-veu { background: linear-gradient(180deg, rgba(11, 13, 14, .95) 0%, rgba(11, 13, 14, .85) 55%, rgba(11, 13, 14, .5) 100%); }
+  /* no celular a coluna nítida fica sob o texto: aparece só embaixo, onde o texto acabou */
+  .feed-col.nitida { -webkit-mask-image: linear-gradient(180deg, transparent 45%, #000 70%, #000 92%, transparent); mask-image: linear-gradient(180deg, transparent 45%, #000 70%, #000 92%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) { .feed-trilho { animation: none; } }
+
+/* ---------------------------------------------------------------- a turma */
+/* Uma camada da tela inteira que só os bonecos tocam; passa por baixo do
+   cabeçalho. O líder fala num balão escuro; os agentes respondem em
+   balõezinhos curtos ("Tô fazendo…", "Pronto! ✓"). */
+.turma { position: fixed; inset: 0; z-index: 45; pointer-events: none; overflow: hidden; }
+.boneco {
+  position: absolute; left: 0; top: 0; width: 42px; aspect-ratio: 1; padding: 0; border: 0; background: none;
+  pointer-events: auto; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .4)); will-change: transform;
+}
+.boneco.lider { aspect-ratio: 240 / 231; z-index: 2; }
+.boneco.pego { cursor: grabbing; filter: drop-shadow(0 20px 20px rgba(0, 0, 0, .45)); z-index: 3; }
+.boneco img { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; transform-origin: 50% 100%; transition: scale .15s; }
+.boneco.pego img { scale: 1.14 .9; }
+.boneco:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 30%; }
+.boneco .sinal {
+  position: absolute; left: 50%; bottom: calc(100% + 4px); translate: -50% 0; min-width: 20px; padding: 2px 7px; border-radius: 999px; white-space: nowrap;
+  background: var(--paper); color: var(--ink); font: 700 .74rem/1.35 var(--display); font-style: normal; text-align: center;
+  box-shadow: 0 6px 12px -6px rgba(0, 0, 0, .5); opacity: 0; scale: .5; transform-origin: 50% 100%; transition: opacity .18s, scale .28s cubic-bezier(.3, 1.6, .5, 1);
+}
+.boneco .sinal::after { content: ""; position: absolute; left: 50%; top: 100%; translate: -50% -1px; border: 4px solid transparent; border-top-color: var(--paper); }
+.boneco.fala-longa .sinal { font-weight: 600; padding: 3px 9px; }
+.boneco.com-sinal .sinal { opacity: 1; scale: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .boneco.pousa img { animation: boneco-pousa .3s cubic-bezier(.3, 1.4, .5, 1) both; }
+}
+@keyframes boneco-pousa { 0% { scale: 1.16 .8; } 60% { scale: .96 1.05; } 100% { scale: 1 1; } }
+.turma-fala {
+  position: fixed; left: 0; top: 0; z-index: 46; display: flex; align-items: center; gap: 10px;
+  width: max-content; max-width: min(420px, calc(100vw - 24px)); padding: 7px 7px 7px 14px; border-radius: 18px;
+  background: rgba(11, 13, 14, .94); color: var(--paper); border: 1px solid rgba(110, 244, 231, .4);
+  box-shadow: 0 16px 30px -16px rgba(0, 0, 0, .6); font: 500 .88rem/1.35 var(--body);
+  opacity: 0; scale: .85; transform-origin: 50% 100%; pointer-events: none; transition: opacity .2s, scale .25s cubic-bezier(.3, 1.5, .5, 1);
+}
+.turma-fala span { padding: 4px 6px 4px 0; }
+.turma-fala.aberta { opacity: 1; scale: 1; pointer-events: auto; }
+.turma-fala a { flex: none; display: inline-flex; align-items: center; min-height: 34px; padding: 0 14px; border-radius: 999px; background: var(--cyan); color: var(--ink); font: 600 .8rem var(--display); }
+@media (max-width: 800px) {
+  .turma-fala { font-size: .8rem; gap: 8px; padding: 6px 6px 6px 12px; }
+  .turma-fala a { min-height: 32px; padding: 0 10px; font-size: .74rem; }
+  .boneco .sinal { font-size: .64rem; padding: 1px 6px; }
+}
+/* espaço acima dos botões: a turma sobe no botão sem cobrir o fim do texto */
+html.com-turma main > section.hero .hero-actions { margin-top: 64px; }
+@media (max-width: 800px) { html.com-turma main > section.hero .hero-actions { margin-top: 50px; } }
+
+/* nenhum balão por cima de texto (o conteúdo do site vem primeiro) */
+.turma-fala.tapada { opacity: 0 !important; pointer-events: none !important; }
+.boneco.tapado .sinal { opacity: 0 !important; }
+/* a coluna nítida um pouco mais à direita */
+@media (min-width: 801px) { .feed-col.nitida { translate: 38% 0; } }

@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { startSite } from '../support/servidor.mjs';
 
-const ROTAS = ['/', '/portfolio/', '/criacao-de-sites/', '/gestao-google-meu-negocio/', '/agentes-de-ia-para-empresas/', '/o-que-fazemos/', '/sett-agenda.html'];
+const ROTAS = ['/', '/portfolio/', '/criacao-de-sites/', '/gestao-google-meu-negocio/', '/agentes-de-ia-para-empresas/', '/o-que-fazemos/', '/marca-e-conteudo/', '/sett-agenda.html'];
 const APARELHOS = [['celular', { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }], ['computador', { viewport: { width: 1440, height: 900 } }]];
 
 let site;

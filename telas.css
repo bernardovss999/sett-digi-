@@ -18,17 +18,19 @@
    lado a lado. O trilho sangra até a borda da tela (o próximo cartão aparece
    cortado na direita, convidando a deslizar) e cada cartão para na margem. */
 @media (max-width: 800px) {
-  :root .service-list, :root .ex-lista, :root .process-track, :root .caminho, :root .termo {
+  :root .service-list, :root .process-track, :root .caminho, :root .termo {
     display: flex; flex-direction: row; align-items: stretch; gap: 12px;
     margin-inline: calc(-1 * var(--margem)); padding: 4px var(--margem) 6px;
     overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--margem);
     scrollbar-width: none; border-top: 0; list-style: none;
   }
-  :root .service-list::-webkit-scrollbar, :root .ex-lista::-webkit-scrollbar, :root .process-track::-webkit-scrollbar,
-  :root .caminho::-webkit-scrollbar, :root .termo::-webkit-scrollbar { display: none; }
+  :root .service-list::-webkit-scrollbar,
+:root .process-track::-webkit-scrollbar,
+:root .caminho::-webkit-scrollbar,
+:root .termo::-webkit-scrollbar { display: none; }
   :root .process-track::after { content: none; }
 
-  :root .service-list > *, :root .ex-lista > *, :root .process-track > *, :root .caminho > li, :root .termo > li {
+  :root .service-list > *, :root .process-track > *, :root .caminho > li, :root .termo > li {
     flex: 0 0 min(80vw, 330px); scroll-snap-align: start; margin: 0;
     padding: 20px; border: 1px solid var(--campo-fio); border-radius: 16px;
     background: color-mix(in srgb, var(--campo-fundo) 93%, var(--campo-texto));
@@ -36,9 +38,6 @@
   /* sem as linhas e setas de lista: cada cartão já se separa sozinho */
   :root .service-list > *::before, :root .caminho li::before, :root .caminho li + li::before { content: none; }
   :root .process-track > .process-step, :root .process-track > .process-step:not(:first-child), :root .caminho li + li, :root .caminho li { border: 1px solid var(--campo-fio); padding: 20px; }
-  :root .ex-lista > .ex-link { padding: 0; }
-  :root .ex-link .ex-alvo { height: 100%; padding: 20px; align-content: start; }
-  :root .service-list > a.service-card { display: grid; align-content: start; gap: 10px; }
   :root .process-step h3 { margin: 14px 0 6px; }
 
   /* os pontos do trilho (escritos pelo script.js): um por cartão, o atual em destaque */
@@ -63,10 +62,9 @@
   :root main > section:first-child .ab-texto { flex: none; }
 
   /* a peça: altura = o que sobra (flex), largura = altura × proporção, nunca mais larga que a tela */
-  :root .mascote, :root .pilha, :root .elenco {
+  :root .pilha, :root .elenco {
     flex: 1 1 0; min-height: 0; width: auto; max-width: 100%; height: auto; margin: 20px auto 0; align-self: center;
   }
-  :root .mascote { max-height: 260px; }
   :root .pilha { max-height: 300px; }
   :root .elenco { max-height: 420px; aspect-ratio: 1 / 1; }
   :root .aparelho { flex: 1 1 0; min-height: 0; margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -90,7 +88,7 @@
   :root main > section:first-child .hero-actions { margin-top: 14px; gap: 4px; }
   :root main > section:first-child .hero-actions .text-link { min-height: 40px; }
   :root .ab-lead-2, :root .aparelho figcaption { display: none; }
-  :root .mascote, :root .pilha, :root .elenco, :root .aparelho { margin-top: 10px; }
+  :root .pilha, :root .elenco, :root .aparelho { margin-top: 10px; }
   /* o link de texto da abertura sai (o mesmo caminho está no menu): o botão principal fica */
   :root main > section:first-child .hero-actions .text-link { display: none; }
   /* ficha e calendário mostram o começo e somem num degradê, sem corte seco */
@@ -104,7 +102,7 @@
   :root .section-title, :root .cta-title { font-size: clamp(1.75rem, 8.2vw, 2.3rem); }
   :root .section-text, :root .cta-text { font-size: .92rem; line-height: 1.45; margin-top: 12px; }
   :root .section-text + .section-text { margin-top: 8px; }
-  :root .service-list, :root .ex-lista, :root .process-track, :root .caminho, :root .termo { margin-top: 16px; }
+  :root .service-list, :root .process-track, :root .caminho, :root .termo { margin-top: 16px; }
   :root .faq-list { margin-top: 14px; }
   :root .faq-list summary { padding-block: 12px; font-size: .98rem; }
   :root .nota-servico, :root .nota-lateral { margin-top: 12px; font-size: .85rem; }
@@ -120,16 +118,8 @@
 }
 /* a chamada da automação na home, em telefone baixo */
 @media (max-width: 800px) and (max-height: 720px) {
-  :root .ia-chamada { gap: 14px; margin-top: 16px; padding: 18px; }
-  :root .ia-titulo { font-size: 1.7rem; }
-  :root .ia-texto { margin-top: 8px; font-size: .86rem; }
-  :root .ia-lado { gap: 10px; }
-  :root .ia-tarefas i { padding: 6px 9px; font-size: .75rem; }
-}
-@media (max-width: 800px) and (max-height: 720px) {
   :root .oque .section-text { font-size: .86rem; line-height: 1.4; }
-  :root .service-list > *, :root .ex-lista > *, :root .process-track > *, :root .termo > li { padding: 16px; }
-  :root .ex-link .ex-alvo { padding: 16px; }
+  :root .service-list > *, :root .process-track > *, :root .termo > li { padding: 16px; }
 }
 
 /* ------------------------------------------------ Sett Agenda: a política numa tela */
@@ -167,25 +157,20 @@
    deixam de ser linhas empilhadas (que passavam da altura da tela em
    notebook) e cabem numa faixa só. */
 @media (min-width: 801px) {
-  :root .service-list, :root .ex-lista {
+  :root .service-list {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 16px;
     margin-top: clamp(24px, 4.5svh, 56px); border-top: 0;
   }
-  :root .service-list > *, :root .ex-lista > .ex {
+  :root .service-list > * {
     display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 10px;
     padding: clamp(18px, 1.8vw, 28px); border: 1px solid var(--campo-fio); border-radius: 16px;
     background: color-mix(in srgb, var(--campo-fundo) 93%, var(--campo-texto));
   }
   :root .service-list > *::before { content: none; }
-  :root .ex-lista > .ex-link { padding: 0; }
-  :root .ex-link .ex-alvo { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 12px; height: 100%; padding: clamp(18px, 1.8vw, 28px); }
   :root .ex::before { inset: 0; border-radius: 16px; }
   :root .service h3 { font-size: clamp(1.4rem, 1.9vw, 2rem); }
   :root .service p { justify-self: start; max-width: none; grid-column: 1; }
-  :root a.service-card { grid-template-columns: minmax(0, 1fr); }
-  :root .ex-nome h3 { font-size: clamp(1.25rem, 1.6vw, 1.7rem); }
-  :root .ex-link .ex-alvo > p, :root .ex > p { font-size: .94rem; }
-  :root .ex-servico { grid-template-columns: minmax(0, 1fr); }
+  :root .ex > p { font-size: .94rem; }
 }
 /* notebook baixo (até 820px de altura): títulos e respiros acompanham a altura */
 @media (min-width: 801px) and (max-height: 820px) {
@@ -194,15 +179,11 @@
   :root .section-text { margin-top: 16px; }
   :root .process-track, :root .caminho, :root .termo, :root .faq-list { margin-top: clamp(20px, 3.4svh, 40px); }
   :root .faq-list summary { padding-block: 14px; }
-  :root .galeria .leque { margin-top: clamp(18px, 3svh, 32px); }
-  :root .galeria .leque-dica { display: none; }
   :root .process-step h3 { margin: 18px 0 8px; }
 }
 /* agentes: o calendário da abertura mede pela altura da tela */
 @media (min-width: 801px) and (max-height: 820px) {
   :root .semana { --bloco: clamp(24px, calc((100svh - 540px) / 5), 40px); }
-  :root .ex-link .ex-alvo { gap: 8px; }
-  :root .ex-link .ex-alvo > p { font-size: .88rem; line-height: 1.45; }
   :root .nota-servico { margin-top: clamp(14px, 2.4svh, 28px); }
 }
 /* O que fazemos · automação: os dois parágrafos lado a lado, a faixa de etapas embaixo */
@@ -212,9 +193,6 @@
   :root .oque > div > .section-text { grid-column: auto; max-width: 34rem; }
 }
 /* cinco possibilidades: as cinco numa linha (sem sobrar uma sozinha embaixo) */
-@media (min-width: 1100px) {
-  :root .ex-lista:has(> :nth-child(5):last-child) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-}
 /* notebook baixo: a abertura começa mais perto do menu (a mesma distância em todas as páginas) e o calendário encolhe */
 @media (min-width: 801px) and (max-height: 820px) {
   :root .semana { --bloco: clamp(22px, calc((100svh - 600px) / 5), 40px); }
@@ -235,7 +213,7 @@
 /* telefone bem baixo (iPhone SE de 1ª geração, 568px): parágrafo um pouco menor */
 @media (max-width: 800px) and (max-height: 600px) {
   :root main > section:first-child .hero-lead, :root main > section:first-child .ab-lead { font-size: .84rem; line-height: 1.38; }
-  :root .mascote, :root .pilha, :root .elenco, :root .aparelho { margin-top: 6px; }
+  :root .pilha, :root .elenco, :root .aparelho { margin-top: 6px; }
 }
 /* calendário dos agentes no celular: quando a altura acaba, ele some num degradê (sem corte seco) */
 @media (max-width: 800px) {

@@ -1,4 +1,6 @@
 // Pedido de 28/10/2026: os agentes de "O que fazemos" se mexem como no vídeo (gesto próprio, piscam e sorriem; o palco dá uma volta pelos seis ao abrir; etapas e fecho chegam pulando). Garante que tudo termina e para, que a volta para quando a pessoa mexe e que "reduzir movimento" deixa tudo parado.
+// Mudou de propósito em 30/10/2026 (pedido do dono, seguindo o roteiro de 29/10/2026): os agentes desta página passaram a
+// ser os do "Elenco da Sett" em 2D (/img/agentes-2d/*.svg, com as mesmas três expressões). O que o teste garante é o mesmo.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -32,8 +34,8 @@ for (const [nome, opcoes] of [['computador', { viewport: { width: 1440, height: 
     const sorrindo = await page.getAttribute('.elenco-ator', 'src');
     await page.waitForTimeout(1100);
     const fim = await page.getAttribute('.elenco-ator', 'src');
-    if (!sorrindo.endsWith('relatorios-sorri.webp')) falhas.push(`não sorriu (${sorrindo})`);
-    if (!fim.endsWith('relatorios-aberto.webp')) falhas.push(`não voltou aos olhos abertos (${fim})`);
+    if (!sorrindo.endsWith('relatorios-sorri.svg')) falhas.push(`não sorriu (${sorrindo})`);
+    if (!fim.endsWith('relatorios-aberto.svg')) falhas.push(`não voltou aos olhos abertos (${fim})`);
     const laco = await page.evaluate(() => document.getAnimations().filter((a) => a.effect?.target?.closest?.('.elenco, .etapas-agentes, .elenco-fila') && a.effect.getComputedTiming().iterations === Infinity).length);
     if (laco) falhas.push(`${laco} animações em laço`);
     await context.close();

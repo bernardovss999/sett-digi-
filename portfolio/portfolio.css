@@ -92,12 +92,12 @@
   flex: 1 1 0; min-width: 0; align-self: start;
   border-radius: 14px; overflow: hidden; background: #fff;
   outline: 1px solid var(--c-fio); outline-offset: 0;
-  box-shadow: 0 34px 60px -34px rgba(11, 13, 14, .5);
+  box-shadow: 0 34px 60px -34px rgba(26, 44, 53, .5);
 }
 .tela-janela { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #fff; }
 .tela-barra {
   height: 34px; display: flex; align-items: center; padding: 0 16px;
-  background: #e3e6e0; border-bottom: 1px solid rgba(11, 13, 14, .1);
+  background: #e3e6e0; border-bottom: 1px solid rgba(26, 44, 53, .1);
   font: 500 .72rem var(--display); letter-spacing: .02em; color: #6b7672;
 }
 .tela-celular {
@@ -105,12 +105,11 @@
   position: relative; overflow: hidden;
   border: 7px solid var(--ink); border-radius: 30px; background: var(--ink);
   outline: 1px solid var(--c-fio); outline-offset: 0;
-  box-shadow: 0 34px 60px -26px rgba(11, 13, 14, .55);
+  box-shadow: 0 34px 60px -26px rgba(26, 44, 53, .55);
 }
 .tela-rola { position: absolute; top: 0; left: 0; display: block; width: 100%; height: auto; }
 
 .caso-feitos-bloco { order: 3; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--c-fio); }
-.caso-rotulo { margin: 0; font: 500 .75rem var(--display); letter-spacing: .08em; color: var(--c-tinta2); }
 .caso-feitos { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .caso-feitos li { display: grid; align-content: start; gap: 6px; padding: 0 24px 0 0; }
 .caso-feitos li + li { padding-left: 24px; border-left: 1px solid var(--c-fio); }
@@ -240,7 +239,7 @@
 .pilha-janela {
   position: absolute; width: 72%; top: calc(var(--k) * 18%); right: calc(var(--k) * 14%);
   border-radius: 12px; overflow: hidden; background: #fff;
-  outline: 1px solid rgba(240, 242, 237, .14);
+  outline: 1px solid rgba(251, 250, 247, .14);
   box-shadow: 0 30px 60px -28px rgba(0, 0, 0, .8);
 }
 /* as de trás escurecem (sem transparência: uma não aparece através da outra) */
@@ -248,7 +247,7 @@
 .pilha-janela:nth-child(2) { filter: brightness(.75); }
 .pilha-barra {
   display: flex; align-items: center; gap: 10px; height: clamp(22px, 2vw, 28px); padding: 0 12px;
-  background: #e3e6e0; border-bottom: 1px solid rgba(11, 13, 14, .1);
+  background: #e3e6e0; border-bottom: 1px solid rgba(26, 44, 53, .1);
   font: 500 clamp(.62rem, .7vw, .72rem) var(--display); color: #6b7672; white-space: nowrap; overflow: hidden;
 }
 .pilha-barra::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: #c8cdc6; box-shadow: 10px 0 #c8cdc6, 20px 0 #c8cdc6; margin-right: 20px; }

@@ -60,37 +60,38 @@ describe('recarregar', () => {
   });
 });
 
+// Mudou de propósito em 30/10/2026 (roteiro de 29/10/2026, tela 3): a vitrine que abria por cima da página saiu. A
+// prévia aparece em uso na própria seção: o rascunho vira o site e o caminho até o contato (o botão de WhatsApp da
+// prévia) fica marcado na tela que está à vista. Segue garantido que a página nunca fica presa.
 describe('portfólio da home', () => {
   for (const [nome, tela] of [['computador', { width: 1440, height: 900 }], ['celular', { width: 390, height: 844 }]]) {
-    test(`${nome}: clicar numa prévia abre a vitrine; troca de prévia; Esc fecha e a página volta a rolar`, async () => {
+    test(`${nome}: escolher uma prévia troca o site na tela e marca o caminho até o contato`, async () => {
       const { context, page } = await abre('index.html', tela);
       await page.locator('#portfolio').scrollIntoViewIfNeeded();
-      // no celular as telas se sobrepõem: toca-se a que está por cima (a primeira); no computador, a segunda
-      const k = nome === 'celular' ? 0 : 1;
-      await page.locator('.leque-carta').nth(k).click();
-      assert.equal(await page.$eval('.vitrine', (d) => d.open), true);
-      assert.equal(await page.textContent('#vitrine-nome'), ['Suud', 'Casa Viva Itacoá'][k]);
-      // as telas cabem na caixa (só o topo do site, nada rolando por dentro)
-      const cabe = await page.$eval('.vitrine-telas', (t) => [...t.querySelectorAll('.vitrine-janela, .vitrine-celular')]
-        .filter((e) => e.offsetParent !== null)
-        .every((e) => { const a = t.getBoundingClientRect(), b = e.getBoundingClientRect(); return b.top >= a.top - 1 && b.bottom <= a.bottom + 1 && b.left >= a.left - 1 && b.right <= a.right + 1; }));
-      assert.equal(cabe, true, 'tela da prévia saiu da caixa');
-      await page.click('.vitrine [data-passo="1"]');
-      assert.equal(await page.textContent('#vitrine-nome'), ['Casa Viva Itacoá', 'Barbearia Carvalho'][k]);
-      await page.keyboard.press('Escape');
-      await page.waitForTimeout(100);   // o evento "close" do <dialog> chega numa tarefa seguinte
-      assert.equal(await page.$eval('.vitrine', (d) => d.open), false);
-      assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).overflow), 'visible');
+      await page.locator('#portfolio [data-caso="1"]').click();
+      await page.waitForFunction(() => document.querySelector('[data-sites]').classList.contains('contato'));
+      const r = await page.evaluate(() => {
+        const palco = document.querySelector('[data-sites]');
+        const ativa = palco.querySelector(palco.dataset.telaAtiva === 'cel' ? '.sc-celular' : '.sc-laptop');
+        const tela = ativa.querySelector('.sc-tela').getBoundingClientRect();
+        const alvo = ativa.querySelector('.sc-alvo').getBoundingClientRect();
+        const meio = { x: alvo.left + alvo.width / 2, y: alvo.top + alvo.height / 2 };
+        return {
+          nome: document.querySelector('[data-sc-nome]').textContent,
+          captura: ativa.querySelector('.sc-captura').getAttribute('src'),
+          alvoNaTela: meio.x >= tela.left && meio.x <= tela.right && meio.y >= tela.top && meio.y <= tela.bottom,
+          alvoVisivel: getComputedStyle(ativa.querySelector('.sc-alvo')).opacity === '1',
+          caminho: document.querySelector('[data-sc-caminho]').textContent,
+          overflow: getComputedStyle(document.documentElement).overflow,
+        };
+      });
       await context.close();
+      assert.equal(r.nome, 'Casa Viva Itacoá');
+      assert.match(r.captura, /casaviva-inicio-/);
+      assert.equal(r.alvoVisivel, true, 'o caminho até o contato não foi marcado');
+      assert.equal(r.alvoNaTela, true, 'a marca do contato ficou fora da tela da prévia');
+      assert.match(r.caminho, /^O caminho até o contato/);
+      assert.equal(r.overflow, 'visible', 'a página ficou presa');
     });
   }
-
-  test('clicar fora da caixa fecha a vitrine', async () => {
-    const { context, page } = await abre('index.html');
-    await page.locator('#portfolio').scrollIntoViewIfNeeded();
-    await page.locator('.leque-carta').first().click();
-    await page.mouse.click(8, 450);
-    assert.equal(await page.$eval('.vitrine', (d) => d.open), false);
-    await context.close();
-  });
 });

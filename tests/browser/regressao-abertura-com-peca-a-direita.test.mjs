@@ -9,7 +9,9 @@ let browser;
 before(async () => { site = await startSite(); browser = await chromium.launch(); });
 after(async () => { await browser?.close(); await site?.close(); });
 
-const PECAS = [['/', '.mascote', '.mascote-quadro i, .mascote-base'], ['/portfolio/', '.pilha', '.pilha-janela']];
+// 30/10/2026 (roteiro de 29/10/2026): a home saiu desta lista de propósito. A abertura dela virou a do protótipo, com o
+// fundo de Reels e o elenco andando por cima (ver regressao-mascote-na-abertura); não há mais uma peça parada à direita.
+const PECAS = [['/portfolio/', '.pilha', '.pilha-janela']];
 // abaixo de 1100px a peça sai do lado e desce para baixo dos botões
 
 for (const [w, h] of [[1100, 700], [1280, 720], [1318, 656], [1366, 768], [1440, 900], [1536, 864], [1920, 1080], [2560, 1440]]) {

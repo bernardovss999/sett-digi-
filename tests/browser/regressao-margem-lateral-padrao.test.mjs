@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { startSite } from '../support/servidor.mjs';
 
-const ROTAS = ['/', '/agentes-de-ia-para-empresas/', '/gestao-google-meu-negocio/', '/criacao-de-sites/', '/portfolio/', '/o-que-fazemos/'];
+const ROTAS = ['/', '/agentes-de-ia-para-empresas/', '/gestao-google-meu-negocio/', '/criacao-de-sites/', '/portfolio/', '/o-que-fazemos/', '/marca-e-conteudo/'];
 let site;
 let browser;
 before(async () => { site = await startSite(); browser = await chromium.launch(); });
@@ -40,7 +40,8 @@ for (const w of [1024, 1280, 1440, 1902]) {
     const page = await context.newPage();
     await page.goto(site.origin + '/', { waitUntil: 'load' });
     const r = await page.evaluate(() => {
-      const c = [...document.querySelectorAll('.leque-carta')].map((e) => e.getBoundingClientRect());
+      // 30/10/2026: as telas do portfólio da home são o laptop e o celular da cena "Sites que facilitam o contato"
+      const c = [...document.querySelectorAll('#portfolio .sc-laptop, #portfolio .sc-celular')].map((e) => e.getBoundingClientRect());
       return { esq: Math.min(...c.map((x) => x.left)), dir: innerWidth - Math.max(...c.map((x) => x.right)), margem: parseFloat(getComputedStyle(document.querySelector('.site-header')).paddingLeft) };
     });
     await context.close();

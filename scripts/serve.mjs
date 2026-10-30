@@ -19,6 +19,7 @@ const TYPES = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.webp': 'image/webp',
+  '.mp4': 'video/mp4',
   '.woff2': 'font/woff2',
   '.svg': 'image/svg+xml',
 };

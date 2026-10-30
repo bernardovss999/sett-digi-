@@ -1,24 +1,27 @@
 # Sett Company
 
-> A Sett Company cria sites, cuida da presença no Google e nas redes sociais e desenvolve automações com IA para negócios de Niterói e do Rio de Janeiro.
+> A Sett Company é um estúdio independente de Niterói e do Rio de Janeiro. Cuida da marca e do conteúdo, do site e da presença digital de negócios e cria sistemas e agentes de IA sob medida. Presença e rotina, conectadas.
 
 ## Páginas
 
-- [Início](https://www.sett.company/): quem é a Sett Company, portfólio, serviços, automação em destaque, processo e contato.
-- [O que fazemos](https://www.sett.company/o-que-fazemos/): os quatro serviços da Sett Company (sites, Google, redes sociais e automação com IA), o fluxo ilustrativo de automação e como o trabalho começa.
+- [Início](https://www.sett.company/): quem é a Sett Company, as quatro frentes (marca e conteúdo, sites, presença digital e sistemas e agentes de IA), as prévias de sites em uso, um fluxo ilustrativo de agentes, como trabalhamos (observar, arrumar, manter) e contato.
+- [O que fazemos](https://www.sett.company/o-que-fazemos/): o mapa das quatro frentes da Sett Company, os agentes de IA e como o trabalho começa.
+- [Marca e conteúdo](https://www.sett.company/marca-e-conteudo/): identidade visual, posicionamento e conteúdo para uma comunicação consistente, com a própria Sett como exemplo.
+- [Sites](https://www.sett.company/criacao-de-sites/): sites com design próprio, clareza no celular e caminhos simples para falar com o negócio.
+- [Presença digital](https://www.sett.company/gestao-google-meu-negocio/): presença digital todo mês: Perfil da Empresa no Google, redes sociais e conteúdo com acompanhamento contínuo. O perfil e a conta continuam com o dono do negócio.
+- [Sistemas e agentes de IA](https://www.sett.company/agentes-de-ia-para-empresas/): ferramentas sob medida para organizar a rotina e cuidar das tarefas que se repetem, com regras claras e uma pessoa responsável.
 - [Portfólio](https://www.sett.company/portfolio/): cinco prévias independentes de sites para negócios reais de Niterói (restaurante, casa de encontro, barbearia, clínica veterinária e governança residencial), criadas com informações públicas.
-- [Criação de sites](https://www.sett.company/criacao-de-sites/): sites para apresentar o negócio com clareza, pensados para diferentes telas e com um caminho direto para o contato.
-- [Gestão de Google Meu Negócio](https://www.sett.company/gestao-google-meu-negocio/): cuidado da presença do negócio no Google: informações, fotos, publicações e respostas às avaliações. O perfil e a conta continuam com o dono do negócio.
-- [Automação com IA](https://www.sett.company/agentes-de-ia-para-empresas/): automações e agentes de IA desenhados a partir da rotina do negócio, com regras claras, acessos autorizados e pessoas acompanhando.
 
-## Serviços
+## Frentes
 
+- Marca e conteúdo: identidade visual, posicionamento e conteúdo.
 - Sites: apresentação clara do negócio e contato direto.
-- Google: informações, fotos, publicações e avaliações cuidadas.
-- Redes sociais: conteúdo para apresentar o negócio; o escopo é definido em proposta.
-- Automação com IA: etapas da rotina conectadas, com agentes de IA nas etapas que pedem interpretação.
+- Presença digital: Perfil da Empresa no Google, redes sociais e conteúdo, todo mês.
+- Sistemas e agentes de IA: tarefas que se repetem organizadas, com regras claras e uma pessoa responsável.
 
 ## Contato
 
+- Site: https://www.sett.company/
 - WhatsApp: https://wa.me/5521936181695
-- Instagram: https://www.instagram.com/sett.digi/
+- Instagram: https://www.instagram.com/settcpny/
+- Rio de Janeiro e Niterói

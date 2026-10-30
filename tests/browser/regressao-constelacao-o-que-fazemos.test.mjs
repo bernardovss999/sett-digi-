@@ -1,4 +1,6 @@
 // Pedido de 28/10/2026: a abertura de "O que fazemos" passou por lista de checagem, constelação e visor; na mesma data virou o palco com os agentes do vídeo "Agentes de IA sob medida". Garante os seis agentes, a escolha funcionando, nada sobreposto e tudo dentro da tela.
+// Mudou de propósito em 30/10/2026 (pedido do dono, seguindo o roteiro de 29/10/2026): os agentes desta página passaram a
+// ser os do "Elenco da Sett" em 2D (/img/agentes-2d/*.svg, com as mesmas três expressões). O que o teste garante é o mesmo.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -53,14 +55,14 @@ test('escolher um agente troca o agente em foco, o nome e o que ele faz (clique 
   await page.goto(site.origin + '/o-que-fazemos/', { waitUntil: 'load' });
   await page.click('.elenco-escolha button[data-ator="agenda"]');
   let r = await page.evaluate(() => ({ src: document.querySelector('.elenco-ator').getAttribute('src'), nome: document.querySelector('.elenco-legenda b').textContent, legenda: document.querySelector('.elenco-legenda span').textContent, pressionado: document.querySelector('.elenco-escolha [aria-pressed="true"]').dataset.ator }));
-  assert.deepEqual(r, { src: '/img/agentes/agenda-aberto.webp', nome: 'Agenda', legenda: 'Confirma e remarca horários.', pressionado: 'agenda' });
+  assert.deepEqual(r, { src: '/img/agentes-2d/agenda-aberto.svg', nome: 'Agenda', legenda: 'Confirma e remarca horários.', pressionado: 'agenda' });
   await page.keyboard.press('ArrowRight');
   r = await page.evaluate(() => ({ nome: document.querySelector('.elenco-legenda b').textContent, foco: document.activeElement.dataset.ator }));
   assert.deepEqual(r, { nome: 'Pedidos', foco: 'pedidos' });
   await context.close();
 });
 
-test('as etapas da automação e o fecho usam os agentes do vídeo; a faixa "Sob medida. Sob controle." tem as três garantias', async () => {
+test('as etapas da automação e o fecho usam os agentes do Elenco em 2D; a faixa "Sob medida. Sob controle." tem as três garantias', async () => {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.goto(site.origin + '/o-que-fazemos/', { waitUntil: 'load' });
@@ -70,7 +72,7 @@ test('as etapas da automação e o fecho usam os agentes do vídeo; a faixa "Sob
     garantias: [...document.querySelectorAll('.controle-lista li')].map((li) => li.textContent.trim()),
   }));
   await context.close();
-  assert.deepEqual(r.etapas, ['atendimento-aberto.webp', 'estoque-aberto.webp', 'pedidos-aberto.webp', 'relatorios-aberto.webp']);
+  assert.deepEqual(r.etapas, ['atendimento-aberto.svg', 'estoque-aberto.svg', 'pedidos-aberto.svg', 'relatorios-aberto.svg']);
   assert.equal(r.fila, 7);
   assert.deepEqual(r.garantias, ['Segue as suas regras', 'Seus dados ficam com você', 'Na dúvida, chama você']);
 });

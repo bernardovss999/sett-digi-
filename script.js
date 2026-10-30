@@ -2,7 +2,6 @@
    0. ao recarregar, volta ao topo
    1. menu do celular e topo que escurece ao rolar
    2. títulos em linhas (sobem uma de cada vez quando aparecem)
-   3. karaokê: o parágrafo vira uma palavra por span
    4. aparições ao rolar (.reveal), em cascata por posição no bloco
    5. números que contam uma vez, quando aparecem
    6. o campo (só no computador): o body assume a cor da seção no meio da tela
@@ -78,15 +77,6 @@ document.querySelectorAll('.section-title, .cta-title, .proof-panel h2').forEach
   const partes = titulo.innerHTML.split(/<br\s*\/?>/i);
   titulo.innerHTML = partes.map((parte, i) => `<span class="linha" style="--i:${i}">${parte.trim()}</span>`).join('');
   titulo.classList.add('em-linhas');
-});
-
-// 3. O parágrafo do karaokê vira uma palavra por span, para encher na rolagem.
-//    O CSS só liga isso onde há suporte; aqui a marcação é inofensiva.
-document.querySelectorAll('.karaoke').forEach(alvo => {
-  const palavras = alvo.textContent.trim().split(/\s+/);
-  alvo.innerHTML = palavras
-    .map((p, i) => `<span class="k" style="--i:${i};--n:${palavras.length}">${p}</span>`)
-    .join(' ');
 });
 
 // 5. Números que contam: correm de zero até o valor quando o bloco aparece.
@@ -191,7 +181,7 @@ if (comMouse.matches) {
 // 9. Trilhos do celular: onde uma lista anda para o lado (telas.css), um ponto
 //    por cartão logo abaixo, e o ponto do cartão à vista fica em destaque.
 //    Os pontos só ilustram (o dedo desliza a lista); leitores de tela já leem a lista.
-document.querySelectorAll('.service-list, .ex-lista, .process-track, .caminho, .termo, .caso-trilho, .politica').forEach(trilho => {
+document.querySelectorAll('.service-list, .process-track, .caminho, .termo, .caso-trilho, .politica').forEach(trilho => {
   const itens = [...trilho.children];
   if (itens.length < 2) return;
   const pontos = document.createElement('div');
@@ -247,7 +237,8 @@ document.querySelectorAll('[data-elenco]').forEach(elenco => {
   const legenda = elenco.querySelector('.elenco-legenda');
   const botoes = [...elenco.querySelectorAll('.elenco-escolha button')];
   const palco = elenco.querySelector('.elenco-palco');
-  const img = (k, estado) => `/img/agentes/${botoes[k].dataset.ator}-${estado}.webp`;
+  // os agentes em 2D (três expressões cada: aberto, pisca, sorri)
+  const img = (k, estado) => `/img/agentes-2d/${botoes[k].dataset.ator}-${estado}.svg`;
   let atual = 0;
   let relogios = [];
   let apontado = false;

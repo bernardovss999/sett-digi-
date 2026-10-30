@@ -8,7 +8,7 @@ const TELAS = [
   [1280, 720], [1366, 768], [1440, 900], [1920, 1080], [2560, 1440],
   [360, 640], [375, 667], [390, 844], [412, 915], [430, 932],
 ];
-const ROTAS = ['/', '/portfolio/', '/criacao-de-sites/', '/gestao-google-meu-negocio/', '/agentes-de-ia-para-empresas/', '/o-que-fazemos/', '/sett-agenda.html'];
+const ROTAS = ['/', '/portfolio/', '/criacao-de-sites/', '/gestao-google-meu-negocio/', '/agentes-de-ia-para-empresas/', '/o-que-fazemos/', '/marca-e-conteudo/', '/sett-agenda.html'];
 
 let site;
 let browser;
@@ -46,7 +46,8 @@ test('home: portfólio simples e sem a seção "Uma conversa, um caminho"', asyn
   await page.goto(site.origin + '/', { waitUntil: 'load' });
   const r = await page.evaluate(() => ({
     explicacao: document.querySelectorAll('.galeria-lista').length,
-    explorar: !!document.querySelector('#portfolio .leque-pe a[href="/portfolio/"]'),
+    // 30/10/2026: o link do portfólio fica no pé da cena "Sites que facilitam o contato"
+    explorar: !!document.querySelector('#portfolio .sc-pe a[href="/portfolio/"]'),
     processo: !!document.querySelector('#processo'),
     primeira: document.querySelector('main > section').id || document.querySelector('main > section').className,
   }));

@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { startSite } from '../support/servidor.mjs';
 
-const ROTAS = ['/', '/agentes-de-ia-para-empresas/', '/gestao-google-meu-negocio/', '/criacao-de-sites/', '/portfolio/', '/o-que-fazemos/', '/sett-agenda.html'];
+const ROTAS = ['/', '/agentes-de-ia-para-empresas/', '/gestao-google-meu-negocio/', '/criacao-de-sites/', '/portfolio/', '/o-que-fazemos/', '/marca-e-conteudo/', '/sett-agenda.html'];
 let site;
 let browser;
 before(async () => { site = await startSite(); browser = await chromium.launch(); });

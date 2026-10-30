@@ -1,4 +1,8 @@
-// Bug: no celular o portfólio da home ("Ideias que ganham vida na tela") era um leque inclinado que saía da tela, com cartas sobrepostas difíceis de tocar, a vitrine ocupava a tela inteira e "Explorar portfólio" ficava escondido. Agora é uma fila de cartões iguais em toda tela.
+// Bug: no celular o portfólio da home ("Ideias que ganham vida na tela") era um leque inclinado que saía da tela, com cartas sobrepostas difíceis de tocar, a vitrine ocupava a tela inteira e "Explorar portfólio" ficava escondido.
+// Mudou de propósito em 30/10/2026 (roteiro de 29/10/2026, tela 3 "Sites que facilitam o contato"): o leque e a vitrine
+// deram lugar à cena do kit — laptop e celular com as prévias em uso, a escolha do caso e o alternador de computador e
+// celular. As garantias continuam: nada sobreposto, cada escolha tocável, nada passa da largura da tela e
+// "Explorar portfólio" fica à vista.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
@@ -12,83 +16,86 @@ after(async () => { await browser?.close(); await site?.close(); });
 const CELULARES = [[320, 568], [360, 640], [375, 667], [390, 844], [412, 915], [430, 932]];
 
 for (const [w, h] of CELULARES) {
-  test(`${w}x${h}: cartões lado a lado sem sobrepor, o primeiro inteiro, cada um tocável, e "Explorar portfólio" na tela`, async () => {
+  test(`${w}x${h}: casos lado a lado sem sobrepor, cada um tocável, a tela do aparelho inteira e "Explorar portfólio" na tela`, async () => {
     const context = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(site.origin + '/', { waitUntil: 'load' });
     await page.waitForTimeout(500);   // a página segura a primeira seção até assentar (ou até a pessoa mexer); a rolagem daqui é por código
     await page.evaluate(() => { const s = document.querySelector('#portfolio'); scrollTo(0, s.offsetTop - document.querySelector('.site-header').offsetHeight); });
     const r = await page.evaluate(async () => {
-      const cartas = [...document.querySelectorAll('.leque-carta')];
-      const caixas = cartas.map((c) => c.getBoundingClientRect());
-      const sobre = caixas.some((a, i) => caixas.some((b, j) => j > i && a.right > b.left + 1 && b.right > a.left + 1));
-      const lista = document.querySelector('.leque-lista');
+      const casos = [...document.querySelectorAll('#portfolio [data-caso]')];
+      const caixas = casos.map((c) => c.getBoundingClientRect());
+      const sobre = caixas.some((a, i) => caixas.some((b, j) => j > i && a.right > b.left + 1 && b.right > a.left + 1 && a.bottom > b.top + 1 && b.bottom > a.top + 1));
       const tocaveis = [];
-      for (const c of cartas) {
-        c.scrollIntoView({ inline: 'start', block: 'nearest' });
+      for (const c of casos) {
+        c.scrollIntoView({ inline: 'nearest', block: 'nearest' });
         await new Promise((ok) => setTimeout(ok, 50));
         const b = c.getBoundingClientRect();
-        const alvo = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 3);
-        tocaveis.push(c.contains(alvo));
+        tocaveis.push(c === document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2) && b.height >= 40);
       }
-      lista.scrollLeft = 0;
-      const pe = document.querySelector('.leque-pe .button').getBoundingClientRect();
+      const tela = document.querySelector('#portfolio .sc-laptop .sc-tela').getBoundingClientRect();
+      const pe = document.querySelector('#portfolio .sc-pe .button').getBoundingClientRect();
+      const secao = document.querySelector('#portfolio').getBoundingClientRect();
       return {
-        sobre,
-        primeira: { l: caixas[0].left, r: caixas[0].right },
-        desliza: lista.scrollWidth > lista.clientWidth,
-        tocaveis,
+        sobre, tocaveis,
+        aparelho: { l: tela.left, r: tela.right },
         rolagemPagina: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-        pe: pe.bottom, tela: innerHeight,
-        inclinada: cartas.some((c) => getComputedStyle(c).transform !== 'none'),
+        pe: { visivel: pe.height > 0, dentro: pe.bottom <= secao.bottom && pe.right <= innerWidth },
       };
     });
     await context.close();
-    assert.equal(r.sobre, false, 'cartões sobrepostos');
-    assert.ok(r.primeira.l >= 0 && r.primeira.r <= w, `primeiro cartão corta: ${r.primeira.l}–${r.primeira.r}`);
-    assert.equal(r.desliza, true, 'a fila deveria deslizar para o lado');
+    assert.equal(r.sobre, false, 'casos sobrepostos');
     assert.deepEqual(r.tocaveis, [true, true, true, true, true]);
+    assert.ok(r.aparelho.l >= 0 && r.aparelho.r <= w, `a tela do laptop corta: ${r.aparelho.l}–${r.aparelho.r}`);
     assert.equal(r.rolagemPagina, 0, 'página com rolagem horizontal');
-    assert.ok(r.pe <= r.tela, `"Explorar portfólio" abaixo da tela (${r.pe} > ${r.tela})`);
-    assert.equal(r.inclinada, false, 'cartão inclinado (o leque antigo voltou)');
+    assert.equal(r.pe.visivel, true, '"Explorar portfólio" sumiu');
+    assert.equal(r.pe.dentro, true, '"Explorar portfólio" fora da tela');
   });
 }
 
 for (const [w, h] of [[390, 844], [360, 640]]) {
-  test(`${w}x${h}: tocar abre a vitrine como caixa (com o site em volta), não em tela cheia`, async () => {
+  test(`${w}x${h}: escolher um caso troca a prévia e o alternador mostra o celular`, async () => {
     const context = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(site.origin + '/', { waitUntil: 'load' });
-    await page.locator('.leque-carta').first().scrollIntoViewIfNeeded();
-    await page.locator('.leque-carta').first().tap();
+    await page.locator('#portfolio [data-caso="2"]').scrollIntoViewIfNeeded();
+    await page.locator('#portfolio [data-caso="2"]').tap();
+    await page.locator('#portfolio [data-tela="cel"]').tap();
+    await page.waitForTimeout(100);
     const r = await page.evaluate(() => {
-      const b = document.querySelector('.vitrine').getBoundingClientRect();
-      const fecha = document.querySelector('.vitrine-fecha').getBoundingClientRect();
-      const vivo = document.querySelector('.vitrine-vivo').getBoundingClientRect();
-      return { aberta: document.querySelector('.vitrine').open, l: b.left, r: innerWidth - b.right, t: b.top, b: innerHeight - b.bottom, fecha: fecha.top >= b.top && fecha.right <= b.right, vivo: vivo.bottom <= b.bottom + 1, conta: getComputedStyle(document.querySelector('.vitrine-escolha'), '::before').content };
+      const cel = document.querySelector('#portfolio .sc-celular');
+      const b = cel.getBoundingClientRect();
+      return {
+        nome: document.querySelector('[data-sc-nome]').textContent,
+        captura: cel.querySelector('.sc-captura').getAttribute('src'),
+        vivo: document.querySelector('[data-sc-vivo]').href,
+        celVisivel: b.width > 0 && b.left >= 0 && b.right <= innerWidth,
+        laptop: getComputedStyle(document.querySelector('#portfolio .sc-laptop')).display,
+      };
     });
     await context.close();
-    assert.equal(r.aberta, true);
-    assert.ok(r.l >= 12 && r.r >= 12 && r.t >= 12 && r.b >= 12, `vitrine encosta na borda: ${JSON.stringify(r)}`);
-    assert.ok(r.fecha && r.vivo, 'botão de fechar ou do site fora da caixa');
-    assert.equal(r.conta, '"1 de 5"');
+    assert.equal(r.nome, 'Barbearia Carvalho');
+    assert.match(r.captura, /carvalho-inicio-celular-390\.webp$/);
+    assert.equal(r.vivo, 'https://cavalhobarbearia.vercel.app/');
+    assert.equal(r.celVisivel, true, 'o celular não apareceu inteiro');
+    assert.equal(r.laptop, 'none', 'no celular só uma tela por vez');
   });
 }
 
 for (const [w, h] of [[1024, 768], [1280, 720], [1440, 900], [1920, 1080]]) {
-  test(`${w}x${h}: no computador as cinco prévias ficam numa linha só, iguais e sem sobrepor`, async () => {
+  test(`${w}x${h}: no computador o laptop e o celular ficam ao lado do texto, sem encostar nele`, async () => {
     const context = await browser.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(site.origin + '/', { waitUntil: 'load' });
     const r = await page.evaluate(() => {
-      const c = [...document.querySelectorAll('.leque-carta')].map((e) => e.getBoundingClientRect());
-      const lista = document.querySelector('.leque-lista');
-      return { topos: new Set(c.map((x) => Math.round(x.top))).size, larguras: new Set(c.map((x) => Math.round(x.width))).size, sobre: c.some((a, i) => i && a.left < c[i - 1].right), desliza: lista.scrollWidth > lista.clientWidth + 1 };
+      const texto = document.querySelector('#portfolio .sc-texto').getBoundingClientRect();
+      const laptop = document.querySelector('#portfolio .sc-laptop').getBoundingClientRect();
+      const cel = document.querySelector('#portfolio .sc-celular').getBoundingClientRect();
+      return { aoLado: laptop.left >= texto.right, celDentro: cel.right <= innerWidth, laptop: laptop.width, cel: cel.width };
     });
     await context.close();
-    assert.equal(r.topos, 1, 'prévias em alturas diferentes');
-    assert.equal(r.larguras, 1, 'prévias de tamanhos diferentes');
-    assert.equal(r.sobre, false);
-    assert.equal(r.desliza, false, 'no computador a fila não precisa deslizar');
+    assert.equal(r.aoLado, true, 'a cena encosta no texto');
+    assert.equal(r.celDentro, true, 'o celular passa da tela');
+    assert.ok(r.laptop > r.cel * 2, 'o laptop é a tela principal da cena');
   });
 }

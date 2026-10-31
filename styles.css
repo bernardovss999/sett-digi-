@@ -939,7 +939,11 @@ html.campos main [data-campo] { background: transparent; --campo-fundo: inherit;
    3. Cada seção ocupa a tela INTEIRA do telefone: lvh é a altura com as
       barras do navegador recolhidas, então a próxima seção não aparece por
       baixo da barra de endereço (Safari do iPhone, Chrome do Android). */
-:root { color-scheme: only light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+:root { color-scheme: only light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; forced-color-adjust: none; print-color-adjust: exact; }
+/* 4. (31/10/2026) O Samsung Internet e outros navegadores de celular só deixam de escurecer a página sozinhos quando
+      ela "tem" um tema escuro próprio. Este bloco é esse tema: as MESMAS cores, sem mudar nada. forced-color-adjust
+      segura o alto contraste do Windows; a meta darkreader-lock, em cada página, segura a extensão Dark Reader. */
+@media (prefers-color-scheme: dark) { :root { color-scheme: only light; } }
 @supports (height: 1lvh) {
   :root main > section.section-grid, :root main > section.hero, :root main > section.ab, :root main > section.port-hero { min-height: calc(100lvh - var(--topo)); }
 }

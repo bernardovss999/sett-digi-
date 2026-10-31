@@ -27,7 +27,9 @@ async function fotos(browser, esquema, rota, aparelho) {
   const context = await browser.newContext({ ...aparelho, colorScheme: esquema, reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.goto(site.origin + rota, { waitUntil: 'load' });
-  await page.addStyleTag({ content: '*{animation:none!important;transition:none!important}' });
+  // 31/10/2026: os Reels da abertura tocam sozinhos em todo aparelho; o quadro do vídeo muda entre as duas fotos, então
+  // o vídeo sai da foto (fica o pôster, que é imagem e entra na comparação)
+  await page.addStyleTag({ content: '*{animation:none!important;transition:none!important} .reel video{visibility:hidden!important}' });
   // a página segura a primeira tela até a primeira mexida da pessoa (script.js, item 0): o gesto libera a rolagem
   await page.evaluate(() => window.dispatchEvent(new WheelEvent('wheel')));
   const n = await page.evaluate(() => document.querySelectorAll('main > section').length);

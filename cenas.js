@@ -25,7 +25,10 @@
   // tela; embaixo, uma linha diz isso ao visitante.
   // Em volta, os quatro cartões das duas áreas: o do Reel da vez acende, a linha dele (do Ponto até o cartão) se
   // desenha, o Ponto pula e se vira para ele e a área do texto acende junto; tocar num cartão leva ao Reel dele.
-  // Fora da tela, pausa sozinho. Com "reduzir movimento" nada toca sozinho: as setas mostram o último quadro.
+  // Fora da tela, pausa sozinho. 31/10/2026 (pedido do dono): a abertura começa tocando em todo aparelho, como o vídeo
+  // do site, inclusive com "reduzir movimento" (a pausa continua no canto). Para não engasgar, o primeiro Reel começa a
+  // baixar na hora e cada Reel já baixa o seguinte; se o aparelho recusar o play (modo de economia), tenta de novo no
+  // primeiro toque, rolagem ou tecla do visitante.
   const NOMES_REELS = {
     'ponto-abre': 'O Ponto apresenta a Sett', 'rascunho-vivo': 'O rascunho vira site', alfinete: 'O Ponto monta o perfil no Google',
     semana: 'Uma semana comum com um agente', 'elenco-agenda': 'O agente de Agenda', trilho: 'Um agente decide o caminho',
@@ -46,7 +49,7 @@
     const cartas = [...reels.querySelectorAll('.reels-cartao')];
     const areas = [...(reels.closest('section')?.querySelectorAll('.areas [data-area]') || [])];
     let k = 0;
-    let parado = quieto;         // o visitante (ou "reduzir movimento") pediu para parar
+    let parado = false;          // o visitante pediu para parar
     let segurando = false;       // o dedo está no Reel (celular): pausa enquanto segura
     let naTela = false;
     let acabou = false;
@@ -59,7 +62,7 @@
       v.muted = true; v.playsInline = true; v.preload = 'auto';
       v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
       v.innerHTML = `<source src="/video/cenas/${id}.av1.mp4" type='video/mp4; codecs="av01.0.05M.08"'><source src="/video/cenas/${id}.mp4" type="video/mp4">`;
-      v.addEventListener('playing', () => v.classList.add('pronto'));
+      v.addEventListener('playing', () => { v.classList.add('pronto'); const n = cartoes[cartoes.indexOf(c) + 1]; if (n) video(n); });
       v.addEventListener('ended', () => { if (k === cartoes.indexOf(c)) proximo(true); });
       c.append(v);
       return v;
@@ -127,7 +130,15 @@
       if (parado || segurando || acabou || !naTela) { if (v && !v.paused) v.pause(); enche(); return; }
       const w = v || video(cartoes[k]);
       if (w.ended) w.currentTime = 0;
-      w.play().then(enche).catch(() => {});
+      w.play().then(enche).catch(insiste);
+    };
+    // o aparelho recusou o play sozinho: tenta de novo no primeiro gesto do visitante, em qualquer lugar da página
+    let esperando = false;
+    const insiste = () => {
+      if (esperando) return;
+      esperando = true;
+      const de = () => { esperando = false; ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach(t => removeEventListener(t, de, true)); toca(); };
+      ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach(t => addEventListener(t, de, { capture: true, passive: true }));
     };
     const vai = (n, sozinho) => {
       k = Math.max(0, Math.min(cartoes.length - 1, n));
@@ -150,7 +161,7 @@
       reels.classList.add('mexeu');
       const dele = cartoes.map((r, i) => (r.dataset.cartao === c.dataset.cartao ? i : -1)).filter(i => i >= 0);
       const n = dele.find(i => i > k && cartoes[k].dataset.cartao === c.dataset.cartao) ?? dele[0];
-      if (n !== k) { parado = quieto; vai(n); }
+      if (n !== k) { parado = false; vai(n); }
     }));
     // na tela do celular, como nos Stories: os dois lados são botões (o clique e o toque chegam neles); aqui ficam o
     // arrasto para o lado (troca) e o segurar (pausa enquanto o dedo ou o botão do mouse estiver na tela). Depois de um
@@ -188,6 +199,7 @@
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(es => { naTela = es.some(e => e.isIntersecting); toca(); }, { threshold: .35 }).observe(reels);
     } else naTela = true;
+    video(cartoes[0]);   // começa a baixar o primeiro Reel antes de a página terminar de montar
     addEventListener('resize', () => { centra(); desenha(); }, { passive: true });
     if ('ResizeObserver' in window) new ResizeObserver(desenha).observe(reels);
     vai(0);
@@ -661,7 +673,7 @@
       if (quieto || v) return;
       v = document.createElement('video');
       v.muted = true; v.playsInline = true; v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
-      v.addEventListener('playing', () => v.classList.add('pronto'));
+      v.addEventListener('playing', () => { v.classList.add('pronto'); const n = cartoes[cartoes.indexOf(c) + 1]; if (n) video(n); });
       v.addEventListener('ended', () => {
         if (n < clipes.length - 1) { n += 1; carrega(n); return; }
         pausa.hidden = true;   // para no último quadro

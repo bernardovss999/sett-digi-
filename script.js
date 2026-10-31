@@ -165,9 +165,10 @@ if (linksMenu.length && 'IntersectionObserver' in window) {
 const comMouse = window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 
 // 8. Rolagem suave só no computador; se a biblioteca não vier, a rolagem normal segue.
+//    Lenis 1.3.26 (MIT) servido pelo próprio site desde 31/10/2026: sem depender de CDN de terceiros.
 if (comMouse.matches) {
   const lenisScript = document.createElement('script');
-  lenisScript.src = 'https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js';
+  lenisScript.src = '/vendor/lenis-1.3.26.min.js';
   lenisScript.onload = () => {
     if (typeof window.Lenis !== 'function') return;
     const lenis = new window.Lenis({ lerp: .1, anchors: { offset: -96 } });

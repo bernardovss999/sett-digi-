@@ -2,7 +2,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROOT, listPublishedPages, inlineScripts, readSite } from '../support/site.mjs';
 import { readVercelConfig } from '../../scripts/site-config.mjs';
@@ -67,13 +67,11 @@ describe('CSP', () => {
     assert.ok(!sources.includes("'unsafe-eval'"), 'script-src não pode ter unsafe-eval');
   });
 
-  test('script-src libera a URL exata da biblioteca Lenis carregada por script.js', () => {
+  test('a biblioteca Lenis vem do próprio site e a script-src só tem self e hashes', () => {
     const scriptJs = readFileSync(join(ROOT, 'script.js'), 'utf8');
-    const urls = [...scriptJs.matchAll(/src\s*=\s*'(https:\/\/[^']+)'/g)].map((m) => m[1]);
-    assert.ok(urls.length > 0, 'esperado ao menos um script externo em script.js');
-    for (const url of urls) {
-      assert.ok((directive('script-src') ?? []).includes(url), `script-src sem ${url}`);
-    }
+    assert.match(scriptJs, /src = '\/vendor\/lenis-1\.3\.26\.min\.js'/);
+    assert.ok(existsSync(join(ROOT, 'vendor/lenis-1.3.26.min.js')));
+    assert.deepEqual((directive('script-src') ?? []).filter((s) => s !== "'self'" && !s.startsWith("'sha256-")), []);
   });
 
   test('cada <script> inline publicado tem hash na script-src', () => {

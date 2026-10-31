@@ -19,9 +19,10 @@ test('script-src não libera host externo inteiro (só URL com caminho)', () => 
   assert.deepEqual(hostsAbertos, []);
 });
 
-test('script-src libera exatamente a URL externa carregada por script.js', () => {
+// 31/10/2026: o Lenis passou a ser servido pelo próprio site (vendor/); a script-src não libera mais nenhuma URL externa.
+test('script-src não libera URL externa e script.js só carrega script do próprio site', () => {
   const scriptJs = readFileSync(join(ROOT, 'script.js'), 'utf8');
-  const urls = [...scriptJs.matchAll(/\.src\s*=\s*'(https:\/\/[^']+)'/g)].map((m) => m[1]);
-  assert.ok(urls.length > 0, 'script.js deixou de carregar script externo; revise este teste');
-  for (const url of urls) assert.ok(scriptSrc.includes(url), `script-src sem ${url}`);
+  assert.deepEqual([...scriptJs.matchAll(/\.src\s*=\s*'(https?:\/\/[^']+)'/g)].map((m) => m[1]), []);
+  assert.deepEqual(scriptSrc.filter((s) => /^https?:/.test(s)), []);
+  assert.match(scriptJs, /\.src = '\/vendor\/lenis-1\.3\.26\.min\.js'/);
 });
